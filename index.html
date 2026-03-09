@@ -897,6 +897,26 @@
             opacity: 0.8;
         }
 
+        /* Vendors Section */
+        .vendor-category { margin-bottom: 2.5rem; }
+        .vendor-category-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+        .vendor-category-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .vendor-category-title { font-size: 1.15rem; font-weight: 700; color: var(--dark); }
+        .vendor-category-subtitle { font-size: 0.8rem; color: var(--text-light); }
+        .vendors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+        .vendor-card-s { background: var(--white); border-radius: 16px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border); transition: all 0.2s; display: flex; flex-direction: column; }
+        .vendor-card-s:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1); transform: translateY(-2px); }
+        .vendor-name { font-size: 0.95rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+        .vendor-tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .vendor-tag.recommended { background: rgba(16, 185, 129, 0.1); color: var(--secondary); }
+        .vendor-tag.enterprise { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+        .vendor-tag.niche { background: rgba(245, 158, 11, 0.1); color: var(--accent); }
+        .vendor-tag.community { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+        .vendor-desc { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; flex: 1; }
+        .vendor-url { display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.75rem; font-size: 0.78rem; color: var(--primary); text-decoration: none; font-weight: 500; }
+        .vendor-url:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .vendors-grid { grid-template-columns: 1fr; } }
+
         /* Footer */
         .footer {
             background: var(--dark);
@@ -1057,6 +1077,12 @@
                     <a href="#risks" class="sidebar-nav-link">
                         <span class="sidebar-nav-icon">⚠️</span>
                         Risks
+                    </a>
+                </li>
+                <li class="sidebar-nav-item">
+                    <a href="#vendors" class="sidebar-nav-link">
+                        <span class="sidebar-nav-icon">🏢</span>
+                        Vendors
                     </a>
                 </li>
             </ul>
@@ -1820,6 +1846,292 @@
                     <p>Platform must handle U.S. volume. <strong>Mitigation:</strong> Cloud infrastructure; proven tech stack from Ecuador operations.</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Potential Vendors -->
+    <section class="section" id="vendors">
+        <div class="section-header">
+            <div class="section-badge">Ecosystem Partners</div>
+            <h2 class="section-title">Potential Vendors & Partners</h2>
+            <p class="section-description">Key technology and service providers to power each pillar of the Payphone U.S. super-app.</p>
+        </div>
+
+        <!-- Card Issuance -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(99, 102, 241, 0.1);">💳</div>
+                <div>
+                    <div class="vendor-category-title">Card Issuance & Processing</div>
+                    <div class="vendor-category-subtitle">Platforms to issue Payphone debit cards (virtual + physical)</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Marqeta</div>
+                    <span class="vendor-tag recommended">Industry Leader</span>
+                    <div class="vendor-desc">API-first card issuing with real-time JIT funding. Powers DoorDash, Square Cash App. Partnered with Green Dot for cash deposits.</div>
+                    <a href="https://www.marqeta.com" target="_blank" class="vendor-url">→ marqeta.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Galileo (SoFi)</div>
+                    <span class="vendor-tag recommended">Top Pick</span>
+                    <div class="vendor-desc">Cloud-native card issuing. #1 in Javelin 2025 Digital Issuance Scorecard. "Instant Issuing" product, no long-term contracts. Powers Pomelo's remittance-linked credit card.</div>
+                    <a href="https://www.galileo-ft.com" target="_blank" class="vendor-url">→ galileo-ft.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">i2c Inc.</div>
+                    <span class="vendor-tag enterprise">Multi-Product</span>
+                    <div class="vendor-desc">Supports debit, credit, and prepaid from a single platform. Full lifecycle card management. Ideal for super-app needing multiple card products.</div>
+                    <a href="https://www.i2cinc.com" target="_blank" class="vendor-url">→ i2cinc.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Highnote</div>
+                    <span class="vendor-tag niche">Startup-Friendly</span>
+                    <div class="vendor-desc">Modern card issuance platform (founded 2020). Visa + Mastercard programs. Designed for fintechs and embedded finance use cases.</div>
+                    <a href="https://www.highnote.com" target="_blank" class="vendor-url">→ highnote.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cash Loading -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(16, 185, 129, 0.1);">🏪</div>
+                <div>
+                    <div class="vendor-category-title">Cash Loading Networks</div>
+                    <div class="vendor-category-subtitle">Retail deposit networks for unbanked users to fund wallets at stores</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Green Dot</div>
+                    <span class="vendor-tag recommended">Largest Network</span>
+                    <div class="vendor-desc">95,000+ retail locations (Walmart, CVS, Walgreens, Dollar General). Industry standard for fintech cash loading. Multiple fintechs joined in 2024-2025.</div>
+                    <a href="https://www.greendot.com" target="_blank" class="vendor-url">→ greendot.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">PayNearMe</div>
+                    <span class="vendor-tag recommended">62K+ Locations</span>
+                    <div class="vendor-desc">Cash payment network at 7-Eleven, CVS, Walmart, Walgreens, Dollar General. Reusable mobile barcode system. Focused on "last mile" for cash-reliant users.</div>
+                    <a href="https://home.paynearme.com" target="_blank" class="vendor-url">→ paynearme.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">InComm Payments (VanillaDirect)</div>
+                    <span class="vendor-tag enterprise">525K+ Locations</span>
+                    <div class="vendor-desc">Global payments network in 40+ countries. Already partnered with Dora Financial (Latino-focused fintech) for 88K+ retail cash deposits. 412 patents.</div>
+                    <a href="https://www.incomm.com" target="_blank" class="vendor-url">→ incomm.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Processing -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(139, 92, 246, 0.1);">⚡</div>
+                <div>
+                    <div class="vendor-category-title">Merchant Acquiring & Payment Processing</div>
+                    <div class="vendor-category-subtitle">Infrastructure for TAP to Pay, POS, and merchant onboarding</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Stripe Connect</div>
+                    <span class="vendor-tag recommended">Fastest to Market</span>
+                    <div class="vendor-desc">Platform product for onboarding merchants. Tap to Pay (iPhone + Android), payment links, invoicing. Developer-friendly APIs. Split payment routing.</div>
+                    <a href="https://stripe.com/connect" target="_blank" class="vendor-url">→ stripe.com/connect</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Adyen for Platforms</div>
+                    <span class="vendor-tag enterprise">Enterprise Grade</span>
+                    <div class="vendor-desc">Full-stack payment platform with global acquiring. Gateway, risk, processing, issuing, settlement. Powers eBay, Etsy, Toast. Better economics at scale.</div>
+                    <a href="https://www.adyen.com" target="_blank" class="vendor-url">→ adyen.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Fiska</div>
+                    <span class="vendor-tag niche">White-Label POS</span>
+                    <div class="vendor-desc">White-label payment infrastructure for embedded merchant acquiring. POS terminals, Tap to Pay, mobile virtual POS. Purpose-built for platforms.</div>
+                    <a href="https://fiska.com" target="_blank" class="vendor-url">→ fiska.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Insurance -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(236, 72, 153, 0.1);">🚗</div>
+                <div>
+                    <div class="vendor-category-title">Auto Insurance Marketplace</div>
+                    <div class="vendor-category-subtitle">Embeddable insurance comparison APIs and white-label marketplaces</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Insurify</div>
+                    <span class="vendor-tag recommended">Top Pick</span>
+                    <div class="vendor-desc">Full API + white-label insurance comparison. Direct integrations with top 10 U.S. auto carriers. Flexible integration: API, portal, or file feed. First to integrate into ChatGPT.</div>
+                    <a href="https://insurify.com/company/partnerships/" target="_blank" class="vendor-url">→ insurify.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">The Zebra</div>
+                    <span class="vendor-tag enterprise">Handles Compliance</span>
+                    <div class="vendor-desc">White-label or co-branded insurance solutions. Handles all licensing & compliance for partners. 100+ licensed agents to support customers. Multi-line: auto + home.</div>
+                    <a href="https://www.thezebra.com/about/partnerships/" target="_blank" class="vendor-url">→ thezebra.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Trellis / Savvy</div>
+                    <span class="vendor-tag niche">Fintech-Focused</span>
+                    <div class="vendor-desc">Embedded insurance marketplace, fully white-labeled. Partners include Rocket Money, Acorns, Albert. API + landing page options. Nationwide agents available.</div>
+                    <a href="https://trellisconnect.com" target="_blank" class="vendor-url">→ trellisconnect.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assistance Plan Providers -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(245, 158, 11, 0.1);">🛡️</div>
+                <div>
+                    <div class="vendor-category-title">Assistance Plan Providers</div>
+                    <div class="vendor-category-subtitle">White-label services for roadside, telehealth, legal, and identity protection bundles</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Agero</div>
+                    <span class="vendor-tag recommended">Roadside Leader</span>
+                    <div class="vendor-desc">Dominant U.S. white-label roadside assistance. 12M+ events/year. Used by 2/3 of U.S. auto insurers. Provider API with GPS dispatch and real-time status.</div>
+                    <a href="https://www.agero.com" target="_blank" class="vendor-url">→ agero.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">MyTelemedicine</div>
+                    <span class="vendor-tag recommended">Telehealth API</span>
+                    <div class="vendor-desc">White-label telehealth platform. Full API suite for phone, video, and chat consultations. Powered 100+ healthcare brands since 2016. B2B partnership model.</div>
+                    <a href="https://mytelemedicine.com" target="_blank" class="vendor-url">→ mytelemedicine.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">LegalShield</div>
+                    <span class="vendor-tag niche">Legal Services</span>
+                    <div class="vendor-desc">Pre-paid legal subscription ($24.95/mo). Dedicated provider law firm in each state. Consultations, document review, will prep. Group/employer plans available.</div>
+                    <a href="https://www.legalshield.com" target="_blank" class="vendor-url">→ legalshield.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Gen Digital / Norton LifeLock</div>
+                    <span class="vendor-tag enterprise">Identity Protection</span>
+                    <div class="vendor-desc">White-label identity theft & scam protection. Credit monitoring, dark web monitoring, identity theft insurance. B2B partner program with full customization.</div>
+                    <a href="https://www.gendigital.com/us/en/partner/" target="_blank" class="vendor-url">→ gendigital.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- KYC / Identity -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(99, 102, 241, 0.1);">🔍</div>
+                <div>
+                    <div class="vendor-category-title">KYC & Identity Verification</div>
+                    <div class="vendor-category-subtitle">Identity verification that works for immigrants, ITIN holders, and underbanked populations</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Socure</div>
+                    <span class="vendor-tag recommended">Best for Underserved</span>
+                    <div class="vendor-desc">400+ data sources, 95% coverage for thin-file and new-to-country users. Intelligent KYC built for immigrants, Gen Z, and underbanked. Largest commercial identity graph.</div>
+                    <a href="https://www.socure.com" target="_blank" class="vendor-url">→ socure.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Veriff</div>
+                    <span class="vendor-tag enterprise">230+ Countries</span>
+                    <div class="vendor-desc">AI-powered ID verification supporting 12,000+ document types from 230+ countries. Accepts foreign passports, consular IDs. Built for remittance providers.</div>
+                    <a href="https://www.veriff.com" target="_blank" class="vendor-url">→ veriff.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Jumio</div>
+                    <span class="vendor-tag enterprise">Biometric + AI</span>
+                    <div class="vendor-desc">AI-powered ID document checks, selfie + liveness verification, risk-based decisioning. Supports international documents. Widely used across fintech and banking.</div>
+                    <a href="https://www.jumio.com" target="_blank" class="vendor-url">→ jumio.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Persona</div>
+                    <span class="vendor-tag niche">Configurable Flows</span>
+                    <div class="vendor-desc">Highly configurable verification flows for different risk levels and user types. Full control over logic and workflow. Flexible for diverse documentation types.</div>
+                    <a href="https://withpersona.com" target="_blank" class="vendor-url">→ withpersona.com</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latino Community & Marketing -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(236, 72, 153, 0.1);">📣</div>
+                <div>
+                    <div class="vendor-category-title">Latino Community & Marketing Partners</div>
+                    <div class="vendor-category-subtitle">Media, organizations, and platforms to reach U.S. Hispanic audiences</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">TelevisaUnivision</div>
+                    <span class="vendor-tag recommended">#1 Spanish Media</span>
+                    <div class="vendor-desc">World's leading Spanish-language media company. Univision, UniMas, ViX streaming. Sports portfolio (Liga MX, UEFA, FIFA). Brand integrations and programmatic CTV ads.</div>
+                    <a href="https://corporate.televisaunivision.com/advertise/" target="_blank" class="vendor-url">→ televisaunivision.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Entravision</div>
+                    <span class="vendor-tag enterprise">TV + Digital</span>
+                    <div class="vendor-desc">Largest Univision/UniMas TV affiliate group + 43 radio stations. 3,000+ Hispanic market clients. Owns Smadex programmatic ad platform for mobile campaigns.</div>
+                    <a href="https://entravision.com" target="_blank" class="vendor-url">→ entravision.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">UnidosUS</div>
+                    <span class="vendor-tag community">Community Trust</span>
+                    <div class="vendor-desc">Nation's largest Hispanic civil rights org. 300 community-based affiliates. Runs Financial Empowerment Network (25+ affiliates, 14 communities). Partners: Experian, JPMorgan.</div>
+                    <a href="https://unidosus.org" target="_blank" class="vendor-url">→ unidosus.org</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Hispanic Federation</div>
+                    <span class="vendor-tag community">Grassroots Network</span>
+                    <div class="vendor-desc">Leading U.S. Hispanic advocacy org. Founded 1990 in NYC. Network of member agencies nationwide. Key markets: NY, FL, TX. Community trust and grassroots reach.</div>
+                    <a href="https://www.hispanicfederation.org" target="_blank" class="vendor-url">→ hispanicfederation.org</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bilingual Support -->
+        <div class="vendor-category">
+            <div class="vendor-category-header">
+                <div class="vendor-category-icon" style="background: rgba(16, 185, 129, 0.1);">💬</div>
+                <div>
+                    <div class="vendor-category-title">Bilingual Customer Support</div>
+                    <div class="vendor-category-subtitle">English/Spanish support platforms — AI chatbots, outsourced agents, helpdesk tools</div>
+                </div>
+            </div>
+            <div class="vendors-grid">
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Intercom (Fin AI)</div>
+                    <span class="vendor-tag recommended">AI-First</span>
+                    <div class="vendor-desc">Conversational customer platform with AI chatbot Fin. Auto-responds in customer's language. Real-time messaging, proactive outreach, in-app support.</div>
+                    <a href="https://www.intercom.com" target="_blank" class="vendor-url">→ intercom.com</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">Haptik</div>
+                    <span class="vendor-tag enterprise">135+ Languages</span>
+                    <div class="vendor-desc">Conversational AI supporting 135+ languages including Spanglish. Auto language detection and switching. 15B+ conversations processed. Finance, retail, travel.</div>
+                    <a href="https://www.haptik.ai" target="_blank" class="vendor-url">→ haptik.ai</a>
+                </div>
+                <div class="vendor-card-s">
+                    <div class="vendor-name">SuperStaff</div>
+                    <span class="vendor-tag niche">Fintech Specialist</span>
+                    <div class="vendor-desc">Bilingual customer support outsourcing trained in fintech ops. KYC, payment help, loan servicing in English + Spanish. Teams in Colombia and Philippines.</div>
+                    <a href="https://superstaff.com" target="_blank" class="vendor-url">→ superstaff.com</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid var(--primary); margin-top: 1rem;">
+            <h3 style="font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">📋 Full Licensing & Compliance Vendors</h3>
+            <p style="color: var(--text-light); font-size: 0.95rem;">For MTL sponsors, surety bonds, AML platforms, insurance carriers, and compliance law firms, see the <a href="licensing-roadmap.html#vendors" style="color: var(--primary); font-weight: 600;">Licensing Roadmap → Vendors Section</a>.</p>
         </div>
     </section>
 
