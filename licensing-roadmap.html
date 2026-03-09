@@ -31,6 +31,130 @@
             line-height: 1.6;
         }
 
+        /* Password Protection Styles */
+        .password-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-screen.hidden {
+            display: none;
+        }
+
+        .password-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+
+        .password-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .password-box h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .password-box p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .password-input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .password-input.error {
+            border-color: #ef4444;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .password-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .password-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .password-error-msg {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .password-error-msg.show {
+            display: block;
+        }
+
+        .content-wrapper {
+            display: none;
+        }
+
+        .content-wrapper.unlocked {
+            display: block;
+        }
+
         /* Left Sidebar Navigation */
         .sidebar {
             position: fixed;
@@ -879,6 +1003,23 @@
     </style>
 </head>
 <body>
+    <!-- Password Protection Screen -->
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-box">
+            <div class="password-logo">📋</div>
+            <h2>Licensing Roadmap</h2>
+            <p>This document is confidential. Please enter the password to continue.</p>
+            <form id="passwordForm">
+                <div class="password-input-group">
+                    <input type="password" class="password-input" id="passwordInput" placeholder="Enter password" autocomplete="off">
+                </div>
+                <div class="password-error-msg" id="errorMsg">Incorrect password. Please try again.</div>
+                <button type="submit" class="password-btn">Access Document</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content-wrapper" id="contentWrapper">
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
         <a href="index.html" class="sidebar-logo">
@@ -1698,6 +1839,44 @@
                     link.classList.add('active');
                 }
             });
+        });
+    </script>
+    </div><!-- end content-wrapper -->
+
+    <script>
+        // Password Protection
+        const correctPassword = 'payphone2026';
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const passwordScreen = document.getElementById('passwordScreen');
+        const contentWrapper = document.getElementById('contentWrapper');
+
+        // Check if already authenticated in this session
+        if (sessionStorage.getItem('payphone_authenticated') === 'true') {
+            passwordScreen.classList.add('hidden');
+            contentWrapper.classList.add('unlocked');
+        }
+
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredPassword = passwordInput.value;
+
+            if (enteredPassword === correctPassword) {
+                sessionStorage.setItem('payphone_authenticated', 'true');
+                passwordScreen.classList.add('hidden');
+                contentWrapper.classList.add('unlocked');
+            } else {
+                passwordInput.classList.add('error');
+                errorMsg.classList.add('show');
+                setTimeout(() => {
+                    passwordInput.classList.remove('error');
+                }, 500);
+            }
+        });
+
+        passwordInput.addEventListener('input', function() {
+            errorMsg.classList.remove('show');
         });
     </script>
 </body>
