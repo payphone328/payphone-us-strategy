@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payphone x Stripe — U.S. Architecture & Action Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #10b981; --accent: #f59e0b;
+            --danger: #ef4444; --dark: #1e1b4b; --text: #374151; --text-light: #6b7280;
+            --bg: #f8fafc; --white: #ffffff; --border: #e5e7eb;
+            --cobrar: #ef4444; --gastar: #6366f1; --cargar: #10b981; --enviar: #f59e0b;
+        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Password */
+        .password-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #0d1117 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .password-screen.hidden { display: none; }
+        .password-box { background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); text-align: center; max-width: 420px; width: 90%; }
+        .password-logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem; }
+        .password-box h2 { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+        .password-box p { color: var(--text-light); margin-bottom: 2rem; font-size: 0.95rem; }
+        .password-input-group { position: relative; margin-bottom: 1.5rem; }
+        .password-input { width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--border); border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.2s; }
+        .password-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(99,102,241,0.1); }
+        .password-input.error { border-color: #ef4444; animation: shake 0.5s ease-in-out; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
+        .password-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .password-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(99,102,241,0.3); }
+        .password-error-msg { color: #ef4444; font-size: 0.85rem; margin-top: -1rem; margin-bottom: 1rem; display: none; }
+        .password-error-msg.show { display: block; }
+        .content-wrapper { display: none; }
+        .content-wrapper.unlocked { display: block; }
+
+        /* Sidebar */
+        .sidebar { position: fixed; left: 0; top: 0; width: 260px; height: 100vh; background: #0f0a2e; padding: 1.5rem; overflow-y: auto; z-index: 1000; display: flex; flex-direction: column; }
+        .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 1.5rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.08); cursor: default; }
+        .sidebar-logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .sidebar-logo-text { color: white; font-weight: 700; font-size: 1rem; }
+        .sidebar-logo-sub { color: rgba(255,255,255,0.5); font-size: 0.7rem; }
+        .sidebar-section { margin-bottom: 1.5rem; }
+        .sidebar-section-title { color: rgba(255,255,255,0.3); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem; padding-left: 0.75rem; }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav-item { margin-bottom: 0.25rem; }
+        .sidebar-nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.75rem; color: rgba(255,255,255,0.6); text-decoration: none; border-radius: 10px; transition: all 0.2s; font-size: 0.85rem; }
+        .sidebar-nav-link:hover { background: rgba(255,255,255,0.08); color: white; }
+        .sidebar-nav-link.active { background: var(--primary); color: white; font-weight: 500; }
+        .sidebar-nav-icon { width: 20px; text-align: center; font-size: 0.85rem; }
+        .main-content { margin-left: 260px; }
+
+        /* Mobile */
+        .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; width: 50px; height: 50px; background: #0f0a2e; border: none; border-radius: 50%; color: white; font-size: 1.25rem; cursor: pointer; z-index: 1001; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .sidebar-overlay.open { display: block; }
+            .main-content { margin-left: 0; }
+        }
+
+        /* Header */
+        .header { background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, var(--primary-dark) 100%); color: white; padding: 3.5rem 2rem 3rem; position: relative; overflow: hidden; }
+        .header::before { content: ''; position: absolute; top: -30%; right: -10%; width: 500px; height: 500px; background: var(--primary); opacity: 0.06; border-radius: 50%; }
+        .header::after { content: ''; position: absolute; bottom: -40%; left: -5%; width: 400px; height: 400px; background: var(--secondary); opacity: 0.05; border-radius: 50%; }
+        .header-content { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .header-badges { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .header-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-phase { background: rgba(99,102,241,0.25); border: 1px solid rgba(99,102,241,0.4); }
+        .badge-stripe { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); }
+        .header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; line-height: 1.2; }
+        .header h1 span { color: var(--secondary); }
+        .header > .header-content > p { font-size: 1.05rem; opacity: 0.85; max-width: 700px; }
+
+        /* Pillars */
+        .pillars { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .pillar { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.06); border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); flex: 1; min-width: 200px; }
+        .pillar-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .pillar-dot.cobrar { background: var(--cobrar); box-shadow: 0 0 10px rgba(239,68,68,0.4); }
+        .pillar-dot.gastar { background: var(--gastar); box-shadow: 0 0 10px rgba(99,102,241,0.4); }
+        .pillar-dot.cargar { background: var(--cargar); box-shadow: 0 0 10px rgba(16,185,129,0.4); }
+        .pillar-dot.enviar { background: var(--enviar); box-shadow: 0 0 10px rgba(245,158,11,0.4); }
+        .pillar-label { font-weight: 700; font-size: 0.9rem; }
+        .pillar-desc { font-size: 0.75rem; opacity: 0.7; }
+
+        /* Sections */
+        .section { padding: 3rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-header { margin-bottom: 2rem; }
+        .section-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+        .badge-red { background: rgba(239,68,68,0.1); color: var(--cobrar); }
+        .badge-blue { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .badge-green { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .badge-orange { background: rgba(245,158,11,0.1); color: var(--accent); }
+        .badge-purple { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+        .section-title { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+        .section-description { font-size: 1rem; color: var(--text-light); }
+        .card { background: var(--white); border-radius: 16px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+
+        /* Architecture Diagram */
+        .arch-container { background: #0f0a2e; border-radius: 20px; padding: 2.5rem; color: white; overflow-x: auto; }
+        .arch-flow { display: flex; align-items: flex-start; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+        .arch-box { border-radius: 14px; padding: 1.25rem; text-align: center; min-width: 200px; flex: 1; max-width: 280px; }
+        .arch-box h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .arch-box p { font-size: 0.78rem; opacity: 0.8; line-height: 1.4; }
+        .arch-stripe { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); }
+        .arch-stripe h4 { color: #818cf8; }
+        .arch-wallet { background: rgba(16,185,129,0.1); border: 2px solid rgba(16,185,129,0.4); }
+        .arch-wallet h4 { color: #34d399; }
+        .arch-incomm { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.25); }
+        .arch-incomm h4 { color: #6ee7b7; }
+        .arch-app { background: rgba(239,68,68,0.1); border: 2px solid rgba(239,68,68,0.35); }
+        .arch-app h4 { color: #f87171; }
+        .arch-kyc { border: 2px dashed rgba(245,158,11,0.4); background: rgba(245,158,11,0.06); }
+        .arch-kyc h4 { color: #fbbf24; }
+        .arch-label { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .label-cobrar { background: var(--cobrar); color: white; }
+        .label-gastar { background: var(--gastar); color: white; }
+        .label-cargar { background: var(--cargar); color: white; }
+
+        /* Journey Steps */
+        .journey-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+        .journey-step { text-align: center; position: relative; }
+        .journey-step::after { content: ''; position: absolute; top: 24px; right: -0.5rem; width: calc(100% - 48px); height: 2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); opacity: 0.3; }
+        .journey-step:last-child::after { display: none; }
+        .step-number { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: 800; font-size: 1.1rem; position: relative; z-index: 1; }
+        .step-1 { background: var(--cobrar); color: white; }
+        .step-2 { background: var(--accent); color: white; }
+        .step-3 { background: var(--primary); color: white; }
+        .step-4 { background: var(--secondary); color: white; }
+        .step-5 { background: #8b5cf6; color: white; }
+        .step-6 { background: var(--cobrar); color: white; }
+        .journey-step h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.4rem; }
+        .journey-step p { font-size: 0.78rem; color: var(--text-light); }
+
+        /* Account Types */
+        .accounts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .account-card { border-top: 4px solid var(--primary); }
+        .account-card.merchant { border-top-color: var(--cobrar); }
+        .account-card.regular { border-top-color: var(--gastar); }
+        .account-card.hybrid { border-top-color: #8b5cf6; }
+        .account-type { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .account-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .account-features { list-style: none; }
+        .account-features li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text); }
+        .account-features li::before { content: '\2713'; color: var(--secondary); font-weight: 700; }
+        .account-sub { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem; }
+        .account-sub-item { background: var(--bg); padding: 0.75rem; border-radius: 10px; text-align: center; }
+        .account-sub-item strong { display: block; font-size: 0.8rem; color: var(--dark); margin-bottom: 0.25rem; }
+        .account-sub-item span { font-size: 0.72rem; color: var(--text-light); }
+
+        /* Compliance Split */
+        .compliance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .compliance-card { position: relative; padding-top: 1rem; }
+        .compliance-card.stripe-card { border-left: 4px solid var(--primary); }
+        .compliance-card.payphone-card { border-left: 4px solid var(--secondary); }
+        .compliance-card.incomm-card { border-left: 4px solid #8b5cf6; }
+        .compliance-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem; }
+        .compliance-card.stripe-card h3 { color: var(--primary); }
+        .compliance-card.payphone-card h3 { color: var(--secondary); }
+        .compliance-card.incomm-card h3 { color: #8b5cf6; }
+        .compliance-list { list-style: none; }
+        .compliance-list li { font-size: 0.85rem; color: var(--text); padding: 0.4rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 0.5rem; }
+        .compliance-list li:last-child { border-bottom: none; }
+        .compliance-list li::before { content: '\00B7'; font-weight: 700; color: var(--text-light); }
+        .highlight-tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-green { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .tag-blue { background: rgba(99,102,241,0.1); color: var(--primary); }
+
+        /* Revenue Model */
+        .revenue-flow { display: grid; gap: 1.25rem; }
+        .revenue-item { display: grid; grid-template-columns: 100px 1fr; gap: 1.5rem; align-items: center; padding: 1.5rem; border-radius: 14px; background: var(--white); border: 1px solid var(--border); }
+        .revenue-label { text-align: center; }
+        .revenue-label span { display: block; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; color: white; margin-bottom: 0.4rem; }
+        .revenue-label small { font-size: 0.72rem; color: var(--text-light); }
+        .revenue-detail h4 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem; }
+        .revenue-detail p { font-size: 0.88rem; color: var(--text-light); }
+        .revenue-detail .revenue-math { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--text); background: var(--bg); padding: 0.75rem 1rem; border-radius: 10px; margin-top: 0.75rem; border-left: 3px solid var(--primary); }
+        .revenue-total { background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%); color: white; padding: 2rem; border-radius: 16px; text-align: center; }
+        .revenue-total h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .revenue-total .big-number { font-size: 3rem; font-weight: 800; color: var(--secondary); }
+        .revenue-total p { opacity: 0.8; font-size: 0.9rem; margin-top: 0.5rem; }
+
+        /* Phase 2 */
+        .phase2-card { background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 100%); color: white; border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden; }
+        .phase2-card::before { content: ''; position: absolute; top: -20%; right: -10%; width: 300px; height: 300px; background: var(--accent); opacity: 0.06; border-radius: 50%; }
+        .phase2-flow { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0; }
+        .phase2-node { padding: 0.6rem 1rem; border-radius: 10px; font-size: 0.85rem; font-weight: 600; }
+        .phase2-arrow { color: rgba(255,255,255,0.3); font-size: 1.25rem; }
+        .phase2-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+        .phase2-feature { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; }
+        .phase2-feature h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .phase2-feature p { font-size: 0.82rem; opacity: 0.7; }
+
+        /* Onboarding Requirements */
+        .onboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .onboard-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .onboard-list { list-style: none; }
+        .onboard-list li { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.6rem 0; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+        .onboard-list li:last-child { border-bottom: none; }
+        .req-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+        .req-dot.required { background: var(--cobrar); }
+        .req-dot.optional { background: var(--accent); }
+        .req-dot.tbd { background: var(--text-light); }
+
+        /* Definitions */
+        .def-grid { display: grid; gap: 1rem; }
+        .def-item { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; padding: 1rem 1.25rem; background: var(--white); border-radius: 12px; border: 1px solid var(--border); align-items: center; }
+        .def-term { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; color: var(--primary); }
+        .def-desc { font-size: 0.9rem; color: var(--text); }
+
+        /* Action Items */
+        .dept-grid { display: grid; gap: 2rem; }
+        .dept-card { background: var(--white); border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .dept-header { padding: 1.5rem 1.5rem 1rem; display: flex; align-items: center; gap: 1rem; }
+        .dept-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; }
+        .dept-header h3 { font-size: 1.15rem; font-weight: 700; color: var(--dark); }
+        .dept-header p { font-size: 0.8rem; color: var(--text-light); margin-top: 0.15rem; }
+        .dept-body { padding: 0 1.5rem 1.5rem; }
+        .action-list { list-style: none; counter-reset: action; }
+        .action-item { display: flex; gap: 0.75rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+        .action-item:last-child { border-bottom: none; }
+        .action-num { counter-increment: action; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+        .action-num::before { content: counter(action); }
+        .action-content { flex: 1; }
+        .action-title { font-size: 0.9rem; font-weight: 600; color: var(--dark); margin-bottom: 0.25rem; }
+        .action-desc { font-size: 0.8rem; color: var(--text-light); line-height: 1.5; }
+        .action-tags { display: flex; gap: 0.4rem; margin-top: 0.4rem; flex-wrap: wrap; }
+        .action-tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tag-critical { background: rgba(239,68,68,0.1); color: var(--cobrar); }
+        .tag-high { background: rgba(245,158,11,0.1); color: var(--accent); }
+        .tag-medium { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .tag-phase1 { background: rgba(16,185,129,0.08); color: var(--secondary); }
+        .tag-phase2 { background: rgba(139,92,246,0.08); color: #8b5cf6; }
+
+        /* Footer */
+        .footer { background: #0f0a2e; color: rgba(255,255,255,0.6); padding: 2rem; text-align: center; font-size: 0.85rem; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .journey-grid { grid-template-columns: repeat(3, 1fr); }
+            .journey-step::after { display: none; }
+            .accounts-grid { grid-template-columns: 1fr; }
+            .compliance-grid { grid-template-columns: 1fr; }
+            .phase2-features { grid-template-columns: 1fr; }
+            .onboard-grid { grid-template-columns: 1fr; }
+            .def-item { grid-template-columns: 1fr; gap: 0.25rem; }
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .pillars { flex-direction: column; }
+            .journey-grid { grid-template-columns: repeat(2, 1fr); }
+            .revenue-item { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-box">
+            <div class="password-logo">&#9889;</div>
+            <h2>Architecture</h2>
+            <p>This document is confidential. Please enter the password to continue.</p>
+            <form id="passwordForm">
+                <div class="password-input-group">
+                    <input type="password" class="password-input" id="passwordInput" placeholder="Enter password" autocomplete="off">
+                </div>
+                <div class="password-error-msg" id="errorMsg">Incorrect password. Please try again.</div>
+                <button type="submit" class="password-btn">Access Document</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content-wrapper" id="contentWrapper">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">&#9889;</div>
+            <div>
+                <div class="sidebar-logo-text">Payphone</div>
+                <div class="sidebar-logo-sub">Architecture & Action Plan</div>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Architecture</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#overview" class="sidebar-nav-link active"><span class="sidebar-nav-icon">&#127959;</span> System Overview</a></li>
+                <li class="sidebar-nav-item"><a href="#journey" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128640;</span> User Journey</a></li>
+                <li class="sidebar-nav-item"><a href="#accounts" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128100;</span> Account Types</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Business</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#compliance" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128737;</span> Compliance Split</a></li>
+                <li class="sidebar-nav-item"><a href="#revenue" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128176;</span> Revenue Model</a></li>
+                <li class="sidebar-nav-item"><a href="#onboarding" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128203;</span> Onboarding / KYC</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Roadmap</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#phase2" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#127758;</span> Phase 2: ENVIAR</a></li>
+                <li class="sidebar-nav-item"><a href="#definitions" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128214;</span> Definitions</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Action Items</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#actions-engineering" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128187;</span> Engineering</a></li>
+                <li class="sidebar-nav-item"><a href="#actions-compliance" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#9878;</span> Compliance / Legal</a></li>
+                <li class="sidebar-nav-item"><a href="#actions-finance" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128200;</span> Finance</a></li>
+                <li class="sidebar-nav-item"><a href="#actions-operations" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#9881;</span> Operations</a></li>
+                <li class="sidebar-nav-item"><a href="#actions-bizdev" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#129309;</span> Business Dev</a></li>
+                <li class="sidebar-nav-item"><a href="#actions-marketing" class="sidebar-nav-link"><span class="sidebar-nav-icon">&#128226;</span> Marketing</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-badges">
+                    <span class="header-badge badge-phase">Phase 1</span>
+                    <span class="header-badge badge-stripe">Stripe-Only Architecture</span>
+                    <span class="header-badge badge-stripe">No Bridge Required</span>
+                    <span class="header-badge badge-stripe">Fastest Path to Market</span>
+                </div>
+                <h1>Payphone x <span>Stripe</span> — Option A</h1>
+                <p>Complete Stripe-only architecture for the U.S. launch. Single unified app experience — accept payments, spend with Visa debit, fund via ACH or cash. No MSB license required.</p>
+
+                <div class="pillars">
+                    <div class="pillar">
+                        <div class="pillar-dot cobrar"></div>
+                        <div>
+                            <div class="pillar-label">COBRAR</div>
+                            <div class="pillar-desc">TAP to Pay — accept payments</div>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-dot gastar"></div>
+                        <div>
+                            <div class="pillar-label">GASTAR</div>
+                            <div class="pillar-desc">Visa debit card — spend</div>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-dot cargar"></div>
+                        <div>
+                            <div class="pillar-label">CARGAR</div>
+                            <div class="pillar-desc">Fund account — ACH / debit / cash</div>
+                        </div>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-dot enviar"></div>
+                        <div>
+                            <div class="pillar-label">ENVIAR</div>
+                            <div class="pillar-desc">Phase 2 — cross-border remittances</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- System Architecture -->
+        <section class="section" id="overview">
+            <div class="section-header">
+                <div class="section-badge badge-blue">System Architecture</div>
+                <h2 class="section-title">Complete Architecture Diagram</h2>
+                <p class="section-description">Every component runs within the Stripe ecosystem. Payphone is the platform, each user is a Custom Connected Account (sub-merchant).</p>
+            </div>
+
+            <div class="arch-container">
+                <div style="display: grid; grid-template-columns: 180px 1fr 250px; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+                    <div class="arch-box" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+                        <h4 style="color: rgba(255,255,255,0.9);">Customer</h4>
+                        <p>Taps Visa / MC / Apple Pay / Google Pay</p>
+                    </div>
+                    <div class="arch-box arch-app" style="max-width: none;">
+                        <h4>Payphone App</h4>
+                        <p>User's mobile device — single unified experience<br><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; opacity: 0.7;">Stripe Terminal SDK &middot; Issuing card UI &middot; Financial Account dashboard &middot; Cash load barcode</span></p>
+                    </div>
+                    <div class="arch-box arch-incomm">
+                        <h4>InComm VanillaDirect</h4>
+                        <p>525K+ retail locations<br>CVS, Walgreens, 7-Eleven, Dollar General, Walmart</p>
+                        <span class="arch-label label-cargar">CARGAR</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <span style="display: inline-block; padding: 0.3rem 1rem; background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: #818cf8; letter-spacing: 1px;">STRIPE ECOSYSTEM</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="arch-box arch-stripe">
+                        <h4>Stripe Connect</h4>
+                        <p>Platform Account (PayFac)<br>Payphone = platform. Each user = Custom Connected Account (sole proprietor sub-merchant).</p>
+                        <span class="arch-label label-cobrar">COBRAR</span>
+                    </div>
+                    <div class="arch-box arch-wallet">
+                        <h4>Stripe Financial Account</h4>
+                        <p>Fifth Third Bank / Evolve &middot; FDIC pass-through<br><strong style="color: #34d399;">Routing # + Account #</strong> &middot; ACH in/out &middot; US domestic wire<br><em>This IS the Payphone wallet</em></p>
+                        <div style="margin-top: 0.5rem; font-size: 0.7rem; opacity: 0.5;">THE WALLET</div>
+                    </div>
+                    <div class="arch-box arch-stripe">
+                        <h4>ACH / Debit Funding</h4>
+                        <p>Stripe-powered on-ramp. User links bank account via Plaid or manual. ACH pull/push.</p>
+                        <span class="arch-label label-cargar">CARGAR</span>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="arch-box arch-stripe">
+                        <h4>Stripe Terminal SDK</h4>
+                        <p>TAP-to-pay processing. Phone = POS terminal. PCI handled by Stripe. NFC card capture.</p>
+                    </div>
+                    <div class="arch-box arch-stripe">
+                        <h4>Stripe Issuing</h4>
+                        <p>Virtual + Physical Visa Debit Cards. Real-time auth &middot; Spend limits &middot; Apple Pay + Google Pay &middot; Interchange revenue.</p>
+                        <span class="arch-label label-gastar">GASTAR</span>
+                    </div>
+                    <div class="arch-box arch-incomm">
+                        <h4>InComm Settlement</h4>
+                        <p>VanillaDirect cash loads. Cash deposited at retail settles to Financial Account via ACH.</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="arch-box arch-kyc">
+                        <h4>KYC / Onboarding Verification</h4>
+                        <p>ID verification (TBD) &middot; Liveness test (TBD) &middot; VPN/geolocation check (TBD) &middot; SSN/ITIN optional</p>
+                    </div>
+                    <div class="arch-box" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+                        <h4 style="color: rgba(255,255,255,0.9);">ACH / Wire Out</h4>
+                        <p>US bank withdrawal. User withdraws to personal US bank account.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Journey -->
+        <section class="section" id="journey" style="background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-green">User Journey</div>
+                    <h2 class="section-title">Sign-Up to First Spend</h2>
+                    <p class="section-description">Six steps from download to fully operational — accepting payments, spending with Visa card, and funding the account.</p>
+                </div>
+
+                <div class="journey-grid">
+                    <div class="journey-step">
+                        <div class="step-number step-1">1</div>
+                        <h4>Download App</h4>
+                        <p>User downloads Payphone from App Store / Play Store</p>
+                    </div>
+                    <div class="journey-step">
+                        <div class="step-number step-2">2</div>
+                        <h4>KYC Onboarding</h4>
+                        <p>Photo ID (US or foreign) + liveness test. SSN/ITIN optional. VPN blocked.</p>
+                    </div>
+                    <div class="journey-step">
+                        <div class="step-number step-3">3</div>
+                        <h4>Financial Account</h4>
+                        <p>Treasury auto-provisions FA with routing # + account #. FDIC eligible.</p>
+                    </div>
+                    <div class="journey-step">
+                        <div class="step-number step-4">4</div>
+                        <h4>Fund Account</h4>
+                        <p>ACH from bank, debit card, or cash at 525K+ InComm retail locations.</p>
+                    </div>
+                    <div class="journey-step">
+                        <div class="step-number step-5">5</div>
+                        <h4>Get Visa Card</h4>
+                        <p>Virtual card instant to Apple Pay / Google Pay. Physical ships 5-7 days.</p>
+                    </div>
+                    <div class="journey-step">
+                        <div class="step-number step-6">6</div>
+                        <h4>Start Using</h4>
+                        <p>COBRAR: accept payments. GASTAR: spend with card. CARGAR: add funds.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account Structure -->
+        <section class="section" id="accounts">
+            <div class="section-header">
+                <div class="section-badge badge-purple">Account Structure</div>
+                <h2 class="section-title">Stripe Account Structure</h2>
+                <p class="section-description">Payphone is the Stripe Connect Platform Account. Every user is a Custom Connected Account (fully white-labeled, no Stripe dashboard).</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; text-align: center; padding: 1.5rem; margin-bottom: 2rem; border-radius: 16px;">
+                <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Payphone — Stripe Connect Platform Account</h3>
+                <p style="font-size: 0.85rem; opacity: 0.85; font-family: 'JetBrains Mono', monospace;">card_payments &middot; transfers &middot; treasury &middot; card_issuing &middot; us_bank_account_ach_payments</p>
+            </div>
+
+            <div class="accounts-grid">
+                <div class="card account-card merchant">
+                    <div class="account-type" style="color: var(--cobrar);">Merchant</div>
+                    <h3>User: Merchant</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Sub-Merchant Account (Custom Connected). Accepts TAP-to-pay via COBRAR + wallet + card.</p>
+                    <ul class="account-features">
+                        <li>Accept NFC TAP payments</li>
+                        <li>Payphone wallet</li>
+                        <li>Visa debit card</li>
+                        <li>Cash loading</li>
+                    </ul>
+                    <div class="account-sub">
+                        <div class="account-sub-item"><strong>Financial Account</strong><span>Fifth Third &middot; Routing # + Acct # &middot; FDIC &middot; ACH</span></div>
+                        <div class="account-sub-item"><strong>Issuing Card</strong><span>Visa Debit &middot; Virtual + Physical &middot; Apple/Google Pay</span></div>
+                    </div>
+                </div>
+                <div class="card account-card regular">
+                    <div class="account-type" style="color: var(--gastar);">Regular</div>
+                    <h3>User: Regular</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Sub-Merchant Account (Custom Connected). Wallet + card only (no merchant features).</p>
+                    <ul class="account-features">
+                        <li>Payphone wallet</li>
+                        <li>Visa debit card</li>
+                        <li>ACH transfers</li>
+                        <li>Cash loading</li>
+                    </ul>
+                    <div class="account-sub">
+                        <div class="account-sub-item"><strong>Financial Account</strong><span>Fifth Third &middot; Routing # + Acct # &middot; FDIC &middot; ACH</span></div>
+                        <div class="account-sub-item"><strong>Issuing Card</strong><span>Visa Debit &middot; Virtual + Physical &middot; Apple/Google Pay</span></div>
+                    </div>
+                </div>
+                <div class="card account-card hybrid">
+                    <div class="account-type" style="color: #8b5cf6;">Hybrid</div>
+                    <h3>User: Hybrid</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Sub-Merchant Account (Custom Connected). Both earn (COBRAR) and spend (GASTAR).</p>
+                    <ul class="account-features">
+                        <li>Accept NFC TAP payments</li>
+                        <li>Payphone wallet</li>
+                        <li>Visa debit card</li>
+                        <li>Cash loading</li>
+                    </ul>
+                    <div class="account-sub">
+                        <div class="account-sub-item"><strong>Financial Account</strong><span>Fifth Third &middot; Routing # + Acct # &middot; FDIC &middot; ACH</span></div>
+                        <div class="account-sub-item"><strong>Issuing Card</strong><span>Visa Debit &middot; Virtual + Physical &middot; Apple/Google Pay</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compliance Split -->
+        <section class="section" id="compliance" style="background: linear-gradient(180deg, #f8fafc 0%, #fef2f2 0%, #f8fafc 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-red">Compliance</div>
+                    <h2 class="section-title">Who Owns What — Compliance & License Split</h2>
+                    <p class="section-description">Clear separation of responsibilities. Key advantage: <strong>No MSB license required for Payphone.</strong></p>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <span class="highlight-tag tag-blue">Stripe = Registered PayFac, PCI Level 1</span>
+                    <span class="highlight-tag tag-blue">Fifth Third / Evolve = BIN Sponsor, FDIC</span>
+                    <span class="highlight-tag tag-green">Payphone = Platform + KYC Owner</span>
+                    <span class="highlight-tag tag-green">No MSB license required for Payphone</span>
+                </div>
+
+                <div class="compliance-grid">
+                    <div class="card compliance-card stripe-card">
+                        <h3>Stripe</h3>
+                        <ul class="compliance-list">
+                            <li>Payment Facilitator (PayFac)</li>
+                            <li>PCI DSS Level 1</li>
+                            <li>Card Issuer (Fifth Third / Evolve)</li>
+                            <li>Treasury provider (FDIC)</li>
+                            <li>1099-K tax filing (if SSN provided)</li>
+                            <li>Dispute management</li>
+                            <li>Card network membership</li>
+                            <li>ACH originator</li>
+                        </ul>
+                    </div>
+                    <div class="card compliance-card payphone-card">
+                        <h3>Payphone</h3>
+                        <ul class="compliance-list">
+                            <li>Platform / Program Manager</li>
+                            <li>Sub-merchant management + onboarding</li>
+                            <li>Customer relationship + brand</li>
+                            <li>Compliance oversight (CCO)</li>
+                            <li>KYC / ID verification (provider TBD)</li>
+                            <li>Liveness test (provider TBD)</li>
+                            <li>VPN / geolocation check (TBD)</li>
+                            <li>Fraud monitoring + escalation</li>
+                            <li>Platform fee pricing</li>
+                            <li><strong style="color: var(--secondary);">NO MSB LICENSE REQUIRED</strong></li>
+                        </ul>
+                    </div>
+                    <div class="card compliance-card incomm-card">
+                        <h3>InComm</h3>
+                        <ul class="compliance-list">
+                            <li>Licensed Money Services Business</li>
+                            <li>Cash load network operator</li>
+                            <li>Retail partner contracts</li>
+                            <li>VanillaDirect barcode system</li>
+                            <li>Settles via ACH to user's Stripe Financial Account</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Revenue Model -->
+        <section class="section" id="revenue">
+            <div class="section-header">
+                <div class="section-badge badge-green">Revenue</div>
+                <h2 class="section-title">Revenue Model</h2>
+                <p class="section-description">How Payphone makes money on every $100 transaction cycle through the platform.</p>
+            </div>
+
+            <div class="revenue-flow">
+                <div class="revenue-item">
+                    <div class="revenue-label">
+                        <span style="background: var(--cobrar);">COBRAR</span>
+                        <small>Accept Payment</small>
+                    </div>
+                    <div class="revenue-detail">
+                        <h4>Customer Pays $100 via TAP</h4>
+                        <p>Stripe processes the NFC payment and takes its standard processing fee. Payphone charges a 1% platform fee on top.</p>
+                        <div class="revenue-math">
+                            $100.00 payment<br>
+                            - $3.20 Stripe fee (2.9% + $0.30)<br>
+                            - <strong>$1.00 Payphone platform fee (1%)</strong><br>
+                            = $95.80 deposited to user's Financial Account
+                        </div>
+                    </div>
+                </div>
+
+                <div class="revenue-item">
+                    <div class="revenue-label">
+                        <span style="background: var(--gastar);">GASTAR</span>
+                        <small>Spend with Card</small>
+                    </div>
+                    <div class="revenue-detail">
+                        <h4>User Spends $95.80 with Visa Debit</h4>
+                        <p>When users spend with their Payphone Visa debit card, Payphone earns interchange revenue on every swipe/tap.</p>
+                        <div class="revenue-math">
+                            $95.80 card spend<br>
+                            x 1.5% interchange<br>
+                            = <strong>$1.44 interchange revenue to Payphone</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="revenue-item">
+                    <div class="revenue-label">
+                        <span style="background: var(--cargar);">CARGAR</span>
+                        <small>Cash Load</small>
+                    </div>
+                    <div class="revenue-detail">
+                        <h4>InComm Cash Load at Retail</h4>
+                        <p>Unbanked and cash-preferred users fund their account at 525K+ retail locations. Potential fee pass-through per cash load.</p>
+                        <div class="revenue-math">
+                            $3.95 per cash load at retail<br>
+                            = <strong>Additional revenue from unbanked / cash-preferred users</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="revenue-total" style="margin-top: 2rem;">
+                <h3>Total Revenue Per $100 Transaction Cycle</h3>
+                <div class="big-number">$2.44</div>
+                <p>$1.00 platform fee (COBRAR) + $1.44 interchange (GASTAR) = $2.44 per $100 throughput</p>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.6;">+ additional cash load fees from CARGAR</p>
+            </div>
+        </section>
+
+        <!-- Onboarding Requirements -->
+        <section class="section" id="onboarding" style="background: linear-gradient(180deg, #f8fafc 0%, #fffbeb 0%, #f8fafc 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-orange">KYC / Onboarding</div>
+                    <h2 class="section-title">Onboarding Requirements</h2>
+                    <p class="section-description">What we collect to open an account. Designed to be accessible for immigrants — SSN/ITIN is optional, foreign IDs are accepted.</p>
+                </div>
+
+                <div class="onboard-grid">
+                    <div class="card onboard-card">
+                        <h3><span style="color: var(--cobrar);">Required</span></h3>
+                        <ul class="onboard-list">
+                            <li><span class="req-dot required"></span> First name + last name</li>
+                            <li><span class="req-dot required"></span> US address (must reside in the United States)</li>
+                            <li><span class="req-dot required"></span> US phone number</li>
+                            <li><span class="req-dot required"></span> Government-issued photo ID (US or foreign — passport, consular ID, etc.)</li>
+                            <li><span class="req-dot required"></span> Liveness test — provider TBD</li>
+                            <li><span class="req-dot required"></span> Geolocation check — VPN + GPS spoofing blocked (provider TBD)</li>
+                        </ul>
+                    </div>
+                    <div class="card onboard-card">
+                        <h3><span style="color: var(--accent);">Optional</span></h3>
+                        <ul class="onboard-list">
+                            <li><span class="req-dot optional"></span> SSN / ITIN — only if the user has one (not required to open account)</li>
+                        </ul>
+                        <div style="margin-top: 2rem; padding: 1.25rem; background: rgba(245,158,11,0.08); border-radius: 12px; border-left: 3px solid var(--accent);">
+                            <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem;">Verification Providers — TBD</h4>
+                            <ul style="list-style: none; font-size: 0.85rem; color: var(--text-light);">
+                                <li style="margin-bottom: 0.4rem;"><span class="req-dot tbd" style="display: inline-block; margin-right: 0.5rem;"></span> KYC / ID Verification provider</li>
+                                <li style="margin-bottom: 0.4rem;"><span class="req-dot tbd" style="display: inline-block; margin-right: 0.5rem;"></span> Liveness test provider</li>
+                                <li><span class="req-dot tbd" style="display: inline-block; margin-right: 0.5rem;"></span> Geolocation / VPN detection provider</li>
+                            </ul>
+                            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 1rem;">Recommended providers: Socure, Veriff, Jumio, Persona.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase 2 -->
+        <section class="section" id="phase2">
+            <div class="section-header">
+                <div class="section-badge badge-orange">Phase 2</div>
+                <h2 class="section-title">Phase 2 — Add Bridge for ENVIAR</h2>
+                <p class="section-description">When ready for cross-border remittances, add Bridge as the off-ramp layer. Bridge becomes complementary — not a replacement for the Stripe wallet.</p>
+            </div>
+
+            <div class="phase2-card">
+                <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Cross-Border Remittance Flow</h3>
+                <p style="opacity: 0.7; font-size: 0.95rem;">Funds move from Financial Account through Bridge to stablecoin and out to LATAM fiat currencies.</p>
+
+                <div class="phase2-flow">
+                    <div class="phase2-node" style="background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399;">Financial Account</div>
+                    <span class="phase2-arrow">&rarr;</span>
+                    <div class="phase2-node" style="background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4); color: #fbbf24;">Bridge</div>
+                    <span class="phase2-arrow">&rarr;</span>
+                    <div class="phase2-node" style="background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #818cf8;">Stablecoin</div>
+                    <span class="phase2-arrow">&rarr;</span>
+                    <div class="phase2-node" style="background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4); color: #f87171;">LATAM Fiat</div>
+                </div>
+
+                <div class="phase2-features">
+                    <div class="phase2-feature">
+                        <h4 style="color: #fbbf24;">ENVIAR</h4>
+                        <p>Cross-border remittances to Latin America. Financial Account &rarr; Bridge &rarr; stablecoin &rarr; local fiat currency.</p>
+                    </div>
+                    <div class="phase2-feature">
+                        <h4 style="color: #34d399;">3.5% APY Yield</h4>
+                        <p>Custom Payphone stablecoin via Bridge Open Issuance. Earn 3.5% APY on reserves held in stablecoin.</p>
+                    </div>
+                    <div class="phase2-feature">
+                        <h4 style="color: #818cf8;">18-Country Card Issuing</h4>
+                        <p>Bridge's card issuing program covers 18 countries. Enables recipient-side debit cards in LATAM markets.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Definitions -->
+        <section class="section" id="definitions" style="background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-blue">Reference</div>
+                    <h2 class="section-title">Key Definitions</h2>
+                </div>
+
+                <div class="def-grid">
+                    <div class="def-item">
+                        <div class="def-term">Platform Account</div>
+                        <div class="def-desc">Payphone (master control — all users are sub-merchants under Payphone)</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">Custom Connected Account</div>
+                        <div class="def-desc">Sub-merchant account per user (no Stripe dashboard — fully white-labeled)</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">Financial Account</div>
+                        <div class="def-desc">User's fiat wallet (FDIC insured, ACH in/out, routing #, receives COBRAR payouts)</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">Issuing Card</div>
+                        <div class="def-desc">User's Visa debit card (virtual + physical, funded by Financial Account balance)</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">PayFac</div>
+                        <div class="def-desc">Payment Facilitator — Stripe's role as the registered entity enabling sub-merchant payment acceptance</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">BIN Sponsor</div>
+                        <div class="def-desc">Fifth Third Bank / Evolve — the bank that provides the card BIN (Bank Identification Number) for Visa debit issuance</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">VanillaDirect</div>
+                        <div class="def-desc">InComm's retail cash loading barcode system — generates unique barcodes users present at checkout to load cash</div>
+                    </div>
+                    <div class="def-item">
+                        <div class="def-term">Bridge</div>
+                        <div class="def-desc">Phase 2 cross-border off-ramp — converts USD to stablecoin to LATAM fiat for remittances</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- ACTION ITEMS BY DEPARTMENT                   -->
+        <!-- ============================================ -->
+
+        <section style="background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 100%); padding: 3rem 2rem; max-width: 100%;">
+            <div style="max-width: 1400px; margin: 0 auto; text-align: center;">
+                <div class="section-badge" style="background: rgba(245,158,11,0.2); color: #fbbf24;">Action Plan</div>
+                <h2 style="font-size: 2rem; font-weight: 800; color: white; margin-bottom: 0.5rem;">Action Items by Department</h2>
+                <p style="color: rgba(255,255,255,0.6); font-size: 1rem; max-width: 600px; margin: 0 auto;">Every department's checklist for taking Payphone from architecture to launch in the U.S. market.</p>
+            </div>
+        </section>
+
+        <!-- ENGINEERING -->
+        <section class="section" id="actions-engineering">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(99,102,241,0.1); color: var(--primary);">&#128187;</div>
+                        <div>
+                            <h3>Engineering / Product</h3>
+                            <p>Build the Stripe-powered infrastructure and app experience</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Set up Stripe Connect Platform Account</div>
+                                    <div class="action-desc">Register Payphone as the Platform Account with capabilities: card_payments, transfers, treasury, card_issuing, us_bank_account_ach_payments. Configure platform-level settings and webhook endpoints.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build Custom Connected Account provisioning</div>
+                                    <div class="action-desc">Auto-create a Custom Connected Account (sole proprietor sub-merchant) per user at sign-up. No Stripe dashboard exposed — fully white-labeled. Handle account verification lifecycle.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Integrate Stripe Terminal SDK (COBRAR)</div>
+                                    <div class="action-desc">Implement NFC TAP-to-pay using Stripe Terminal SDK. Phone becomes POS terminal. Handle card capture, payment creation, and real-time confirmation. iOS + Android.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Implement Stripe Treasury (Financial Account)</div>
+                                    <div class="action-desc">Auto-provision Financial Account per user with routing # + account #. FDIC pass-through via Fifth Third / Evolve. ACH in/out. This IS the Payphone wallet — display balance, transaction history, account details.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Implement Stripe Issuing (GASTAR)</div>
+                                    <div class="action-desc">Issue virtual Visa debit cards instantly. Provision to Apple Pay + Google Pay. Physical card ordering and fulfillment (5-7 day shipping). Real-time authorization, spend limits, card controls.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build ACH / debit funding flow (CARGAR)</div>
+                                    <div class="action-desc">Stripe-powered on-ramp for bank account linking (via Plaid or manual entry). ACH pull/push. Debit card funding. Handle micro-deposit verification for manual bank link.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Integrate InComm VanillaDirect (CARGAR)</div>
+                                    <div class="action-desc">Generate unique barcodes per user for cash loading at 525K+ retail locations. Handle barcode display in-app, load notifications, and settlement reconciliation (InComm ACH to Financial Account).</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Integrate KYC / ID verification provider</div>
+                                    <div class="action-desc">Select and integrate KYC provider (Socure, Veriff, Jumio, or Persona). Must support foreign government IDs (passports, consular IDs). Include liveness test and VPN/geolocation blocking.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build user onboarding flow (6-step journey)</div>
+                                    <div class="action-desc">Download &rarr; KYC &rarr; Financial Account &rarr; Fund &rarr; Card &rarr; Start Using. Seamless mobile-first flow with progress indicators, error handling, and bilingual support (EN/ES).</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build transaction dashboard + notifications</div>
+                                    <div class="action-desc">Real-time balance updates, transaction history for COBRAR / GASTAR / CARGAR. Push notifications for payments received, card charges, and cash loads. Export statements.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build Bridge integration for ENVIAR</div>
+                                    <div class="action-desc">Financial Account &rarr; Bridge &rarr; stablecoin &rarr; LATAM fiat. Cross-border remittance flow. Custom stablecoin via Bridge Open Issuance. 18-country card issuing for recipients.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPLIANCE / LEGAL -->
+        <section class="section" id="actions-compliance" style="background: linear-gradient(180deg, #f8fafc 0%, #fef2f2 0%, #f8fafc 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(239,68,68,0.1); color: var(--cobrar);">&#9878;</div>
+                        <div>
+                            <h3>Compliance / Legal</h3>
+                            <p>Regulatory framework, KYC ownership, and compliance infrastructure</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Hire Chief Compliance Officer (CCO)</div>
+                                    <div class="action-desc">Must have fintech / payments compliance experience. Responsible for overall compliance oversight, BSA/AML program, suspicious activity reporting, and regulatory liaison. Pedro Infante currently designated as CCO.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Establish BSA/AML compliance program</div>
+                                    <div class="action-desc">Written BSA/AML policies and procedures. Transaction monitoring rules. Suspicious Activity Report (SAR) filing procedures. Employee training program. Independent audit schedule.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Select and contract KYC / ID verification provider</div>
+                                    <div class="action-desc">Evaluate Socure, Veriff, Jumio, Persona. Key requirements: foreign government ID support (passports, consular IDs, matr&iacute;cula consular), liveness detection, SSN/ITIN optional acceptance. Negotiate contract and SLA.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Finalize Stripe Connect platform agreement</div>
+                                    <div class="action-desc">Execute Stripe Connect Platform Agreement. Confirm PayFac model — Stripe holds PCI DSS Level 1, card network membership, and ACH originator status. Confirm Payphone has no MSB license obligation under this structure.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Document foreign ID acceptance policy</div>
+                                    <div class="action-desc">Formal policy for accepting non-US government IDs: which documents are accepted (foreign passports, consular IDs, national IDs), verification procedures, and edge cases. Align with Stripe's connected account verification requirements.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Establish fraud monitoring + escalation procedures</div>
+                                    <div class="action-desc">Define transaction velocity limits, unusual pattern detection, account takeover prevention. Escalation workflow from automated alerts to CCO review. Document cooperation protocols with Stripe's dispute management.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">VPN / geolocation blocking policy</div>
+                                    <div class="action-desc">Select VPN detection and geolocation verification provider. Define policy: block account creation from VPN, prevent GPS spoofing during onboarding. Ongoing monitoring for suspicious location patterns.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">1099-K tax filing coordination with Stripe</div>
+                                    <div class="action-desc">Define process for users who provide SSN/ITIN. Stripe handles 1099-K filing for qualifying merchants. Document tax reporting responsibilities and data sharing between Payphone and Stripe.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Evaluate cross-border remittance licensing (ENVIAR)</div>
+                                    <div class="action-desc">Determine if Payphone needs additional licenses for Phase 2 remittances via Bridge. Evaluate state-by-state MTL requirements for money transmission when sending funds cross-border.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- FINANCE -->
+        <section class="section" id="actions-finance">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(16,185,129,0.1); color: var(--secondary);">&#128200;</div>
+                        <div>
+                            <h3>Finance</h3>
+                            <p>Revenue model, unit economics, and financial operations</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Finalize platform fee structure</div>
+                                    <div class="action-desc">Confirm 1% platform fee on COBRAR transactions. Model competitive analysis against Square, Toast, SumUp. Ensure fee is sustainable at launch volumes and attractive to target merchant segment.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Model interchange revenue share with Stripe</div>
+                                    <div class="action-desc">Negotiate Payphone's share of 1.5% interchange on GASTAR (Visa debit spend). Understand Stripe Issuing's interchange revenue sharing model. Build projections based on average user spend.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Negotiate InComm cash load fee structure</div>
+                                    <div class="action-desc">Confirm $3.95 per cash load fee. Determine who absorbs the fee (user-paid vs. subsidized). Model cash load volume projections for unbanked / cash-preferred segment.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build unit economics model per user type</div>
+                                    <div class="action-desc">Model revenue per Merchant, Regular, and Hybrid user. Factor in: platform fees, interchange, cash load fees, Stripe costs, KYC costs, card production, customer support. Target $2.44 per $100 throughput.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Set up financial reconciliation for Stripe payouts</div>
+                                    <div class="action-desc">Automate reconciliation of Stripe Connect payouts, Treasury balances, InComm ACH settlements, and interchange revenue. Daily/weekly/monthly financial reporting dashboards.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Establish FDIC pass-through accounting</div>
+                                    <div class="action-desc">Set up accounting treatment for user funds held in Stripe Financial Accounts (Fifth Third / Evolve). Ensure FDIC pass-through insurance compliance. Segregation of user funds from platform operating funds.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Model Phase 2 remittance revenue (ENVIAR)</div>
+                                    <div class="action-desc">Project cross-border remittance fees. Model Bridge costs vs. traditional remittance pricing ($5-15 per transfer). Factor in 3.5% APY stablecoin yield as additional revenue stream.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPERATIONS -->
+        <section class="section" id="actions-operations" style="background: linear-gradient(180deg, #f8fafc 0%, #fffbeb 0%, #f8fafc 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(245,158,11,0.1); color: var(--accent);">&#9881;</div>
+                        <div>
+                            <h3>Operations</h3>
+                            <p>Day-to-day operations, customer support, and operational integrations</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Set up bilingual customer support (EN/ES)</div>
+                                    <div class="action-desc">Hire bilingual support agents (English + Spanish). Set up support channels: in-app chat, email, phone. Create FAQ/knowledge base in both languages. Define SLA response times.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Establish dispute management workflow</div>
+                                    <div class="action-desc">Define dispute handling process for COBRAR chargebacks and GASTAR card disputes. Coordinate with Stripe's built-in dispute management. Escalation paths, evidence submission, and resolution timelines.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Physical card fulfillment logistics</div>
+                                    <div class="action-desc">Set up physical Visa debit card ordering, printing, and shipping pipeline. 5-7 day delivery target. Card activation flow in-app. Handle replacements, lost/stolen reporting, and expedited shipping.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">InComm cash load operational procedures</div>
+                                    <div class="action-desc">Document cash load flow: barcode generation &rarr; user presents at checkout &rarr; cash deposited &rarr; ACH settlement to Financial Account. Handle load failures, settlement delays, and reconciliation discrepancies.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build fraud monitoring + alerting operations</div>
+                                    <div class="action-desc">Operational team for reviewing fraud alerts. Define velocity checks, unusual pattern detection, and account freeze procedures. Coordinate SAR filing with compliance. 24/7 monitoring for high-risk transactions.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">KYC review queue for manual verifications</div>
+                                    <div class="action-desc">Handle edge cases where automated KYC fails: blurry IDs, unusual document types, failed liveness tests. Manual review queue with SLA. Escalation to compliance for suspicious applications.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Account closure and fund withdrawal procedures</div>
+                                    <div class="action-desc">Define account closure process: withdraw remaining balance via ACH, cancel Visa card, deactivate Financial Account. Handle regulatory holds, dormant accounts, and unclaimed funds.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- BUSINESS DEVELOPMENT -->
+        <section class="section" id="actions-bizdev">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(139,92,246,0.1); color: #8b5cf6;">&#129309;</div>
+                        <div>
+                            <h3>Business Development / Partnerships</h3>
+                            <p>Strategic partnerships, vendor contracts, and market entry relationships</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Execute Stripe Connect platform partnership</div>
+                                    <div class="action-desc">Formalize Stripe partnership: Platform Account approval, Treasury access, Issuing program enrollment, Terminal SDK access. Negotiate interchange revenue share. Establish dedicated Stripe account manager relationship.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Execute InComm VanillaDirect integration contract</div>
+                                    <div class="action-desc">Sign InComm partnership for VanillaDirect cash loading. Negotiate per-load fees, settlement terms (ACH timing), and barcode generation API access. Confirm coverage at 525K+ retail locations (CVS, Walgreens, 7-Eleven, Dollar General, Walmart).</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Identify and onboard launch merchant partners</div>
+                                    <div class="action-desc">Target initial merchant cohort: Latino-owned small businesses, food trucks, bodegas, barber shops, nail salons. Develop merchant onboarding playbook. Aim for 100-500 launch merchants in initial market.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Negotiate KYC provider contract</div>
+                                    <div class="action-desc">RFP across Socure, Veriff, Jumio, and Persona. Evaluate: foreign ID coverage, liveness detection accuracy, cost per verification, API integration complexity, and turnaround time. Negotiate volume pricing.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Evaluate Plaid partnership for bank linking</div>
+                                    <div class="action-desc">Assess Plaid vs. Stripe's native bank linking for ACH funding (CARGAR). Compare coverage, user experience, cost, and reliability. May use both — Plaid for instant verification, Stripe for micro-deposit fallback.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Initiate Bridge partnership for ENVIAR</div>
+                                    <div class="action-desc">Begin discussions with Bridge (Stripe-acquired) for Phase 2 cross-border remittances. Evaluate stablecoin issuance (3.5% APY), LATAM off-ramp capabilities, and 18-country card issuing program.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Explore LATAM banking partnerships for ENVIAR</div>
+                                    <div class="action-desc">Identify local banking / fintech partners in target LATAM markets for fiat off-ramp (receiving end of remittances). Evaluate local mobile money options, bank transfer networks, and cash pickup alternatives.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MARKETING / GROWTH -->
+        <section class="section" id="actions-marketing" style="background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-header">
+                        <div class="dept-icon" style="background: rgba(245,158,11,0.1); color: var(--accent);">&#128226;</div>
+                        <div>
+                            <h3>Marketing / Growth</h3>
+                            <p>User acquisition, merchant onboarding, and brand positioning</p>
+                        </div>
+                    </div>
+                    <div class="dept-body">
+                        <ul class="action-list">
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Define U.S. launch market and go-to-market strategy</div>
+                                    <div class="action-desc">Select initial launch city/region (e.g., Miami, Houston, Los Angeles). Define target user persona: Latino immigrants, unbanked/underbanked, small business owners. Competitive positioning against Venmo, Cash App, Square.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(239,68,68,0.1); color: var(--cobrar);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Build bilingual brand identity for U.S. market</div>
+                                    <div class="action-desc">Adapt Payphone's LATAM brand for U.S. audience. All marketing assets in English + Spanish. App store listings, website, social media, and print materials. Emphasize: no SSN required, foreign IDs accepted, cash loading available.</div>
+                                    <div class="action-tags"><span class="action-tag tag-critical">Critical</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Develop merchant acquisition campaign</div>
+                                    <div class="action-desc">Street-level merchant acquisition: door-to-door in Latino business districts. Key pitch: lower fees than Square (total cost of 3.9% + $0.30 vs. Square's 2.6% + $0.10 but with full banking), instant access to funds, no separate POS hardware needed.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(245,158,11,0.1); color: var(--accent);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Create user acquisition campaigns (Regular users)</div>
+                                    <div class="action-desc">Target: immigrants needing banking access without SSN. Channels: Spanish-language social media (Instagram, TikTok, WhatsApp groups), community radio, church partnerships, consulate waiting rooms. Highlight: Visa debit card, cash loading, no SSN.</div>
+                                    <div class="action-tags"><span class="action-tag tag-high">High</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Design referral program</div>
+                                    <div class="action-desc">User-to-user and merchant-to-user referral incentives. Bonus credit to Financial Account for successful referrals. Track referral attribution. Target viral growth within Latino communities.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(99,102,241,0.1); color: var(--primary);"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Partner with community organizations</div>
+                                    <div class="action-desc">Build relationships with Latino chambers of commerce, immigrant advocacy groups, remittance-focused nonprofits, and community development financial institutions (CDFIs). Co-branded financial literacy programs.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase1">Phase 1</span></div>
+                                </div>
+                            </li>
+                            <li class="action-item">
+                                <div class="action-num" style="background: rgba(139,92,246,0.1); color: #8b5cf6;"></div>
+                                <div class="action-content">
+                                    <div class="action-title">Launch ENVIAR remittance marketing campaign</div>
+                                    <div class="action-desc">Position ENVIAR against Western Union, MoneyGram, Remitly. Highlight: send from Payphone wallet, lower fees, faster settlement via stablecoin, recipient gets card in 18 LATAM countries.</div>
+                                    <div class="action-tags"><span class="action-tag tag-medium">Medium</span><span class="action-tag tag-phase2">Phase 2</span></div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Payphone x Stripe — Option A Architecture & Action Plan | Phase 1 & Phase 2</p>
+            <p style="margin-top: 0.5rem; opacity: 0.5; font-size: 0.8rem;">Standalone Document &middot; Confidential &middot; Pedro Infante, CCO</p>
+        </footer>
+    </div><!-- End Main Content -->
+    </div><!-- end content-wrapper -->
+
+    <script>
+        const correctPassword = 'payphone2026';
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const passwordScreen = document.getElementById('passwordScreen');
+        const contentWrapper = document.getElementById('contentWrapper');
+
+        if (sessionStorage.getItem('payphone_arch_authenticated') === 'true') {
+            passwordScreen.classList.add('hidden');
+            contentWrapper.classList.add('unlocked');
+        }
+
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (passwordInput.value === correctPassword) {
+                sessionStorage.setItem('payphone_arch_authenticated', 'true');
+                passwordScreen.classList.add('hidden');
+                contentWrapper.classList.add('unlocked');
+            } else {
+                passwordInput.classList.add('error');
+                errorMsg.classList.add('show');
+                setTimeout(() => { passwordInput.classList.remove('error'); }, 500);
+            }
+        });
+        passwordInput.addEventListener('input', function() { errorMsg.classList.remove('show'); });
+
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        sidebarToggle.addEventListener('click', () => { sidebar.classList.toggle('open'); sidebarOverlay.classList.toggle('open'); });
+        sidebarOverlay.addEventListener('click', () => { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); });
+
+        document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.querySelectorAll('.sidebar-nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                if (window.innerWidth <= 1024) { sidebar.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section, section');
+            let current = '';
+            sections.forEach(section => { if (section.id && scrollY >= section.offsetTop - 200) current = section.id; });
+            document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
