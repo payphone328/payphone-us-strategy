@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payphone Colombia Revenue Model</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e1b4b;
+            --text: #374151;
+            --text-light: #6b7280;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --border: #e5e7eb;
+            --colombia: #fcd34d;
+            --colombia-dark: #f59e0b;
+            --betting: #dc2626;
+            --acquiring: #0891b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Password Screen */
+        .password-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #0f0a2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .password-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .password-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+        .password-box h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .password-box p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .password-box input {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+        .password-box input:focus {
+            border-color: var(--primary);
+        }
+        .password-box button {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .password-box button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+        }
+        .password-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.75rem;
+            display: none;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .shake { animation: shake 0.3s ease-in-out; }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .content-wrapper.unlocked {
+            opacity: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: 270px;
+            height: 100vh;
+            background: #0f0a2e;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sidebar-logo .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--colombia), var(--colombia-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .sidebar-logo h3 {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .sidebar-logo p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+        .nav-section {
+            padding: 1rem 0;
+        }
+        .nav-section-title {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.5rem;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--colombia-dark);
+        }
+        .nav-link .icon { font-size: 1rem; }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 1rem;
+        }
+        .back-link:hover { color: white; }
+
+        /* Mobile Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem; left: 1.5rem;
+            width: 48px; height: 48px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #2d1f6e 100%);
+            padding: 3.5rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(252,211,77,0.15), transparent 70%);
+            top: -150px; right: -100px;
+            border-radius: 50%;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(99,102,241,0.1), transparent 70%);
+            bottom: -100px; left: 10%;
+            border-radius: 50%;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .header-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-yellow { background: rgba(252,211,77,0.15); color: var(--colombia); }
+        .badge-green { background: rgba(16,185,129,0.15); color: #34d399; }
+        .badge-blue { background: rgba(8,145,178,0.15); color: #22d3ee; }
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+        }
+        .header h1 span { color: var(--colombia); }
+        .header > .header-content > p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            max-width: 700px;
+            line-height: 1.7;
+        }
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .header-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-num {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 800;
+        }
+        .stat-num.green { color: #34d399; }
+        .stat-num.yellow { color: var(--colombia); }
+        .stat-num.blue { color: #22d3ee; }
+        .stat-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sections */
+        section {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-header {
+            margin-bottom: 2rem;
+        }
+        .section-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        .badge-yellow-bg { background: rgba(245,158,11,0.1); color: var(--accent); }
+        .badge-green-bg { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .badge-red-bg { background: rgba(220,38,38,0.1); color: var(--danger); }
+        .badge-blue-bg { background: rgba(8,145,178,0.1); color: var(--acquiring); }
+        .badge-purple-bg { background: rgba(124,58,237,0.1); color: #7c3aed; }
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            color: var(--text-light);
+            font-size: 0.92rem;
+            max-width: 700px;
+        }
+
+        /* Tables */
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        .model-table th {
+            background: #0f0a2e;
+            color: white;
+            padding: 0.85rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+        .model-table td {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .model-table tr:last-child td { border-bottom: none; }
+        .model-table tr:hover td { background: rgba(99,102,241,0.03); }
+        .model-table .row-highlight td {
+            background: rgba(16,185,129,0.06);
+            font-weight: 600;
+        }
+        .model-table .row-total td {
+            background: #0f0a2e;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .model-table .row-negative td { color: var(--danger); }
+        .model-table .text-right { text-align: right; }
+        .model-table .text-center { text-align: center; }
+        .model-table .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+        }
+        .positive { color: var(--secondary); font-weight: 600; }
+        .negative { color: var(--danger); font-weight: 600; }
+        .neutral { color: var(--text-light); }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .card p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Grid layouts */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        /* KPI Cards */
+        .kpi-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid var(--border);
+        }
+        .kpi-card.green { border-top-color: var(--secondary); }
+        .kpi-card.yellow { border-top-color: var(--accent); }
+        .kpi-card.red { border-top-color: var(--danger); }
+        .kpi-card.blue { border-top-color: var(--primary); }
+        .kpi-card .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .kpi-card .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+        .kpi-card .kpi-sub {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Strategy Box */
+        .strategy-box {
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        .strategy-box::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(252,211,77,0.08), transparent 70%);
+            top: -100px; right: -50px;
+            border-radius: 50%;
+        }
+        .strategy-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+        .strategy-item {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .strategy-item h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .strategy-item p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        /* Section background alternation */
+        .section-alt {
+            background: rgba(99,102,241,0.02);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.25rem;
+        }
+        .tag-green { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .tag-red { background: rgba(220,38,38,0.1); color: var(--danger); }
+        .tag-yellow { background: rgba(245,158,11,0.1); color: var(--accent); }
+        .tag-blue { background: rgba(99,102,241,0.1); color: var(--primary); }
+
+        /* Note box */
+        .note-box {
+            background: rgba(245,158,11,0.08);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 12px 12px 0;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--text);
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f0a2e;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.78rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-left: 0; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .header-stats { flex-direction: column; gap: 1rem; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .model-table { font-size: 0.75rem; }
+            .model-table th, .model-table td { padding: 0.5rem 0.6rem; }
+            section { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Password Screen -->
+<div class="password-screen" id="passwordScreen">
+    <div class="password-box" id="passwordBox">
+        <h2>Colombia Revenue Model</h2>
+        <p>Enter password to access financial projections</p>
+        <input type="password" id="passwordInput" placeholder="Enter password..." autofocus>
+        <button onclick="checkPassword()">Access Dashboard</button>
+        <div class="password-error" id="passwordError">Incorrect password. Try again.</div>
+    </div>
+</div>
+
+<div class="content-wrapper" id="contentWrapper">
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-icon">&#127464;&#127476;</div>
+        <h3>Colombia Revenue</h3>
+        <p>Payphone Financial Model</p>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Revenue Model</div>
+        <a href="#merchant-charges" class="nav-link"><span class="icon">&#128176;</span> Merchant Charges</a>
+        <a href="#provider-costs" class="nav-link"><span class="icon">&#128178;</span> Provider Costs</a>
+        <a href="#local-rails" class="nav-link"><span class="icon">&#9886;</span> Local Payment Rails</a>
+        <a href="#other-costs" class="nav-link"><span class="icon">&#128203;</span> Other Costs</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Current Products</div>
+        <a href="#current-products" class="nav-link"><span class="icon">&#128230;</span> Product Suite</a>
+        <a href="#betting-expansion" class="nav-link"><span class="icon">&#127922;</span> Betting Expansion</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Margins</div>
+        <a href="#margins" class="nav-link"><span class="icon">&#128200;</span> Margin Analysis</a>
+        <a href="#market-data" class="nav-link"><span class="icon">&#127757;</span> Market Data</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Projections</div>
+        <a href="#assumptions" class="nav-link"><span class="icon">&#128202;</span> Assumptions</a>
+        <a href="#revenue-proj" class="nav-link"><span class="icon">&#128185;</span> Revenue P&L</a>
+        <a href="#cost-proj" class="nav-link"><span class="icon">&#128195;</span> Cost of Revenue</a>
+        <a href="#opex" class="nav-link"><span class="icon">&#127970;</span> Operating Expenses</a>
+        <a href="#net-pl" class="nav-link"><span class="icon">&#127919;</span> Net P&L</a>
+    </div>
+    <a href="latam-expansion.html" class="back-link">&#8592; Back to LATAM Strategy</a>
+    <a href="mexico-revenue-model.html" class="back-link">&#127474;&#127485; Mexico Revenue Model</a>
+</nav>
+
+<!-- Mobile Toggle -->
+<button class="sidebar-toggle" id="sidebarToggle">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-badges">
+                <span class="header-badge badge-yellow">Colombia</span>
+                <span class="header-badge badge-green">Revenue Model</span>
+                <span class="header-badge badge-blue">3-Year Projection</span>
+            </div>
+            <h1>Payphone <span>Colombia</span><br>Revenue Model</h1>
+            <p>Complete financial breakdown of merchant charges, provider costs, margins, and 3-year P&L projections for the Colombian market.</p>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <span class="stat-num yellow">$451M</span>
+                    <span class="stat-label">Year 3 TPV</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num green">$2.0M</span>
+                    <span class="stat-label">Year 3 EBITDA</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num blue">~18 mo</span>
+                    <span class="stat-label">Breakeven</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num">5,000</span>
+                    <span class="stat-label">Year 3 Merchants</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Products -->
+    <section id="current-products">
+        <div class="section-header">
+            <div class="section-badge badge-purple-bg">Current State</div>
+            <h2>Payphone's Current Product Suite</h2>
+            <p>Existing products from Ecuador that can be deployed into Colombia. Two channels: Web Business (merchant-facing) and App Personal (consumer-facing).</p>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Web Business (Merchant Portal)</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>What It Does</th>
+                    <th>Betting Relevance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Cajita de Pago</strong></td>
+                    <td>Embedded checkout form (Prestashop, WordPress, custom ecommerce)</td>
+                    <td><span class="tag tag-yellow">Low</span> Not typical for betting</td>
+                </tr>
+                <tr>
+                    <td><strong>Bot&oacute;n de Pago</strong></td>
+                    <td>Redirect button to Payphone payment gateway</td>
+                    <td><span class="tag tag-yellow">Medium</span> Quick deposit button</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>API</strong></td>
+                    <td>Full integration: tokenization, pre-auth, web transactions, mass payouts, payment links</td>
+                    <td><span class="tag tag-green">Critical</span> Core betting integration</td>
+                </tr>
+                <tr>
+                    <td><strong>Link de Pagos</strong></td>
+                    <td>Shareable payment links + QR codes</td>
+                    <td><span class="tag tag-yellow">Medium</span> Promo deposits</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Pagos Masivos</strong></td>
+                    <td>Bulk payments via CSV upload</td>
+                    <td><span class="tag tag-green">Critical</span> Batch winner payouts</td>
+                </tr>
+                <tr>
+                    <td><strong>Solicitud de Pago</strong></td>
+                    <td>Push payment request to customer via phone/cedula</td>
+                    <td><span class="tag tag-yellow">Low</span> Niche use</td>
+                </tr>
+                <tr>
+                    <td><strong>Env&iacute;o de Dinero</strong></td>
+                    <td>Send money B2P and B2B from web portal</td>
+                    <td><span class="tag tag-green">High</span> Individual payouts</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">App Personal (Consumer App)</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>What It Does</th>
+                    <th>Betting Relevance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>TAP (NFC)</strong></td>
+                    <td>Contactless card acceptance on Android &mdash; phone becomes a POS</td>
+                    <td><span class="tag tag-red">None</span> Physical POS, not for online betting</td>
+                </tr>
+                <tr>
+                    <td><strong>Link de Pagos</strong></td>
+                    <td>Generate payment links/QR from the app</td>
+                    <td><span class="tag tag-yellow">Medium</span> P2P betting links</td>
+                </tr>
+                <tr>
+                    <td><strong>Recarga</strong></td>
+                    <td>Top up wallet balance from any linked card</td>
+                    <td><span class="tag tag-green">High</span> Fund betting wallet</td>
+                </tr>
+                <tr>
+                    <td><strong>Tarjetas Payphone</strong></td>
+                    <td>Mastercard prepaid card &mdash; reload from wallet only</td>
+                    <td><span class="tag tag-yellow">Medium</span> Withdraw winnings to card</td>
+                </tr>
+                <tr>
+                    <td><strong>Env&iacute;o de Dinero</strong></td>
+                    <td>P2P, P2B, and bill payments (utilities)</td>
+                    <td><span class="tag tag-yellow">Medium</span> Transfer winnings</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box">
+            <strong>Card program limitation:</strong> The Tarjetas Payphone Mastercard is a closed-loop prepaid card. It has no ACH/payroll direct deposit capability and no ATM cash withdrawal. Users can only load it from the Payphone wallet (which itself is loaded from another card). Limits: $1,000/tx, $3,000/month. This limits its utility for betting payouts &mdash; winners can spend via Mastercard but cannot withdraw cash.
+        </div>
+    </section>
+
+    <!-- Betting Expansion Colombia -->
+    <section id="betting-expansion" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-red-bg">iGaming</div>
+            <h2>Betting Expansion &mdash; Colombia</h2>
+            <p>How Payphone's existing products map to the Colombian betting market regulated by Coljuegos.</p>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Colombia Betting Market Overview</h3>
+        <div class="grid-3" style="margin-bottom: 2rem;">
+            <div class="kpi-card red">
+                <div class="kpi-value">$1.8B</div>
+                <div class="kpi-label">Online Betting Market</div>
+                <div class="kpi-sub">Growing ~25% YoY</div>
+            </div>
+            <div class="kpi-card yellow">
+                <div class="kpi-value">Coljuegos</div>
+                <div class="kpi-label">Regulator</div>
+                <div class="kpi-sub">License ~$120K</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">20+</div>
+                <div class="kpi-label">Licensed Operators</div>
+                <div class="kpi-sub">Betplay, Wplay, Codere, 1xBet, etc.</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Payphone Product &rarr; Betting Use Case Mapping</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Betting Need</th>
+                    <th>Payphone Product</th>
+                    <th>How It Works</th>
+                    <th>Revenue per Tx</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Player deposits (card)</strong></td>
+                    <td><strong>API</strong> &mdash; Web Transaction + Tokenization</td>
+                    <td>Player saves card in betting app via Payphone API, tokenized for recurring deposits</td>
+                    <td class="mono positive">5.0% &ndash; 7.0%</td>
+                </tr>
+                <tr>
+                    <td><strong>Player deposits (wallet)</strong></td>
+                    <td><strong>API</strong> &mdash; Payphone App payment</td>
+                    <td>Player pays from Payphone wallet balance directly into betting platform</td>
+                    <td class="mono positive">2.0% &ndash; 3.0%</td>
+                </tr>
+                <tr>
+                    <td><strong>Player deposits (PSE)</strong></td>
+                    <td><strong>API</strong> &mdash; PSE integration</td>
+                    <td>Bank transfer via PSE for larger deposits (high-rollers prefer bank transfer)</td>
+                    <td class="mono">COP $3,000 &ndash; $5,000 flat</td>
+                </tr>
+                <tr>
+                    <td><strong>Player deposits (cash)</strong></td>
+                    <td><strong>Efecty/Baloto</strong> via API</td>
+                    <td>Player generates voucher, pays cash at 12K+ Efecty locations, funds credited to betting account</td>
+                    <td class="mono positive">2.5% &ndash; 3.5%</td>
+                </tr>
+                <tr>
+                    <td><strong>Single winner payout</strong></td>
+                    <td><strong>API</strong> &mdash; Payouts + Env&iacute;o de Dinero</td>
+                    <td>Operator sends winnings to player's Payphone wallet or linked bank account</td>
+                    <td class="mono">$0.50 &ndash; $2.00 per payout</td>
+                </tr>
+                <tr>
+                    <td><strong>Batch winner payouts</strong></td>
+                    <td><strong>Pagos Masivos</strong></td>
+                    <td>Operator uploads CSV with hundreds of winners, Payphone processes all at once</td>
+                    <td class="mono">$0.30 &ndash; $1.00 per payout</td>
+                </tr>
+                <tr>
+                    <td><strong>Withdrawal to card</strong></td>
+                    <td><strong>Tarjetas Payphone</strong></td>
+                    <td>Winnings sent to player's Payphone Mastercard for spending (no ATM withdrawal)</td>
+                    <td class="mono">$0.50 per load</td>
+                </tr>
+                <tr>
+                    <td><strong>Pre-auth / hold</strong></td>
+                    <td><strong>API</strong> &mdash; Preautorizaciones</td>
+                    <td>Hold funds on player's card before bet is confirmed (prevents chargebacks)</td>
+                    <td class="mono">Included in deposit fee</td>
+                </tr>
+                <tr>
+                    <td><strong>Recurring deposits</strong></td>
+                    <td><strong>API</strong> &mdash; Tokenizaci&oacute;n</td>
+                    <td>Saved card tokens enable one-click deposits without re-entering card data</td>
+                    <td class="mono">Included in deposit fee</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Target Operators in Colombia</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Operator</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Opportunity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>BetPlay</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Largest operator in CO, #1 target</td>
+                </tr>
+                <tr>
+                    <td><strong>Wplay</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Strong local brand, needs payment diversification</td>
+                </tr>
+                <tr>
+                    <td><strong>Codere</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Spanish operator, expanding in LATAM</td>
+                </tr>
+                <tr>
+                    <td><strong>1xBet</strong></td>
+                    <td>Sports</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Global operator, needs local payment rails</td>
+                </tr>
+                <tr>
+                    <td><strong>Betsson</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Nordic operator, growing CO presence</td>
+                </tr>
+                <tr>
+                    <td><strong>Rivalo</strong></td>
+                    <td>Sports</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>German operator, LATAM-focused</td>
+                </tr>
+                <tr>
+                    <td><strong>Luckia</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>Spanish operator, needs Nequi/Daviplata integration</td>
+                </tr>
+                <tr>
+                    <td><strong>Rushbet</strong></td>
+                    <td>Sports + Casino</td>
+                    <td><span class="tag tag-green">Licensed</span></td>
+                    <td>RSI-backed, US operator entering CO</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Colombia Betting Revenue Model</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Betting operators onboarded</strong></td>
+                    <td class="text-right mono">3</td>
+                    <td class="text-right mono">8</td>
+                    <td class="text-right mono">15</td>
+                </tr>
+                <tr>
+                    <td><strong>Avg monthly deposits per operator</strong></td>
+                    <td class="text-right mono">$200K</td>
+                    <td class="text-right mono">$500K</td>
+                    <td class="text-right mono">$1.2M</td>
+                </tr>
+                <tr>
+                    <td><strong>Annual deposit volume</strong></td>
+                    <td class="text-right mono">$7.2M</td>
+                    <td class="text-right mono">$48M</td>
+                    <td class="text-right mono">$216M</td>
+                </tr>
+                <tr>
+                    <td><strong>Deposit revenue</strong> (avg 5.5%)</td>
+                    <td class="text-right mono positive">$396K</td>
+                    <td class="text-right mono positive">$2.6M</td>
+                    <td class="text-right mono positive">$11.9M</td>
+                </tr>
+                <tr>
+                    <td><strong>Payout volume</strong> (~60% of deposits)</td>
+                    <td class="text-right mono">$4.3M</td>
+                    <td class="text-right mono">$28.8M</td>
+                    <td class="text-right mono">$129.6M</td>
+                </tr>
+                <tr>
+                    <td><strong>Payout revenue</strong> ($0.75/tx avg, ~$50 avg payout)</td>
+                    <td class="text-right mono positive">$65K</td>
+                    <td class="text-right mono positive">$432K</td>
+                    <td class="text-right mono positive">$1.9M</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>Total Betting Revenue</strong></td>
+                    <td class="text-right mono">$461K</td>
+                    <td class="text-right mono">$3.0M</td>
+                    <td class="text-right mono">$13.8M</td>
+                </tr>
+                <tr>
+                    <td><strong>Acquirer + rail costs</strong> (~2.5% on deposits)</td>
+                    <td class="text-right mono">-$180K</td>
+                    <td class="text-right mono">-$1.2M</td>
+                    <td class="text-right mono">-$5.4M</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Betting Net Margin</strong></td>
+                    <td class="text-right mono positive">$281K</td>
+                    <td class="text-right mono positive">$1.8M</td>
+                    <td class="text-right mono positive">$8.4M</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="strategy-box">
+            <h3>Colombia Betting Expansion Playbook</h3>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <h4>Phase 1: API Integration</h4>
+                    <p>Offer the API (tokenization + web transaction + payouts) to 2&ndash;3 Coljuegos-licensed operators. The API is the most betting-ready product today. Lead with card deposits + Pagos Masivos for payouts.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Phase 2: Add PSE + Wallets</h4>
+                    <p>Integrate PSE for bank transfer deposits and Nequi/Daviplata as deposit methods. This captures the 55% of banked Colombians who prefer non-card payments for betting.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Phase 3: Cash Deposits via Efecty</h4>
+                    <p>Enable cash-in at 12K+ Efecty locations. This is the key to reaching the 40% cash-dependent population. Generate voucher in betting app &rarr; pay at Efecty &rarr; funds credited instantly.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Phase 4: Payphone as Betting Wallet</h4>
+                    <p>Position the Payphone wallet + Mastercard as the player's betting account. Deposit from any source, winnings go to wallet, spend via card. Becomes a closed-loop ecosystem.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Coljuegos Advantage</h4>
+                    <p>Colombia's Coljuegos license is ~$120K &mdash; cheapest in LATAM. No IEPS-equivalent tax on gaming revenue (unlike Mexico's 30%). This makes Colombia the highest-margin betting market in the region.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>Card Gap &rarr; Opportunity</h4>
+                    <p>The Payphone Mastercard can't do ATM withdrawals today. For betting, this is actually a feature: winnings stay in the Payphone ecosystem. But add Nequi/Daviplata withdrawal as an alternative cash-out path.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 1: Merchant Charges -->
+    <section id="merchant-charges">
+        <div class="section-header">
+            <div class="section-badge badge-green-bg">Revenue</div>
+            <h2>What Payphone Charges Merchants</h2>
+            <p>Commission structure and fee schedule for Colombian merchants across all payment methods.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Fee Type</th>
+                    <th>Rate</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Card commission (credit)</strong></td>
+                    <td class="mono">3.5% &ndash; 4.5% + IVA (19%)</td>
+                    <td>Credit cards dominate in commerce</td>
+                </tr>
+                <tr>
+                    <td><strong>Card commission (debit)</strong></td>
+                    <td class="mono">2.5% &ndash; 3.5% + IVA</td>
+                    <td>Lower rate, regulated caps coming</td>
+                </tr>
+                <tr>
+                    <td><strong>QR / wallet (Nequi, Daviplata)</strong></td>
+                    <td class="mono">1.5% &ndash; 2.5%</td>
+                    <td>Growing fast, especially informal economy</td>
+                </tr>
+                <tr>
+                    <td><strong>PSE (bank transfer)</strong></td>
+                    <td class="mono">COP $2,500 &ndash; $5,000 flat (~$0.60&ndash;$1.20)</td>
+                    <td>Popular for e-commerce, fixed fee model</td>
+                </tr>
+                <tr>
+                    <td><strong>Cash collection (Efecty, Baloto)</strong></td>
+                    <td class="mono">2.0% &ndash; 3.0%</td>
+                    <td>~40% of Colombia is cash-heavy</td>
+                </tr>
+                <tr>
+                    <td><strong>Cross-border surcharge</strong></td>
+                    <td class="mono">+1.0% &ndash; 1.5%</td>
+                    <td>Foreign cards in Colombia</td>
+                </tr>
+                <tr>
+                    <td><strong>FX markup (USD&#8594;COP)</strong></td>
+                    <td class="mono">1.0% &ndash; 1.5%</td>
+                    <td>On remittance or cross-border settlement</td>
+                </tr>
+                <tr>
+                    <td><strong>Monthly platform fee</strong></td>
+                    <td class="mono">COP $50K &ndash; $150K (~$12&ndash;$35)</td>
+                    <td>SaaS component</td>
+                </tr>
+                <tr>
+                    <td><strong>Payout to merchant</strong></td>
+                    <td class="mono">COP $2,000 &ndash; $4,500 (~$0.50&ndash;$1.10)</td>
+                    <td>ACH Colombia transfer</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Betting / gaming</strong></td>
+                    <td class="mono">5.0% &ndash; 7.0%</td>
+                    <td>Regulated under Coljuegos</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 2: Provider Costs -->
+    <section id="provider-costs" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-red-bg">Costs</div>
+            <h2>What Acquirers & Processors Charge Payphone</h2>
+            <p>Direct processing costs from acquirers, including interchange and scheme fees.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Provider</th>
+                    <th>Cost</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Redeban Multicolor</strong> <span class="tag tag-green">Local</span></td>
+                    <td class="mono">1.6% &ndash; 2.2% + COP $400&ndash;$800</td>
+                    <td>Largest acquirer, Visa-heavy</td>
+                </tr>
+                <tr>
+                    <td><strong>Credibanco</strong> <span class="tag tag-green">Local</span></td>
+                    <td class="mono">1.5% &ndash; 2.0% + COP $400&ndash;$700</td>
+                    <td>MC-heavy, competitive</td>
+                </tr>
+                <tr>
+                    <td><strong>dLocal</strong> <span class="tag tag-blue">Cross-border</span></td>
+                    <td class="mono">3.5% &ndash; 4.0% + $0.30</td>
+                    <td>Fast launch, no local entity needed</td>
+                </tr>
+                <tr>
+                    <td><strong>Mercado Pago</strong> <span class="tag tag-yellow">Hybrid</span></td>
+                    <td class="mono">2.5% &ndash; 3.5%</td>
+                    <td>If using as sub-acquirer</td>
+                </tr>
+                <tr>
+                    <td><strong>Interchange (Visa/MC)</strong></td>
+                    <td class="mono">1.2% &ndash; 2.2%</td>
+                    <td>Credit higher, debit lower</td>
+                </tr>
+                <tr>
+                    <td><strong>Card scheme assessment</strong></td>
+                    <td class="mono">0.11% &ndash; 0.14%</td>
+                    <td>Network fees</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 3: Local Payment Rails -->
+    <section id="local-rails">
+        <div class="section-header">
+            <div class="section-badge badge-blue-bg">Infrastructure</div>
+            <h2>Local Payment Rails</h2>
+            <p>Alternative payment methods and their costs to Payphone.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Rail</th>
+                    <th>Cost to Payphone</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PSE (ACH Colombia)</strong></td>
+                    <td class="mono">COP $1,800 &ndash; $3,200 (~$0.45&ndash;$0.80)</td>
+                    <td>Bank transfer, real-time</td>
+                </tr>
+                <tr>
+                    <td><strong>Nequi API</strong></td>
+                    <td class="mono">1.0% &ndash; 1.5%</td>
+                    <td>Bancolombia's wallet, 17M+ users</td>
+                </tr>
+                <tr>
+                    <td><strong>Daviplata API</strong></td>
+                    <td class="mono">1.0% &ndash; 1.5%</td>
+                    <td>Davivienda's wallet, 15M+ users</td>
+                </tr>
+                <tr>
+                    <td><strong>Efecty (cash-in)</strong></td>
+                    <td class="mono">1.5% &ndash; 2.5%</td>
+                    <td>Cash network, ~12K locations</td>
+                </tr>
+                <tr>
+                    <td><strong>Baloto (cash-in)</strong></td>
+                    <td class="mono">1.5% &ndash; 2.0%</td>
+                    <td>Alternative cash network</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 4: Other Costs -->
+    <section id="other-costs" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-yellow-bg">Overhead</div>
+            <h2>Other Provider Costs</h2>
+            <p>Regulatory, compliance, tax, and operational costs specific to Colombia.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Cost</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Local entity setup (SAS)</strong></td>
+                    <td class="mono">$8K &ndash; $15K</td>
+                    <td>Sociedad por Acciones Simplificada</td>
+                </tr>
+                <tr>
+                    <td><strong>SFC regulatory registration</strong></td>
+                    <td class="mono">$5K &ndash; $15K</td>
+                    <td>Superintendencia Financiera</td>
+                </tr>
+                <tr>
+                    <td><strong>Coljuegos license</strong> <span class="tag tag-red">Betting</span></td>
+                    <td class="mono">~COP $500M (~$120K)</td>
+                    <td>If entering gaming vertical</td>
+                </tr>
+                <tr>
+                    <td><strong>GMF tax (4x1000)</strong></td>
+                    <td class="mono">0.4% on bank movements</td>
+                    <td>Financial movement tax, unavoidable</td>
+                </tr>
+                <tr>
+                    <td><strong>IVA on services</strong></td>
+                    <td class="mono">19% on your commission</td>
+                    <td>Collected from merchant, remitted</td>
+                </tr>
+                <tr>
+                    <td><strong>KYC (local provider)</strong></td>
+                    <td class="mono">COP $2,000 &ndash; $8,000 per check (~$0.50&ndash;$2.00)</td>
+                    <td>DIAN/Registraduria validation</td>
+                </tr>
+                <tr>
+                    <td><strong>Fraud screening</strong></td>
+                    <td class="mono">$0.03 &ndash; $0.08 per tx</td>
+                    <td>Colombia has elevated CNP fraud</td>
+                </tr>
+                <tr>
+                    <td><strong>Retefuente (withholding)</strong></td>
+                    <td class="mono">1.5% &ndash; 3.5% on income</td>
+                    <td>Tax withholding on revenue</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="note-box">
+            <strong>Key Colombia-specific cost:</strong> The GMF (Gravamen a los Movimientos Financieros) at 0.4% applies to virtually every bank movement. This is a hidden but significant drag on margins that does not exist in most other LATAM markets.
+        </div>
+    </section>
+
+    <!-- Section 5: Margin Analysis -->
+    <section id="margins">
+        <div class="section-header">
+            <div class="section-badge badge-green-bg">Analysis</div>
+            <h2>Margin Analysis by Payment Method</h2>
+            <p>Net margin after provider costs and taxes for each payment channel.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Scenario</th>
+                    <th class="text-right">You Charge</th>
+                    <th class="text-right">Your Cost</th>
+                    <th class="text-right">GMF (0.4%)</th>
+                    <th class="text-right">Net Margin</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Credit card (local acquirer)</strong></td>
+                    <td class="text-right mono">4.0%</td>
+                    <td class="text-right mono">~2.0%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono positive">~1.6%</td>
+                </tr>
+                <tr>
+                    <td><strong>Credit card (cross-border)</strong></td>
+                    <td class="text-right mono">4.5%</td>
+                    <td class="text-right mono">~3.7%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono neutral">~0.4%</td>
+                </tr>
+                <tr>
+                    <td><strong>Debit card (local)</strong></td>
+                    <td class="text-right mono">3.0%</td>
+                    <td class="text-right mono">~1.5%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono positive">~1.1%</td>
+                </tr>
+                <tr>
+                    <td><strong>PSE</strong></td>
+                    <td class="text-right mono">COP $4,000</td>
+                    <td class="text-right mono">~COP $2,500</td>
+                    <td class="text-right mono">minimal</td>
+                    <td class="text-right mono positive">COP ~$1,500/tx</td>
+                </tr>
+                <tr>
+                    <td><strong>Nequi / Daviplata</strong></td>
+                    <td class="text-right mono">2.0%</td>
+                    <td class="text-right mono">~1.2%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono neutral">~0.4%</td>
+                </tr>
+                <tr>
+                    <td><strong>Cash (Efecty)</strong></td>
+                    <td class="text-right mono">2.5%</td>
+                    <td class="text-right mono">~1.8%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono neutral">~0.3%</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Betting (local acquirer)</strong></td>
+                    <td class="text-right mono">6.0%</td>
+                    <td class="text-right mono">~2.5%</td>
+                    <td class="text-right mono">0.4%</td>
+                    <td class="text-right mono positive">~3.1%</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>FX spread</strong></td>
+                    <td class="text-right mono">+1.2%</td>
+                    <td class="text-right mono">~0.3%</td>
+                    <td class="text-right mono">&mdash;</td>
+                    <td class="text-right mono positive">+0.9%</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 6: Market Data -->
+    <section id="market-data" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-blue-bg">Market</div>
+            <h2>Colombia Market Data</h2>
+            <p>Key market metrics that drive the revenue model.</p>
+        </div>
+        <div class="grid-3">
+            <div class="kpi-card yellow">
+                <div class="kpi-value">~52M</div>
+                <div class="kpi-label">Population</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">~55%</div>
+                <div class="kpi-label">Banked Population</div>
+                <div class="kpi-sub">Growing fast via wallets</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-value">~30%</div>
+                <div class="kpi-label">Card Penetration</div>
+                <div class="kpi-sub">Of total transactions</div>
+            </div>
+            <div class="kpi-card yellow">
+                <div class="kpi-value">~$12B</div>
+                <div class="kpi-label">E-Commerce Market</div>
+                <div class="kpi-sub">USD per year</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">COP $95K</div>
+                <div class="kpi-label">Avg Transaction</div>
+                <div class="kpi-sub">~$23 USD</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-value">~4,100</div>
+                <div class="kpi-label">COP/USD Rate</div>
+                <div class="kpi-sub">Volatile currency</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Assumptions -->
+    <section id="assumptions">
+        <div class="section-header">
+            <div class="section-badge badge-purple-bg">Projections</div>
+            <h2>3-Year Projection Assumptions</h2>
+            <p>Volume, merchant count, and transaction mix assumptions driving the P&L.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Merchants onboarded</strong></td>
+                    <td class="text-right mono">500</td>
+                    <td class="text-right mono">2,000</td>
+                    <td class="text-right mono">5,000</td>
+                </tr>
+                <tr>
+                    <td><strong>Monthly tx per merchant</strong></td>
+                    <td class="text-right mono">150</td>
+                    <td class="text-right mono">200</td>
+                    <td class="text-right mono">280</td>
+                </tr>
+                <tr>
+                    <td><strong>Avg ticket (COP)</strong></td>
+                    <td class="text-right mono">COP $95,000 (~$23)</td>
+                    <td class="text-right mono">COP $100,000 (~$24)</td>
+                    <td class="text-right mono">COP $110,000 (~$27)</td>
+                </tr>
+                <tr>
+                    <td><strong>Monthly TPV</strong></td>
+                    <td class="text-right mono">~$1.7M</td>
+                    <td class="text-right mono">~$9.8M</td>
+                    <td class="text-right mono">~$37.6M</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>Annual TPV</strong></td>
+                    <td class="text-right mono">~$20.5M</td>
+                    <td class="text-right mono">~$117M</td>
+                    <td class="text-right mono">~$451M</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem; color: var(--dark);">Transaction Mix</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Payment Method</th>
+                    <th class="text-center">Year 1</th>
+                    <th class="text-center">Year 2</th>
+                    <th class="text-center">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Credit card</strong></td>
+                    <td class="text-center mono">40%</td>
+                    <td class="text-center mono">35%</td>
+                    <td class="text-center mono">30%</td>
+                </tr>
+                <tr>
+                    <td><strong>Debit card</strong></td>
+                    <td class="text-center mono">25%</td>
+                    <td class="text-center mono">25%</td>
+                    <td class="text-center mono">25%</td>
+                </tr>
+                <tr>
+                    <td><strong>PSE</strong></td>
+                    <td class="text-center mono">15%</td>
+                    <td class="text-center mono">18%</td>
+                    <td class="text-center mono">20%</td>
+                </tr>
+                <tr>
+                    <td><strong>Nequi / Daviplata</strong></td>
+                    <td class="text-center mono">5%</td>
+                    <td class="text-center mono">12%</td>
+                    <td class="text-center mono">18%</td>
+                </tr>
+                <tr>
+                    <td><strong>Cash (Efecty / Baloto)</strong></td>
+                    <td class="text-center mono">15%</td>
+                    <td class="text-center mono">10%</td>
+                    <td class="text-center mono">7%</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 8: Revenue Projection -->
+    <section id="revenue-proj" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-green-bg">Revenue</div>
+            <h2>Annual Revenue Projection</h2>
+            <p>Revenue breakdown by stream across 3 years.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Revenue Stream</th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Credit card commissions</strong> (4.0%)</td>
+                    <td class="text-right mono">$328K</td>
+                    <td class="text-right mono">$1.6M</td>
+                    <td class="text-right mono">$5.4M</td>
+                </tr>
+                <tr>
+                    <td><strong>Debit card commissions</strong> (3.0%)</td>
+                    <td class="text-right mono">$154K</td>
+                    <td class="text-right mono">$878K</td>
+                    <td class="text-right mono">$3.4M</td>
+                </tr>
+                <tr>
+                    <td><strong>PSE fees</strong> (~$0.90/tx)</td>
+                    <td class="text-right mono">$81K</td>
+                    <td class="text-right mono">$504K</td>
+                    <td class="text-right mono">$2.0M</td>
+                </tr>
+                <tr>
+                    <td><strong>Wallet commissions</strong> (2.0%)</td>
+                    <td class="text-right mono">$21K</td>
+                    <td class="text-right mono">$281K</td>
+                    <td class="text-right mono">$1.6M</td>
+                </tr>
+                <tr>
+                    <td><strong>Cash commissions</strong> (2.5%)</td>
+                    <td class="text-right mono">$77K</td>
+                    <td class="text-right mono">$293K</td>
+                    <td class="text-right mono">$789K</td>
+                </tr>
+                <tr>
+                    <td><strong>FX spread</strong> (on 10% of volume)</td>
+                    <td class="text-right mono">$25K</td>
+                    <td class="text-right mono">$140K</td>
+                    <td class="text-right mono">$541K</td>
+                </tr>
+                <tr>
+                    <td><strong>Platform fees</strong> ($20/mo avg)</td>
+                    <td class="text-right mono">$120K</td>
+                    <td class="text-right mono">$480K</td>
+                    <td class="text-right mono">$1.2M</td>
+                </tr>
+                <tr>
+                    <td><strong>Payout fees</strong> ($0.70/tx avg)</td>
+                    <td class="text-right mono">$63K</td>
+                    <td class="text-right mono">$336K</td>
+                    <td class="text-right mono">$1.2M</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>Total Revenue</strong></td>
+                    <td class="text-right mono">$869K</td>
+                    <td class="text-right mono">$4.5M</td>
+                    <td class="text-right mono">$16.1M</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 9: Cost of Revenue -->
+    <section id="cost-proj">
+        <div class="section-header">
+            <div class="section-badge badge-red-bg">Costs</div>
+            <h2>Cost of Revenue</h2>
+            <p>Direct costs associated with processing payments.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Cost</th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Acquirer fees</strong> <span class="tag tag-blue">Cross-border Y1</span> <span class="tag tag-green">Local Y2+</span></td>
+                    <td class="text-right mono">$615K</td>
+                    <td class="text-right mono">$2.1M</td>
+                    <td class="text-right mono">$6.8M</td>
+                </tr>
+                <tr>
+                    <td><strong>PSE rail cost</strong> (~$0.55/tx)</td>
+                    <td class="text-right mono">$49K</td>
+                    <td class="text-right mono">$307K</td>
+                    <td class="text-right mono">$1.2M</td>
+                </tr>
+                <tr>
+                    <td><strong>Wallet rail cost</strong> (1.2%)</td>
+                    <td class="text-right mono">$12K</td>
+                    <td class="text-right mono">$169K</td>
+                    <td class="text-right mono">$975K</td>
+                </tr>
+                <tr>
+                    <td><strong>Cash network fees</strong> (1.8%)</td>
+                    <td class="text-right mono">$55K</td>
+                    <td class="text-right mono">$211K</td>
+                    <td class="text-right mono">$568K</td>
+                </tr>
+                <tr>
+                    <td><strong>FX hedging</strong> (0.3%)</td>
+                    <td class="text-right mono">$6K</td>
+                    <td class="text-right mono">$35K</td>
+                    <td class="text-right mono">$135K</td>
+                </tr>
+                <tr>
+                    <td><strong>GMF tax</strong> (0.4% on bank movements)</td>
+                    <td class="text-right mono">$82K</td>
+                    <td class="text-right mono">$468K</td>
+                    <td class="text-right mono">$1.8M</td>
+                </tr>
+                <tr>
+                    <td><strong>Fraud / chargeback losses</strong> (0.3% of TPV)</td>
+                    <td class="text-right mono">$62K</td>
+                    <td class="text-right mono">$351K</td>
+                    <td class="text-right mono">$1.4M</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>Total Cost of Revenue</strong></td>
+                    <td class="text-right mono">$881K</td>
+                    <td class="text-right mono">$3.6M</td>
+                    <td class="text-right mono">$12.8M</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Gross Profit -->
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.1rem; color: var(--dark);">Gross Profit</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Gross Profit</strong></td>
+                    <td class="text-right mono negative">-$12K</td>
+                    <td class="text-right mono positive">$900K</td>
+                    <td class="text-right mono positive">$3.3M</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Gross Margin</strong></td>
+                    <td class="text-right mono negative">-1.4%</td>
+                    <td class="text-right mono positive">20.0%</td>
+                    <td class="text-right mono positive">20.5%</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 10: Operating Expenses -->
+    <section id="opex" class="section-alt">
+        <div class="section-header">
+            <div class="section-badge badge-yellow-bg">OpEx</div>
+            <h2>Operating Expenses</h2>
+            <p>Team, compliance, infrastructure, and go-to-market costs.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Expense</th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Engineering team</strong> (local + shared)</td>
+                    <td class="text-right mono">$180K</td>
+                    <td class="text-right mono">$300K</td>
+                    <td class="text-right mono">$450K</td>
+                </tr>
+                <tr>
+                    <td><strong>Local ops team</strong> (Bogota)</td>
+                    <td class="text-right mono">$96K</td>
+                    <td class="text-right mono">$192K</td>
+                    <td class="text-right mono">$336K</td>
+                </tr>
+                <tr>
+                    <td><strong>Compliance / legal</strong></td>
+                    <td class="text-right mono">$60K</td>
+                    <td class="text-right mono">$80K</td>
+                    <td class="text-right mono">$120K</td>
+                </tr>
+                <tr>
+                    <td><strong>KYC / onboarding costs</strong></td>
+                    <td class="text-right mono">$3K</td>
+                    <td class="text-right mono">$8K</td>
+                    <td class="text-right mono">$15K</td>
+                </tr>
+                <tr>
+                    <td><strong>Office / infra</strong></td>
+                    <td class="text-right mono">$36K</td>
+                    <td class="text-right mono">$60K</td>
+                    <td class="text-right mono">$96K</td>
+                </tr>
+                <tr>
+                    <td><strong>Marketing / sales</strong></td>
+                    <td class="text-right mono">$48K</td>
+                    <td class="text-right mono">$120K</td>
+                    <td class="text-right mono">$240K</td>
+                </tr>
+                <tr>
+                    <td><strong>Coljuegos license</strong> <span class="tag tag-red">Betting</span></td>
+                    <td class="text-right mono">$120K</td>
+                    <td class="text-right mono">&mdash;</td>
+                    <td class="text-right mono">&mdash;</td>
+                </tr>
+                <tr>
+                    <td><strong>Entity setup</strong></td>
+                    <td class="text-right mono">$15K</td>
+                    <td class="text-right mono">&mdash;</td>
+                    <td class="text-right mono">&mdash;</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>Total OpEx</strong></td>
+                    <td class="text-right mono">$558K</td>
+                    <td class="text-right mono">$760K</td>
+                    <td class="text-right mono">$1.3M</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 11: Net P&L -->
+    <section id="net-pl">
+        <div class="section-header">
+            <div class="section-badge badge-green-bg">Bottom Line</div>
+            <h2>Net P&L Summary</h2>
+            <p>EBITDA and cumulative returns over the 3-year projection period.</p>
+        </div>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-right">Year 1</th>
+                    <th class="text-right">Year 2</th>
+                    <th class="text-right">Year 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Gross Profit</strong></td>
+                    <td class="text-right mono negative">-$12K</td>
+                    <td class="text-right mono positive">$900K</td>
+                    <td class="text-right mono positive">$3.3M</td>
+                </tr>
+                <tr>
+                    <td><strong>Operating Expenses</strong></td>
+                    <td class="text-right mono">-$558K</td>
+                    <td class="text-right mono">-$760K</td>
+                    <td class="text-right mono">-$1.3M</td>
+                </tr>
+                <tr class="row-total">
+                    <td><strong>EBITDA</strong></td>
+                    <td class="text-right mono negative">-$570K</td>
+                    <td class="text-right mono positive">$140K</td>
+                    <td class="text-right mono positive">$2.0M</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>EBITDA Margin</strong></td>
+                    <td class="text-right mono negative">-65.6%</td>
+                    <td class="text-right mono positive">3.1%</td>
+                    <td class="text-right mono positive">12.5%</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Cumulative P&L</strong></td>
+                    <td class="text-right mono negative">-$570K</td>
+                    <td class="text-right mono negative">-$430K</td>
+                    <td class="text-right mono positive">$1.6M</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="grid-4" style="margin-top: 2rem;">
+            <div class="kpi-card red">
+                <div class="kpi-value">$570K</div>
+                <div class="kpi-label">Investment Needed</div>
+                <div class="kpi-sub">Year 1 cash burn</div>
+            </div>
+            <div class="kpi-card yellow">
+                <div class="kpi-value">~18 mo</div>
+                <div class="kpi-label">Breakeven</div>
+                <div class="kpi-sub">Month 18&ndash;20</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">$2.0M</div>
+                <div class="kpi-label">Year 3 EBITDA</div>
+                <div class="kpi-sub">12.5% margin</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-value">$1.6M</div>
+                <div class="kpi-label">Cumulative Return</div>
+                <div class="kpi-sub">By end of Year 3</div>
+            </div>
+        </div>
+
+        <!-- Strategy Box -->
+        <div class="strategy-box">
+            <h3>Colombia Strategic Takeaways</h3>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <h4>&#128640; Fast to Market</h4>
+                    <p>Lower upfront investment ($570K) vs Mexico ($896K). Cheaper Coljuegos license ($120K) makes betting viable from day one.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128179; Wallet Ecosystem</h4>
+                    <p>Nequi + Daviplata = 32M combined users. This is a major differentiator that doesn't exist at this scale in most other LATAM markets.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#9888;&#65039; GMF Tax Drag</h4>
+                    <p>The 0.4% financial movement tax is unavoidable and eats into margins on every bank transfer. Build this into pricing from day one.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128184; FX Opportunity</h4>
+                    <p>COP volatility creates wider FX spreads. The +0.9% FX margin is higher than Mexico's +0.8% due to currency risk premium.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#127919; Betting is Key</h4>
+                    <p>At ~3.1% net margin, the betting vertical is 2x more profitable than standard card processing. Coljuegos license should be a Year 1 priority.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128200; Path to Scale</h4>
+                    <p>Launch cross-border via dLocal, migrate to Redeban/Credibanco as volume grows. Target 5,000 merchants by Year 3 for $451M TPV.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Payphone Colombia Revenue Model &mdash; Confidential &mdash; Bambu Systems / UniCash</p>
+    </div>
+
+</div><!-- end main-content -->
+</div><!-- end content-wrapper -->
+
+<script>
+    const correctPassword = 'payphone2026';
+
+    if (sessionStorage.getItem('payphone_colombia_authenticated') === 'true') {
+        document.getElementById('passwordScreen').classList.add('hidden');
+        document.getElementById('contentWrapper').classList.add('unlocked');
+    }
+
+    function checkPassword() {
+        const input = document.getElementById('passwordInput');
+        if (input.value === correctPassword) {
+            sessionStorage.setItem('payphone_colombia_authenticated', 'true');
+            document.getElementById('passwordScreen').classList.add('hidden');
+            document.getElementById('contentWrapper').classList.add('unlocked');
+        } else {
+            document.getElementById('passwordError').style.display = 'block';
+            document.getElementById('passwordBox').classList.add('shake');
+            setTimeout(() => document.getElementById('passwordBox').classList.remove('shake'), 300);
+        }
+    }
+
+    document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') checkPassword();
+    });
+
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebarToggle');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    toggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    });
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+    });
+
+    // Active link tracking
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            if (window.scrollY >= section.offsetTop - 200) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + current) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+</body>
+</html>
