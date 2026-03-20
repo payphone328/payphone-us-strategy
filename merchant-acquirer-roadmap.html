@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payphone US Merchant Acquiring Roadmap — State-by-State Expansion Strategy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #10b981; --accent: #f59e0b;
+            --danger: #ef4444; --dark: #1e1b4b; --text: #374151; --text-light: #6b7280;
+            --bg: #f8fafc; --white: #ffffff; --border: #e5e7eb;
+            --naranja: #FF6400; --violeta: #5A00B4; --amarillo: #FFA000; --dark-mode: #222222;
+        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Password */
+        .password-screen { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #0d1117 100%); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .password-screen.hidden { display: none; }
+        .password-box { background: white; padding: 3rem; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); text-align: center; max-width: 420px; width: 90%; }
+        .password-logo { width: 80px; height: 80px; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem; }
+        .password-box h2 { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+        .password-box p { color: var(--text-light); margin-bottom: 2rem; font-size: 0.95rem; }
+        .password-input-group { position: relative; margin-bottom: 1.5rem; }
+        .password-input { width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--border); border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.2s; }
+        .password-input:focus { outline: none; border-color: var(--naranja); box-shadow: 0 0 0 4px rgba(255,100,0,0.1); }
+        .password-input.error { border-color: #ef4444; animation: shake 0.5s ease-in-out; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
+        .password-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .password-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,100,0,0.3); }
+        .password-error-msg { color: #ef4444; font-size: 0.85rem; margin-top: -1rem; margin-bottom: 1rem; display: none; }
+        .password-error-msg.show { display: block; }
+        .content-wrapper { display: none; }
+        .content-wrapper.unlocked { display: block; }
+
+        /* Sidebar */
+        .sidebar { position: fixed; left: 0; top: 0; width: 260px; height: 100vh; background: #0f0a2e; padding: 1.5rem; overflow-y: auto; z-index: 1000; display: flex; flex-direction: column; }
+        .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 1.5rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.08); }
+        .sidebar-logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .sidebar-logo-text { color: white; font-weight: 700; font-size: 1rem; }
+        .sidebar-logo-sub { color: rgba(255,255,255,0.5); font-size: 0.7rem; }
+        .sidebar-section { margin-bottom: 1.5rem; }
+        .sidebar-section-title { color: rgba(255,255,255,0.3); font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem; padding-left: 0.75rem; }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav-item { margin-bottom: 0.25rem; }
+        .sidebar-nav-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.75rem; color: rgba(255,255,255,0.6); text-decoration: none; border-radius: 10px; transition: all 0.2s; font-size: 0.85rem; }
+        .sidebar-nav-link:hover { background: rgba(255,255,255,0.08); color: white; }
+        .sidebar-nav-link.active { background: var(--naranja); color: white; font-weight: 500; }
+        .sidebar-nav-icon { width: 20px; text-align: center; font-size: 0.85rem; }
+        .sidebar-back { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); }
+        .sidebar-back-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; color: rgba(255,255,255,0.5); text-decoration: none; border-radius: 10px; transition: all 0.2s; font-size: 0.85rem; }
+        .sidebar-back-link:hover { background: rgba(255,255,255,0.08); color: white; }
+        .main-content { margin-left: 260px; }
+
+        /* Mobile */
+        .sidebar-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; width: 50px; height: 50px; background: #0f0a2e; border: none; border-radius: 50%; color: white; font-size: 1.25rem; cursor: pointer; z-index: 1001; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+            .sidebar-overlay.open { display: block; }
+            .main-content { margin-left: 0; }
+        }
+
+        /* Header */
+        .header { background: linear-gradient(135deg, var(--naranja) 0%, var(--amarillo) 100%); color: white; padding: 3.5rem 2rem 3rem; position: relative; overflow: hidden; }
+        .header::before { content: ''; position: absolute; top: -30%; right: -10%; width: 500px; height: 500px; background: var(--violeta); opacity: 0.12; border-radius: 50%; }
+        .header::after { content: ''; position: absolute; bottom: -40%; left: -5%; width: 400px; height: 400px; background: white; opacity: 0.08; border-radius: 50%; }
+        .header-content { max-width: 1400px; margin: 0 auto; position: relative; z-index: 1; }
+        .header-badges { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .header-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); }
+        .header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; line-height: 1.2; }
+        .header h1 span { color: var(--violeta); background: white; padding: 0 0.3rem; border-radius: 6px; }
+        .header > .header-content > p { font-size: 1.05rem; opacity: 0.95; max-width: 900px; }
+
+        /* Sections */
+        .section { padding: 3rem 2rem; max-width: 1400px; margin: 0 auto; }
+        .section-header { margin-bottom: 2rem; }
+        .section-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+        .badge-orange { background: rgba(255,100,0,0.1); color: var(--naranja); border: 1px solid rgba(255,100,0,0.2); }
+        .badge-purple { background: rgba(90,0,180,0.1); color: var(--violeta); border: 1px solid rgba(90,0,180,0.2); }
+        .badge-blue { background: rgba(99,102,241,0.1); color: var(--primary); border: 1px solid rgba(99,102,241,0.2); }
+        .badge-green { background: rgba(16,185,129,0.1); color: var(--secondary); border: 1px solid rgba(16,185,129,0.2); }
+        .badge-yellow { background: rgba(255,160,0,0.1); color: var(--amarillo); border: 1px solid rgba(255,160,0,0.2); }
+        .section-title { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+        .section-description { font-size: 1rem; color: var(--text-light); }
+        .card { background: var(--white); border-radius: 16px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+
+        /* State Cards */
+        .state-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .state-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border-top: 5px solid var(--naranja); position: relative; }
+        .state-card.tier1 { border-top-color: #10b981; }
+        .state-card.tier2 { border-top-color: var(--amarillo); }
+        .state-card.tier3 { border-top-color: var(--violeta); }
+        .state-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; }
+        .state-name { font-size: 1.5rem; font-weight: 800; color: var(--dark); }
+        .state-tier { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tier1-badge { background: #10b981; color: white; }
+        .tier2-badge { background: var(--amarillo); color: white; }
+        .tier3-badge { background: var(--violeta); color: white; }
+        .state-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .state-metric { background: var(--bg); padding: 1rem; border-radius: 10px; }
+        .state-metric-label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.25rem; }
+        .state-metric-value { font-size: 1.25rem; font-weight: 800; color: var(--dark); }
+        .state-metro-list { margin: 1.5rem 0; }
+        .state-metro-list h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .state-metro-list ul { list-style: none; }
+        .state-metro-list li { font-size: 0.85rem; color: var(--text); padding: 0.4rem 0; display: flex; align-items: center; gap: 0.5rem; }
+        .state-metro-list li::before { content: '📍'; font-size: 0.75rem; }
+        .state-segments { margin: 1.5rem 0; }
+        .state-segments h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .state-segments ul { list-style: none; }
+        .state-segments li { font-size: 0.85rem; color: var(--text); padding: 0.4rem 0; display: flex; align-items: flex-start; gap: 0.5rem; }
+        .state-segments li::before { content: '→'; color: var(--naranja); font-weight: 700; margin-top: 0.2rem; }
+        .state-remittance { margin: 1.5rem 0; padding: 1rem; background: linear-gradient(135deg, rgba(255,100,0,0.05), rgba(255,160,0,0.05)); border-radius: 10px; border-left: 4px solid var(--naranja); }
+        .state-remittance h4 { font-size: 0.85rem; font-weight: 700; color: var(--naranja); margin-bottom: 0.5rem; }
+        .state-remittance p { font-size: 0.8rem; color: var(--text); line-height: 1.5; }
+
+        /* Migration Section */
+        .migration-card { background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%); color: white; border-radius: 16px; padding: 2rem; margin: 2rem 0; }
+        .migration-flows { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .migration-flow { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); }
+        .migration-flow h4 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; }
+        .migration-arrow { font-size: 1.5rem; margin: 0.5rem 0; }
+        .migration-flow ul { list-style: none; font-size: 0.85rem; opacity: 0.9; }
+        .migration-flow li { padding: 0.3rem 0; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, var(--naranja), var(--amarillo)); border-radius: 2px; }
+        .timeline-item { position: relative; margin-bottom: 2.5rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -2.5rem; top: 0.5rem; width: 14px; height: 14px; background: var(--naranja); border-radius: 50%; border: 3px solid var(--bg); box-shadow: 0 0 0 2px var(--naranja); }
+        .timeline-phase { display: inline-block; padding: 0.3rem 0.8rem; background: var(--naranja); color: white; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; }
+        .timeline-title { font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem; }
+        .timeline-meta { display: flex; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .timeline-meta-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-light); }
+        .timeline-content { background: var(--white); border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+
+        /* Segment Cards */
+        .segment-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .segment-card { border-top: 4px solid var(--naranja); position: relative; }
+        .segment-card.restaurant { border-top-color: var(--danger); }
+        .segment-card.retail { border-top-color: var(--primary); }
+        .segment-card.services { border-top-color: var(--secondary); }
+        .segment-card.food { border-top-color: var(--accent); }
+        .segment-card.smb { border-top-color: var(--violeta); }
+        .segment-icon { width: 50px; height: 50px; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; }
+        .segment-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 0.75rem; }
+        .segment-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+        .segment-meta-item { background: var(--bg); padding: 0.75rem; border-radius: 10px; text-align: center; }
+        .segment-meta-item strong { display: block; font-size: 0.8rem; color: var(--dark); margin-bottom: 0.25rem; }
+        .segment-meta-item span { font-size: 0.72rem; color: var(--text-light); }
+        .segment-features { list-style: none; margin-top: 1rem; }
+        .segment-features li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text); }
+        .segment-features li::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+
+        /* Pricing Table */
+        .pricing-comparison { overflow-x: auto; }
+        .pricing-table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        .pricing-table thead { background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%); color: white; }
+        .pricing-table th { padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pricing-table td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        .pricing-table tbody tr:hover { background: rgba(255,100,0,0.02); }
+        .pricing-highlight { background: linear-gradient(135deg, var(--naranja), var(--amarillo)); color: white; padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+        .pricing-competitor { color: var(--text-light); }
+
+        /* Tech Stack */
+        .tech-stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .tech-item { background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); border-radius: 12px; padding: 1.5rem; border: 1px solid var(--border); }
+        .tech-item h4 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .tech-item p { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; }
+        .tech-code { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: var(--dark); color: #34d399; padding: 0.75rem 1rem; border-radius: 8px; margin-top: 0.75rem; overflow-x: auto; }
+
+        /* Revenue Model */
+        .revenue-card { background: linear-gradient(135deg, var(--dark) 0%, var(--primary-dark) 100%); color: white; border-radius: 16px; padding: 2rem; margin-top: 2rem; }
+        .revenue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1.5rem; }
+        .revenue-item { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 1.25rem; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .revenue-item h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; opacity: 0.8; }
+        .revenue-item .big-number { font-size: 2rem; font-weight: 800; color: var(--amarillo); }
+        .revenue-item p { font-size: 0.8rem; opacity: 0.7; margin-top: 0.5rem; }
+
+        /* Metrics Dashboard */
+        .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .metric-card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid var(--naranja); }
+        .metric-label { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; }
+        .metric-value { font-size: 1.75rem; font-weight: 800; color: var(--dark); }
+        .metric-subtext { font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem; }
+
+        /* Footer */
+        .footer { background: #0f0a2e; color: rgba(255,255,255,0.6); padding: 2rem; text-align: center; font-size: 0.85rem; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .segment-grid { grid-template-columns: 1fr; }
+            .tech-stack { grid-template-columns: 1fr; }
+            .revenue-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .state-grid { grid-template-columns: 1fr; }
+            .migration-flows { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .timeline { padding-left: 1.5rem; }
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="password-screen" id="passwordScreen">
+        <div class="password-box">
+            <div class="password-logo">🏪</div>
+            <h2>Merchant Roadmap</h2>
+            <p>This document is confidential. Please enter the password to continue.</p>
+            <form id="passwordForm">
+                <div class="password-input-group">
+                    <input type="password" class="password-input" id="passwordInput" placeholder="Enter password" autocomplete="off">
+                </div>
+                <div class="password-error-msg" id="errorMsg">Incorrect password. Please try again.</div>
+                <button type="submit" class="password-btn">Access Document</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content-wrapper" id="contentWrapper">
+    <aside class="sidebar" id="sidebar">
+        <a href="index.html" class="sidebar-logo">
+            <div class="sidebar-logo-icon">⚡</div>
+            <div>
+                <div class="sidebar-logo-text">Payphone</div>
+                <div class="sidebar-logo-sub">Merchant Acquiring</div>
+            </div>
+        </a>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Roadmap</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#overview" class="sidebar-nav-link active"><span class="sidebar-nav-icon">🎯</span> Executive Summary</a></li>
+                <li class="sidebar-nav-item"><a href="#migration" class="sidebar-nav-link"><span class="sidebar-nav-icon">🗺️</span> Migration Patterns</a></li>
+                <li class="sidebar-nav-item"><a href="#tier1" class="sidebar-nav-link"><span class="sidebar-nav-icon">🥇</span> Tier 1 States</a></li>
+                <li class="sidebar-nav-item"><a href="#tier2" class="sidebar-nav-link"><span class="sidebar-nav-icon">🥈</span> Tier 2 States</a></li>
+                <li class="sidebar-nav-item"><a href="#tier3" class="sidebar-nav-link"><span class="sidebar-nav-icon">🥉</span> Tier 3 States</a></li>
+                <li class="sidebar-nav-item"><a href="#timeline" class="sidebar-nav-link"><span class="sidebar-nav-icon">📅</span> Phase Timeline</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Strategy</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#segments" class="sidebar-nav-link"><span class="sidebar-nav-icon">🏢</span> Target Segments</a></li>
+                <li class="sidebar-nav-item"><a href="#payphone-business" class="sidebar-nav-link"><span class="sidebar-nav-icon">📱</span> Payphone Business</a></li>
+                <li class="sidebar-nav-item"><a href="#pricing" class="sidebar-nav-link"><span class="sidebar-nav-icon">💰</span> Pricing Strategy</a></li>
+                <li class="sidebar-nav-item"><a href="#tech" class="sidebar-nav-link"><span class="sidebar-nav-icon">🔧</span> Tech Stack</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Execution</div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-item"><a href="#revenue" class="sidebar-nav-link"><span class="sidebar-nav-icon">📈</span> Revenue Model</a></li>
+                <li class="sidebar-nav-item"><a href="#metrics" class="sidebar-nav-link"><span class="sidebar-nav-icon">📊</span> Success Metrics</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-back">
+            <a href="index.html" class="sidebar-back-link"><span>←</span> Strategy Home</a>
+            <a href="architecture.html" class="sidebar-back-link"><span>🏗️</span> Architecture</a>
+            <a href="licensing-roadmap.html" class="sidebar-back-link"><span>📋</span> Licensing</a>
+        </div>
+    </aside>
+
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-badges">
+                    <span class="header-badge">Stripe-Powered</span>
+                    <span class="header-badge">Q2 2026 Launch</span>
+                    <span class="header-badge">State-by-State Strategy</span>
+                    <span class="header-badge">Hispanic Market Focus</span>
+                </div>
+                <h1>US Merchant Acquiring Roadmap — <span>State</span>-Based Expansion</h1>
+                <p>Strategic state-by-state merchant acquisition plan leveraging Hispanic/Latino population density, immigrant migration patterns, and remittance corridors. Powered by Stripe Connect and Terminal for instant onboarding and zero hardware costs. From 0 to 10,000 merchants in 18 months across 11 priority states.</p>
+            </div>
+        </header>
+
+        <!-- Executive Summary -->
+        <section class="section" id="overview">
+            <div class="section-header">
+                <div class="section-badge badge-orange">Executive Summary</div>
+                <h2 class="section-title">State-Based Market Expansion Strategy</h2>
+                <p class="section-description">Payphone's merchant acquiring business targets 11 priority US states representing 70%+ of the Hispanic/Latino population and fastest-growing immigrant communities. Stripe Connect enables multi-state merchant onboarding with zero regulatory friction.</p>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 1.5rem;">Why State-Based Expansion Wins</h3>
+
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                    <div style="background: linear-gradient(135deg, rgba(255,100,0,0.05) 0%, rgba(255,160,0,0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--naranja);">
+                        <h4 style="font-size: 1rem; font-weight: 700; color: var(--naranja); margin-bottom: 0.75rem;">📊 64.7M Hispanic Population</h4>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin-bottom: 1rem;">Hispanic/Latino population is 19% of total US population (2024-2026) and growing faster than any other demographic. 5M+ Hispanic-owned businesses contribute $800B+ annually.</p>
+                        <ul style="list-style: none; font-size: 0.85rem; color: var(--text-light);">
+                            <li style="margin-bottom: 0.4rem;">✓ California: 15.5M (40% of state)</li>
+                            <li style="margin-bottom: 0.4rem;">✓ Texas: 12M (40% of state)</li>
+                            <li style="margin-bottom: 0.4rem;">✓ Florida: 6M (27% of state)</li>
+                            <li>✓ New York, Illinois, Arizona: 2M-4M each</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(99,102,241,0.05) 0%, rgba(16,185,129,0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--primary);">
+                        <h4 style="font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem;">🚀 Fastest-Growing Markets</h4>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin-bottom: 1rem;">North Carolina, Georgia, South Carolina, Florida, Texas, and Arizona lead in domestic migration. Venezuelans (+100%), Ecuadorians (+48%), Colombians (+43%) are fastest-growing immigrant groups.</p>
+                        <ul style="list-style: none; font-size: 0.85rem; color: var(--text-light);">
+                            <li style="margin-bottom: 0.4rem;">✓ NC: 47K net international migration (2024-25)</li>
+                            <li style="margin-bottom: 0.4rem;">✓ SC: 1.5% population growth (highest in US)</li>
+                            <li style="margin-bottom: 0.4rem;">✓ FL/TX: Top destinations for CA/NY/NJ outflows</li>
+                            <li>✓ AZ: Shifted from international to domestic migration</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(16,185,129,0.05) 0%, rgba(245,158,11,0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--secondary);">
+                        <h4 style="font-size: 1rem; font-weight: 700; color: var(--secondary); margin-bottom: 0.75rem;">⚡ Stripe Multi-State Advantage</h4>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin-bottom: 1rem;">Stripe Connect operates in all 50 US states with unified compliance infrastructure. Merchants onboard in <10 minutes regardless of location. No state-by-state merchant agreements needed.</p>
+                        <ul style="list-style: none; font-size: 0.85rem; color: var(--text-light);">
+                            <li style="margin-bottom: 0.4rem;">✓ Single integration for all states</li>
+                            <li style="margin-bottom: 0.4rem;">✓ Automatic tax/compliance handling</li>
+                            <li style="margin-bottom: 0.4rem;">✓ Instant multi-state merchant expansion</li>
+                            <li>✓ Zero geographic restrictions</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(90,0,180,0.05) 0%, rgba(239,68,68,0.05) 100%); border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--violeta);">
+                        <h4 style="font-size: 1rem; font-weight: 700; color: var(--violeta); margin-bottom: 0.75rem;">🌎 Remittance Corridor Strength</h4>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6; margin-bottom: 1rem;">Payphone's Ecuador/LATAM brand + remittance integration = unique merchant value prop. Accept US payments, send remittances home instantly.</p>
+                        <ul style="list-style: none; font-size: 0.85rem; color: var(--text-light);">
+                            <li style="margin-bottom: 0.4rem;">✓ FL: Strong Ecuador/Colombia/Venezuela ties</li>
+                            <li style="margin-bottom: 0.4rem;">✓ CA/TX: Mexico remittance volume leaders</li>
+                            <li style="margin-bottom: 0.4rem;">✓ NY/NJ: Ecuadorian diaspora concentration</li>
+                            <li>✓ IL: Mexico/Central America corridor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Migration Patterns -->
+        <section class="section" id="migration">
+            <div class="section-header">
+                <div class="section-badge badge-purple">Market Intelligence</div>
+                <h2 class="section-title">US Domestic Migration Patterns (2025-2026)</h2>
+                <p class="section-description">Understanding where immigrant communities are moving within the US helps prioritize merchant acquisition efforts. Follow the migration, capture the merchant opportunity.</p>
+            </div>
+
+            <div class="migration-card">
+                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">Immigrant Migration Flows Within USA</h3>
+                <p style="opacity: 0.9; margin-bottom: 2rem;">As of 2025-2026, strong internal migration patterns show Hispanic/Latino populations moving from traditional gateway states (CA, NY, NJ) to Sun Belt states (FL, TX, NC, SC, GA, AZ) driven by affordability, jobs, and climate.</p>
+
+                <div class="migration-flows">
+                    <div class="migration-flow">
+                        <h4>California → Texas, Arizona, Nevada</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">California has highest outbound migration in US. Hispanic families moving to TX (Austin, Houston, Dallas), AZ (Phoenix), NV (Las Vegas) for lower cost of living.</p>
+                        <div class="migration-arrow">🔻 CA → 🔺 TX/AZ/NV</div>
+                        <ul>
+                            <li><strong>Merchant Opportunity:</strong> Transplanted CA merchants need new payment processors</li>
+                            <li><strong>Strategy:</strong> Target CA expats in Austin, Phoenix, Vegas with "CA merchant discount"</li>
+                        </ul>
+                    </div>
+
+                    <div class="migration-flow">
+                        <h4>New York/New Jersey → Florida, North Carolina</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">NY/NJ seeing massive exodus to FL (Miami, Tampa, Orlando) and NC (Charlotte, Raleigh). Tax advantages and remote work driving moves.</p>
+                        <div class="migration-arrow">🔻 NY/NJ → 🔺 FL/NC</div>
+                        <ul>
+                            <li><strong>Merchant Opportunity:</strong> Ecuadorian/Colombian merchants from NY/NJ to FL</li>
+                            <li><strong>Strategy:</strong> Payphone Ecuador brand recognition = trust in FL market</li>
+                        </ul>
+                    </div>
+
+                    <div class="migration-flow">
+                        <h4>Illinois → Florida, Texas, North Carolina</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">Illinois (esp. Chicago) losing population to FL, TX, NC. Mexican-American community relocating for warmer climate and lower taxes.</p>
+                        <div class="migration-arrow">🔻 IL → 🔺 FL/TX/NC</div>
+                        <ul>
+                            <li><strong>Merchant Opportunity:</strong> Chicago restaurant/retail owners opening FL/TX locations</li>
+                            <li><strong>Strategy:</strong> Multi-location merchant accounts (IL + FL/TX)</li>
+                        </ul>
+                    </div>
+
+                    <div class="migration-flow">
+                        <h4>Sun Belt States (FL, TX, NC, SC, GA, AZ)</h4>
+                        <p style="font-size: 0.85rem; opacity: 0.8; margin-bottom: 1rem;">North Carolina, South Carolina, Georgia, Florida, Texas, Arizona are TOP GAINERS in domestic migration. International migration also surging (NC: +47K, AZ shifting to domestic).</p>
+                        <div class="migration-arrow">🔺 Highest Inbound Migration</div>
+                        <ul>
+                            <li><strong>Merchant Opportunity:</strong> New businesses opening daily to serve growing populations</li>
+                            <li><strong>Strategy:</strong> First-mover advantage in NC/SC/GA before Square/Clover saturate</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tier 1 States -->
+        <section class="section" id="tier1" style="background: linear-gradient(180deg, #f8fafc 0%, #f0fdf4 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-green">Tier 1 States</div>
+                    <h2 class="section-title">Launch Markets — Highest Priority (Q2 2026)</h2>
+                    <p class="section-description">Largest Hispanic populations + proven merchant density + strong remittance corridors. Start here for maximum impact and fastest revenue ramp.</p>
+                </div>
+
+                <div class="state-grid">
+                    <!-- Florida -->
+                    <div class="state-card tier1">
+                        <div class="state-header">
+                            <div class="state-name">Florida 🌴</div>
+                            <div class="state-tier tier1-badge">Tier 1</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">6.0M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">27.4%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">180K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">TOP GAINER</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Miami-Dade County (2.7M Hispanic, 70% of county) — #1 PRIORITY</li>
+                                <li>Orlando (465K Hispanic, strong Puerto Rican + Venezuelan)</li>
+                                <li>Tampa-St. Petersburg (450K Hispanic, fast-growing)</li>
+                                <li>Jacksonville (125K Hispanic, underserved by fintech)</li>
+                                <li>Fort Lauderdale-Broward (850K Hispanic)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Cuban/Venezuelan/Colombian restaurants and cafeterias</li>
+                                <li>Remittance agencies and money transfer businesses</li>
+                                <li>Small retail (bodegas, beauty supply, convenience stores)</li>
+                                <li>Construction and home services (contractors, landscaping)</li>
+                                <li>Travel agencies and tour operators (LATAM focus)</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Ecuador → Florida:</strong> Strong Payphone brand awareness from Ecuador diaspora in Miami. Venezuelan diaspora (fastest-growing) needs remittance solutions to family. Colombian community ties to Payphone LATAM expansion.</p>
+                        </div>
+                    </div>
+
+                    <!-- Texas -->
+                    <div class="state-card tier1">
+                        <div class="state-header">
+                            <div class="state-name">Texas 🤠</div>
+                            <div class="state-tier tier1-badge">Tier 1</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">12.0M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">39.7%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">360K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">TOP GAINER</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Houston (2.4M Hispanic, explosive growth) — #1 PRIORITY</li>
+                                <li>San Antonio (1.0M Hispanic, 64% of city, highest in major metros)</li>
+                                <li>Dallas-Fort Worth (1.8M Hispanic, tech hub growth)</li>
+                                <li>Austin (350K Hispanic, CA transplant boom)</li>
+                                <li>El Paso (680K Hispanic, 81% of city, Mexico border)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican restaurants, taquerias, food trucks (MASSIVE opportunity)</li>
+                                <li>Construction contractors and trade businesses</li>
+                                <li>Auto repair and body shops</li>
+                                <li>Small grocery stores and meat markets (carnicerías)</li>
+                                <li>Professional services (tax prep, immigration law, notaries)</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico → Texas:</strong> Largest Mexico remittance volume in US. Houston/Dallas/San Antonio have strong Mexican-American business communities. El Paso border corridor critical for cross-border commerce. Lower competition than CA.</p>
+                        </div>
+                    </div>
+
+                    <!-- California -->
+                    <div class="state-card tier1">
+                        <div class="state-header">
+                            <div class="state-name">California 🌞</div>
+                            <div class="state-tier tier1-badge">Tier 1</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">15.5M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">40.2%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">465K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">OUTBOUND</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Los Angeles County (4.9M Hispanic, largest in US) — #1 PRIORITY</li>
+                                <li>Riverside-San Bernardino (2.5M Hispanic, inland growth)</li>
+                                <li>San Diego (1.1M Hispanic, Mexico border)</li>
+                                <li>Orange County (1.0M Hispanic, affluent market)</li>
+                                <li>San Jose/Silicon Valley (550K Hispanic, tech-enabled merchants)</li>
+                            </ul>
+                            </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican/Central American restaurants and bakeries (panaderías)</li>
+                                <li>Mobile food vendors and farmers market sellers</li>
+                                <li>Landscaping and gardening services (huge market)</li>
+                                <li>Wholesale and distribution (LA garment district, produce markets)</li>
+                                <li>Retail (tiendas, boutiques, electronics, jewelry)</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico → California:</strong> #1 remittance volume state in US. Dense Mexican-American merchant community. Despite outbound migration, still 15.5M Hispanic population and largest merchant opportunity. Competitive but high reward.</p>
+                        </div>
+                    </div>
+
+                    <!-- New York -->
+                    <div class="state-card tier1">
+                        <div class="state-header">
+                            <div class="state-name">New York 🗽</div>
+                            <div class="state-tier tier1-badge">Tier 1</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">4.0M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">19.8%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">120K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">OUTBOUND</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>New York City (2.5M Hispanic, diverse origins) — #1 PRIORITY</li>
+                                <li>Queens (750K Hispanic, most diverse borough)</li>
+                                <li>Bronx (750K Hispanic, 56% of borough)</li>
+                                <li>Brooklyn (550K Hispanic, rapid gentrification)</li>
+                                <li>Long Island (450K Hispanic, suburban growth)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Dominican/Puerto Rican/Ecuadorian restaurants and bodegas</li>
+                                <li>Corner stores and convenience shops (24/7 bodegas)</li>
+                                <li>Beauty salons and barbershops</li>
+                                <li>Small grocery and specialty food importers</li>
+                                <li>Professional services (lawyers, accountants, consultants)</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Ecuador/Dominican Republic → New York:</strong> STRONG Ecuadorian diaspora in Queens/NYC (Payphone brand advantage). Dominican community sends massive remittance volume. Puerto Rican businesses don't need remittances but benefit from bilingual UX.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tier 2 States -->
+        <section class="section" id="tier2" style="background: linear-gradient(180deg, #f8fafc 0%, #fffbeb 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-yellow">Tier 2 States</div>
+                    <h2 class="section-title">Expansion Markets — High Growth (Q3-Q4 2026)</h2>
+                    <p class="section-description">Fast-growing Hispanic populations + lower competition + strong migration trends. Launch after Tier 1 validation.</p>
+                </div>
+
+                <div class="state-grid">
+                    <!-- Georgia -->
+                    <div class="state-card tier2">
+                        <div class="state-header">
+                            <div class="state-name">Georgia 🍑</div>
+                            <div class="state-tier tier2-badge">Tier 2</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">1.2M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">10.7%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">36K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">GAINER</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Atlanta Metro (680K Hispanic, tech hub growth)</li>
+                                <li>Gwinnett County (220K Hispanic, suburban boom)</li>
+                                <li>Cobb County (120K Hispanic)</li>
+                                <li>Savannah (35K Hispanic, growing)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican/Central American restaurants and food trucks</li>
+                                <li>Construction and landscaping services</li>
+                                <li>Auto repair and detailing</li>
+                                <li>Small retail and convenience stores</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico/Central America → Georgia:</strong> Growing Mexican immigrant population. Atlanta becoming major Hispanic business hub. Lower competition than traditional markets.</p>
+                        </div>
+                    </div>
+
+                    <!-- North Carolina -->
+                    <div class="state-card tier2">
+                        <div class="state-header">
+                            <div class="state-name">North Carolina 🌲</div>
+                            <div class="state-tier tier2-badge">Tier 2</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">1.1M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">10.2%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">33K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">TOP GAINER</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Charlotte-Mecklenburg (280K Hispanic, banking hub)</li>
+                                <li>Raleigh-Durham-Chapel Hill (220K Hispanic, tech corridor)</li>
+                                <li>Winston-Salem (75K Hispanic)</li>
+                                <li>Greensboro (60K Hispanic)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican/Honduran restaurants and taquerías</li>
+                                <li>Construction contractors and home services</li>
+                                <li>Landscaping and lawn care</li>
+                                <li>Small grocery stores and meat markets</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico/Honduras → North Carolina:</strong> +47K net international migration (2024-25). Fastest-growing Hispanic market in US. First-mover advantage opportunity.</p>
+                        </div>
+                    </div>
+
+                    <!-- Arizona -->
+                    <div class="state-card tier2">
+                        <div class="state-header">
+                            <div class="state-name">Arizona 🏜️</div>
+                            <div class="state-tier tier2-badge">Tier 2</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">2.3M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">31.4%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">69K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">GAINER (DOM)</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Phoenix Metro (1.5M Hispanic, CA transplant boom)</li>
+                                <li>Tucson (440K Hispanic, 43% of city)</li>
+                                <li>Mesa (220K Hispanic)</li>
+                                <li>Glendale (140K Hispanic)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican restaurants and authentic food businesses</li>
+                                <li>Landscaping and pool services (desert market)</li>
+                                <li>HVAC and home cooling services</li>
+                                <li>Small retail and specialty shops</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico → Arizona:</strong> Mexico border state, strong remittance volume. Shifted from international to domestic migration (CA transplants). Growing fast.</p>
+                        </div>
+                    </div>
+
+                    <!-- New Jersey -->
+                    <div class="state-card tier2">
+                        <div class="state-header">
+                            <div class="state-name">New Jersey 🏖️</div>
+                            <div class="state-tier tier2-badge">Tier 2</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">2.0M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">22.5%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">60K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">OUTBOUND</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Newark-Hudson County (550K Hispanic, NYC proximity)</li>
+                                <li>Paterson (90K Hispanic, 60% of city)</li>
+                                <li>Jersey City (120K Hispanic)</li>
+                                <li>Elizabeth (80K Hispanic, 65% of city)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Dominican/Ecuadorian restaurants and bodegas</li>
+                                <li>Small grocery and specialty food importers</li>
+                                <li>Beauty salons and barbershops</li>
+                                <li>Professional services and consulting</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Ecuador/Dominican Republic → New Jersey:</strong> Strong Ecuadorian community (Payphone brand advantage). Dominican remittance corridor. NYC metro spillover opportunity.</p>
+                        </div>
+                    </div>
+
+                    <!-- Illinois -->
+                    <div class="state-card tier2">
+                        <div class="state-header">
+                            <div class="state-name">Illinois 🌆</div>
+                            <div class="state-tier tier2-badge">Tier 2</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">2.5M</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">18.2%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">75K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">OUTBOUND</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Chicago Metro (2.0M Hispanic, 3rd largest US)</li>
+                                <li>Cook County (1.4M Hispanic)</li>
+                                <li>Aurora (85K Hispanic, 42% of city)</li>
+                                <li>Cicero (65K Hispanic, 77% of city)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican restaurants, taquerías, and bakeries</li>
+                                <li>Small grocery stores and meat markets</li>
+                                <li>Auto repair and body shops</li>
+                                <li>Construction and trade services</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico → Illinois:</strong> Large Mexican-American community. Chicago = major remittance hub. Mature market but high volume opportunity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tier 3 States -->
+        <section class="section" id="tier3" style="background: linear-gradient(180deg, #f8fafc 0%, #faf5ff 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-purple">Tier 3 States</div>
+                    <h2 class="section-title">Opportunity Markets — Strategic Future (2027+)</h2>
+                    <p class="section-description">Emerging Hispanic populations + lower density but strategic value. Launch selectively based on Tier 1/2 learnings.</p>
+                </div>
+
+                <div class="state-grid">
+                    <!-- South Carolina -->
+                    <div class="state-card tier3">
+                        <div class="state-header">
+                            <div class="state-name">South Carolina 🌊</div>
+                            <div class="state-tier tier3-badge">Tier 3</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">350K</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">6.6%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">10.5K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">FASTEST GROWTH</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Greenville-Spartanburg (110K Hispanic)</li>
+                                <li>Charleston (65K Hispanic, tourism/service economy)</li>
+                                <li>Columbia (55K Hispanic, state capital)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Mexican restaurants and food businesses</li>
+                                <li>Construction and landscaping</li>
+                                <li>Small retail and convenience stores</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Mexico → South Carolina:</strong> 1.5% population growth (HIGHEST IN US). Early-stage market, low competition, high opportunity.</p>
+                        </div>
+                    </div>
+
+                    <!-- North Dakota -->
+                    <div class="state-card tier3">
+                        <div class="state-header">
+                            <div class="state-name">North Dakota ❄️</div>
+                            <div class="state-tier tier3-badge">Tier 3</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">30K</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">4.3%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">900+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">FASTEST % GROWTH</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Fargo (12K Hispanic, tech/ag economy)</li>
+                                <li>Bismarck (5K Hispanic, state capital)</li>
+                                <li>Grand Forks (4K Hispanic, university town)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Restaurants and food services</li>
+                                <li>Construction and oil field services</li>
+                                <li>Small retail businesses</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Strategic Value:</strong> >50% relative Hispanic population growth (fastest in US). Small but underserved market. Oil/ag economy = merchant revenue potential.</p>
+                        </div>
+                    </div>
+
+                    <!-- South Dakota -->
+                    <div class="state-card tier3">
+                        <div class="state-header">
+                            <div class="state-name">South Dakota 🦬</div>
+                            <div class="state-tier tier3-badge">Tier 3</div>
+                        </div>
+                        <div class="state-metrics">
+                            <div class="state-metric">
+                                <div class="state-metric-label">Hispanic Population</div>
+                                <div class="state-metric-value">35K</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">% of State</div>
+                                <div class="state-metric-value">4.5%</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Est. Hispanic SMBs</div>
+                                <div class="state-metric-value">1K+</div>
+                            </div>
+                            <div class="state-metric">
+                                <div class="state-metric-label">Migration Status</div>
+                                <div class="state-metric-value">GROWING</div>
+                            </div>
+                        </div>
+                        <div class="state-metro-list">
+                            <h4>Priority Metro Areas</h4>
+                            <ul>
+                                <li>Sioux Falls (15K Hispanic, meat processing hub)</li>
+                                <li>Rapid City (6K Hispanic, tourism economy)</li>
+                                <li>Aberdeen (2K Hispanic)</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Top Merchant Segments</h4>
+                            <ul>
+                                <li>Restaurants and food businesses</li>
+                                <li>Meat processing and food services</li>
+                                <li>Small retail and convenience stores</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Remittance Corridor Strength</h4>
+                            <p><strong>Strategic Value:</strong> Small but growing Hispanic population. Sioux Falls meat processing industry = merchant concentration. Low competition.</p>
+                        </div>
+                    </div>
+
+                    <!-- Nevada, Colorado, Washington, Massachusetts, Virginia (honorable mentions) -->
+                    <div class="state-card tier3">
+                        <div class="state-header">
+                            <div class="state-name">Other Strategic States 🌐</div>
+                            <div class="state-tier tier3-badge">Tier 3</div>
+                        </div>
+                        <p style="font-size: 0.95rem; color: var(--text); line-height: 1.6; margin-bottom: 1.5rem;">Additional states with strong Hispanic populations and strategic value for future expansion (2027+):</p>
+                        <div class="state-metro-list">
+                            <h4>Priority States & Key Metros</h4>
+                            <ul>
+                                <li><strong>Nevada (29.6%):</strong> 900K Hispanic. Las Vegas (560K), Reno (160K). CA transplants, gaming/hospitality economy.</li>
+                                <li><strong>Colorado (22.5%):</strong> 1.3M Hispanic. Denver Metro (750K), Colorado Springs (140K). Tech hub, CA transplants.</li>
+                                <li><strong>Washington (13.2%):</strong> 1.0M Hispanic. Seattle Metro (420K), Yakima (120K, 50% of city). Tech economy, agriculture.</li>
+                                <li><strong>Massachusetts (12.6%):</strong> 900K Hispanic. Boston Metro (350K), Springfield (95K, 45% of city). Education/tech hub.</li>
+                                <li><strong>Virginia (9.6%):</strong> 850K Hispanic. Northern VA/DC Metro (450K), Richmond (80K). Government contractors, tech corridor.</li>
+                            </ul>
+                        </div>
+                        <div class="state-segments">
+                            <h4>Expansion Strategy</h4>
+                            <ul>
+                                <li>Nevada: Natural extension from CA/AZ markets (Vegas = CA transplant magnet)</li>
+                                <li>Colorado: Tech-savvy merchants, Denver boom, CA outflow destination</li>
+                                <li>Washington: Seattle tech economy, agriculture in Yakima/Wenatchee</li>
+                                <li>Massachusetts: Boston education/healthcare, Springfield manufacturing</li>
+                                <li>Virginia: DC metro government contractors, Northern VA tech corridor</li>
+                            </ul>
+                        </div>
+                        <div class="state-remittance">
+                            <h4>Combined Strategic Value</h4>
+                            <p><strong>Total Hispanic Population:</strong> 5M+ across these 5 states. Strong economic fundamentals, tech-forward economies, lower competition than CA/TX. Launch selectively based on merchant density and strategic partnerships.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phase Timeline (State-Based) -->
+        <section class="section" id="timeline" style="background: linear-gradient(180deg, #f8fafc 0%, #fff7ed 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-yellow">Launch Timeline</div>
+                    <h2 class="section-title">18-Month State-by-State Rollout</h2>
+                    <p class="section-description">Phased geographic expansion aligned with merchant density, migration patterns, and operational capacity. Conservative target: 10,000 active merchants by Q4 2027.</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <span class="timeline-phase">Phase 1</span>
+                        <h3 class="timeline-title">Pilot & Product Validation — FL, TX, CA</h3>
+                        <div class="timeline-meta">
+                            <div class="timeline-meta-item"><strong>📅</strong> Q2 2026 (Apr-Jun)</div>
+                            <div class="timeline-meta-item"><strong>🎯</strong> 50 merchants</div>
+                            <div class="timeline-meta-item"><strong>🗺️</strong> 3 states (Tier 1)</div>
+                            <div class="timeline-meta-item"><strong>💰</strong> $250K GMV target</div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Geographic Focus</h4>
+                            <ul>
+                                <li><strong>Florida:</strong> Miami-Dade County (10 merchants) — Test Ecuadorian/Venezuelan merchant market</li>
+                                <li><strong>Texas:</strong> Houston (20 merchants) — Test Mexican-American restaurant/food truck segment</li>
+                                <li><strong>California:</strong> Los Angeles (20 merchants) — Test high-competition, mature market dynamics</li>
+                            </ul>
+
+                            <h4>Objectives</h4>
+                            <ul>
+                                <li>Validate Stripe Connect onboarding flow with real merchants across 3 diverse markets</li>
+                                <li>Test state-specific merchant needs (FL remittances, TX food trucks, CA mobile vendors)</li>
+                                <li>Refine bilingual support model (Spanish/English) for each market</li>
+                                <li>Build 3 regional case studies for marketing (1 per state)</li>
+                                <li>Identify top friction points in merchant journey by geography</li>
+                            </ul>
+
+                            <h4>Success Criteria</h4>
+                            <ul>
+                                <li>80%+ of pilot merchants process ≥10 transactions/week</li>
+                                <li>NPS ≥50 from pilot cohort across all 3 states</li>
+                                <li>Average onboarding time <15 minutes (all states)</li>
+                                <li>Zero critical technical issues (payment failures, payout delays)</li>
+                                <li>Validate Stripe multi-state compliance (no state-specific blockers)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="timeline-phase" style="background: var(--primary);">Phase 2</span>
+                        <h3 class="timeline-title">Growth & Tier 1 Expansion — NY + Scale FL/TX/CA</h3>
+                        <div class="timeline-meta">
+                            <div class="timeline-meta-item"><strong>📅</strong> Q3-Q4 2026 (Jul-Dec)</div>
+                            <div class="timeline-meta-item"><strong>🎯</strong> 500 merchants</div>
+                            <div class="timeline-meta-item"><strong>🗺️</strong> 4 states (all Tier 1)</div>
+                            <div class="timeline-meta-item"><strong>💰</strong> $2.5M GMV target</div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Geographic Expansion</h4>
+                            <ul>
+                                <li><strong>New York:</strong> Launch NYC (Queens, Bronx, Brooklyn) — Ecuadorian diaspora targeting (100 merchants)</li>
+                                <li><strong>Florida:</strong> Expand to Orlando, Tampa, Fort Lauderdale (100 merchants)</li>
+                                <li><strong>Texas:</strong> Launch San Antonio, Dallas-Fort Worth, Austin (150 merchants)</li>
+                                <li><strong>California:</strong> Expand to San Diego, Riverside, Orange County (150 merchants)</li>
+                            </ul>
+
+                            <h4>Acquisition Channels by State</h4>
+                            <ul>
+                                <li><strong>FL:</strong> Spanish radio ads (Univision/Telemundo), Venezuelan community events, Ecuadorian chambers</li>
+                                <li><strong>TX:</strong> Food truck rallies, taqueria associations, construction trade shows</li>
+                                <li><strong>CA:</strong> Farmers markets, mobile vendor networks, LA garment district outreach</li>
+                                <li><strong>NY:</strong> Bodega associations, NYC small business expos, Queens community boards</li>
+                                <li><strong>All States:</strong> Facebook/Instagram ads (geo-targeted), WhatsApp Business, referral program</li>
+                            </ul>
+
+                            <h4>Success Criteria</h4>
+                            <ul>
+                                <li>500 active merchants (≥$1K GMV/month) across 4 states</li>
+                                <li>50%+ merchant acquisition via referrals (organic growth)</li>
+                                <li>CAC <$200 per merchant (blended across states)</li>
+                                <li>Merchant retention ≥85% month-over-month (all states)</li>
+                                <li>State-specific product-market fit validated (FL remittances, TX food trucks, etc.)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="timeline-phase" style="background: var(--secondary);">Phase 3</span>
+                        <h3 class="timeline-title">Scale & Tier 2 Launch — GA, NC, AZ, NJ, IL</h3>
+                        <div class="timeline-meta">
+                            <div class="timeline-meta-item"><strong>📅</strong> Q1-Q2 2027 (Jan-Jun)</div>
+                            <div class="timeline-meta-item"><strong>🎯</strong> 2,500 merchants</div>
+                            <div class="timeline-meta-item"><strong>🗺️</strong> 9 states (Tier 1 + Tier 2)</div>
+                            <div class="timeline-meta-item"><strong>💰</strong> $15M GMV target</div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Geographic Expansion</h4>
+                            <ul>
+                                <li><strong>Georgia:</strong> Launch Atlanta, Gwinnett County (300 merchants) — Tech hub + migration destination</li>
+                                <li><strong>North Carolina:</strong> Launch Charlotte, Raleigh-Durham (300 merchants) — Fastest-growing Hispanic market</li>
+                                <li><strong>Arizona:</strong> Launch Phoenix, Tucson (300 merchants) — CA transplant boom</li>
+                                <li><strong>New Jersey:</strong> Launch Newark, Paterson, Jersey City (200 merchants) — NYC spillover + Ecuadorian community</li>
+                                <li><strong>Illinois:</strong> Launch Chicago Metro (200 merchants) — Large Mexican-American market</li>
+                                <li><strong>Tier 1 States:</strong> Continue scaling FL/TX/CA/NY (1,200 merchants added = 2,200 total in Tier 1)</li>
+                            </ul>
+
+                            <h4>State-Specific Strategies</h4>
+                            <ul>
+                                <li><strong>NC/SC/GA (New South):</strong> First-mover advantage messaging, "Before Square Gets Here" positioning</li>
+                                <li><strong>AZ:</strong> Target CA expats, "Same CA quality, AZ affordability" marketing</li>
+                                <li><strong>NJ:</strong> Leverage NYC Ecuadorian merchant referrals, cross-state merchant networks</li>
+                                <li><strong>IL:</strong> Chicago Mexican restaurant association partnerships, taquería focus</li>
+                            </ul>
+
+                            <h4>Success Criteria</h4>
+                            <ul>
+                                <li>2,500 active merchants across 9 states</li>
+                                <li>30%+ of merchants use ≥2 value-added features (invoicing, inventory, loyalty)</li>
+                                <li>Average GMV per merchant ≥$6K/month (all states)</li>
+                                <li>CAC <$150 (economies of scale from brand + referrals)</li>
+                                <li>Tier 2 states show >20% month-over-month merchant growth</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <span class="timeline-phase" style="background: var(--accent);">Phase 4</span>
+                        <h3 class="timeline-title">Dominance & Tier 3 Expansion — All 11 States + Selective Others</h3>
+                        <div class="timeline-meta">
+                            <div class="timeline-meta-item"><strong>📅</strong> Q3-Q4 2027 (Jul-Dec)</div>
+                            <div class="timeline-meta-item"><strong>🎯</strong> 10,000 merchants</div>
+                            <div class="timeline-meta-item"><strong>🗺️</strong> 11+ states (all tiers)</div>
+                            <div class="timeline-meta-item"><strong>💰</strong> $75M GMV target</div>
+                        </div>
+                        <div class="timeline-content">
+                            <h4>Geographic Expansion</h4>
+                            <ul>
+                                <li><strong>South Carolina:</strong> Launch Greenville, Charleston, Columbia (200 merchants) — Fastest-growing US state</li>
+                                <li><strong>North/South Dakota:</strong> Selective launch in Fargo, Sioux Falls (50 merchants) — Underserved, high % growth</li>
+                                <li><strong>Nevada:</strong> Launch Las Vegas, Reno (400 merchants) — CA transplant magnet, gaming/hospitality</li>
+                                <li><strong>Colorado:</strong> Launch Denver, Colorado Springs (300 merchants) — Tech hub, CA outflow</li>
+                                <li><strong>All Tier 1/2 States:</strong> Scale to 8,050 merchants (majority of merchant base)</li>
+                            </ul>
+
+                            <h4>Market Dominance Strategy</h4>
+                            <ul>
+                                <li>Become #1 payment processor for Hispanic-owned businesses in FL, TX, NY (displacement of Square/Clover)</li>
+                                <li>Launch financial services ecosystem (Stripe Capital loans, business checking, insurance)</li>
+                                <li>Expand into non-Hispanic SMB market in proven states (product maturity + competitive pricing)</li>
+                                <li>Multi-state merchant accounts (e.g., food truck franchises operating in FL + TX + CA)</li>
+                                <li>IPO/acquisition readiness (institutional-grade metrics across all states)</li>
+                            </ul>
+
+                            <h4>Success Criteria</h4>
+                            <ul>
+                                <li>10,000 active merchants processing ≥$1K/month across 11+ states</li>
+                                <li>$75M annual GMV (10,000 merchants × $6K average × 12 months)</li>
+                                <li>≥500 merchants using Stripe Capital (cash advance)</li>
+                                <li>≥1,000 merchants using business checking accounts</li>
+                                <li>50%+ of new merchants from organic/referral (brand-driven growth)</li>
+                                <li>Profitability on merchant acquiring business unit</li>
+                                <li>Top 3 payment processor for Hispanic SMBs in FL, TX, CA, NY</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Segments (same as before, unchanged) -->
+        <section class="section" id="segments">
+            <div class="section-header">
+                <div class="section-badge badge-blue">Target Markets</div>
+                <h2 class="section-title">High-Value Merchant Segments (Universal Across States)</h2>
+                <p class="section-description">Five merchant types optimized for Payphone's unique advantages — mobile payments, fast payouts, Hispanic market expertise. Prioritize differently by state based on local economy.</p>
+            </div>
+
+            <div class="segment-grid">
+                <div class="card segment-card restaurant">
+                    <div class="segment-icon" style="background: linear-gradient(135deg, #ef4444, #f59e0b);">🍽️</div>
+                    <h3>Hispanic Restaurants & Food Service</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Taquerias, pupuserias, food trucks, catering — high transaction volume, cash-heavy, need fast payouts for inventory.</p>
+
+                    <div class="segment-meta">
+                        <div class="segment-meta-item">
+                            <strong>Avg GMV/Month</strong>
+                            <span>$8,000 - $15,000</span>
+                        </div>
+                        <div class="segment-meta-item">
+                            <strong>Pain Point</strong>
+                            <span>2-3 day payouts kill cash flow</span>
+                        </div>
+                    </div>
+
+                    <ul class="segment-features">
+                        <li>TAP-to-pay on phone (no counter terminal needed)</li>
+                        <li>Instant payouts to Payphone wallet → buy supplies same day</li>
+                        <li>Tip prompts (15%/18%/20%) built-in</li>
+                        <li>Spanish-language interface</li>
+                        <li>Accept orders via QR code (table tents, menus)</li>
+                    </ul>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                        <strong style="font-size: 0.85rem; color: var(--dark);">Strongest States:</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">TX (taquerías), CA (food trucks), FL (Cuban cafés), IL (Mexican bakeries)</p>
+                    </div>
+                </div>
+
+                <div class="card segment-card retail">
+                    <div class="segment-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">🏪</div>
+                    <h3>Small Retail & Convenience Stores</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Bodegas, tiendas, mini-marts, beauty supply — need inventory management, low fees, fast onboarding.</p>
+
+                    <div class="segment-meta">
+                        <div class="segment-meta-item">
+                            <strong>Avg GMV/Month</strong>
+                            <span>$5,000 - $10,000</span>
+                        </div>
+                        <div class="segment-meta-item">
+                            <strong>Pain Point</strong>
+                            <span>Expensive legacy POS systems</span>
+                        </div>
+                    </div>
+
+                    <ul class="segment-features">
+                        <li>Barcode scanning (existing smartphone camera)</li>
+                        <li>Inventory tracking (auto-decrement stock on sale)</li>
+                        <li>Multi-user accounts (owner + cashiers)</li>
+                        <li>No monthly terminal rental fees</li>
+                        <li>Accept EBT/SNAP (via Stripe partnership — future)</li>
+                    </ul>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                        <strong style="font-size: 0.85rem; color: var(--dark);">Strongest States:</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">NY (bodegas), NJ (corner stores), FL (tiendas), CA (mini-marts)</p>
+                    </div>
+                </div>
+
+                <div class="card segment-card services">
+                    <div class="segment-icon" style="background: linear-gradient(135deg, #10b981, #14b8a6);">🔧</div>
+                    <h3>Home Services & Contractors</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Landscaping, cleaning, plumbing, painting — mobile workforce, invoice-based, need on-site payment.</p>
+
+                    <div class="segment-meta">
+                        <div class="segment-meta-item">
+                            <strong>Avg GMV/Month</strong>
+                            <span>$6,000 - $12,000</span>
+                        </div>
+                        <div class="segment-meta-item">
+                            <strong>Pain Point</strong>
+                            <span>Chase customers for payment</span>
+                        </div>
+                    </div>
+
+                    <ul class="segment-features">
+                        <li>SMS/email invoicing with "Pay Now" link</li>
+                        <li>Accept payment on-site (TAP customer's card)</li>
+                        <li>Recurring billing (weekly mowing, monthly cleaning)</li>
+                        <li>Photo attachments (before/after job documentation)</li>
+                        <li>Customer database (service history, notes)</li>
+                    </ul>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                        <strong style="font-size: 0.85rem; color: var(--dark);">Strongest States:</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">FL (landscaping), TX (construction), CA (gardening), NC/GA (contractors)</p>
+                    </div>
+                </div>
+
+                <div class="card segment-card food">
+                    <div class="segment-icon" style="background: linear-gradient(135deg, #f59e0b, #eab308);">🚚</div>
+                    <h3>Mobile Vendors & Pop-Ups</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Food trucks, flea market sellers, farmers market vendors — no fixed location, need offline mode, simple setup.</p>
+
+                    <div class="segment-meta">
+                        <div class="segment-meta-item">
+                            <strong>Avg GMV/Month</strong>
+                            <span>$3,000 - $8,000</span>
+                        </div>
+                        <div class="segment-meta-item">
+                            <strong>Pain Point</strong>
+                            <span>Unreliable WiFi/cellular at events</span>
+                        </div>
+                    </div>
+
+                    <ul class="segment-features">
+                        <li>Offline mode (store transactions, sync later)</li>
+                        <li>No hardware required (phone-only setup)</li>
+                        <li>Event tracking (Saturday farmer's market vs Sunday flea market)</li>
+                        <li>QR code generator (print on signage, customers scan to pay)</li>
+                        <li>Same-day payouts (restock inventory immediately)</li>
+                    </ul>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                        <strong style="font-size: 0.85rem; color: var(--dark);">Strongest States:</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">CA (food trucks, farmers markets), TX (food trucks), AZ (flea markets), FL (pop-up events)</p>
+                    </div>
+                </div>
+
+                <div class="card segment-card smb">
+                    <div class="segment-icon" style="background: linear-gradient(135deg, #8b5cf6, #d946ef);">💼</div>
+                    <h3>Professional Services</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 1rem;">Immigration lawyers, tax preparers, notaries, consultants — high-ticket invoices, need payment plans, trust is key.</p>
+
+                    <div class="segment-meta">
+                        <div class="segment-meta-item">
+                            <strong>Avg GMV/Month</strong>
+                            <span>$10,000 - $25,000</span>
+                        </div>
+                        <div class="segment-meta-item">
+                            <strong>Pain Point</strong>
+                            <span>Clients can't afford upfront fees</span>
+                        </div>
+                    </div>
+
+                    <ul class="segment-features">
+                        <li>Payment plans (split $1,500 invoice into 3 monthly $500 charges)</li>
+                        <li>Retainer billing (auto-charge monthly for ongoing services)</li>
+                        <li>Trust accounts (hold client funds, compliant with legal regs)</li>
+                        <li>Client portal (view invoice history, payment status)</li>
+                        <li>Bilingual receipts (Spanish/English)</li>
+                    </ul>
+
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                        <strong style="font-size: 0.85rem; color: var(--dark);">Strongest States:</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.25rem;">CA (immigration lawyers), TX (tax preparers), NY (consultants), FL (notaries/legal)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAYPHONE BUSINESS: Mobile Payment Acceptance Product -->
+        <section class="section" id="payphone-business" style="background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, var(--dark) 100%); max-width: 100%; padding: 4rem 2rem; color: white;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge" style="background: linear-gradient(135deg, var(--naranja), var(--amarillo)); color: white; border: none;">PRODUCT OVERVIEW</div>
+                    <h2 class="section-title" style="color: white; font-size: 2.25rem;">Payphone Business — Turn Any Phone Into a Payment Terminal</h2>
+                    <p class="section-description" style="color: rgba(255,255,255,0.85); font-size: 1.15rem;">The simplest way for Hispanic SMB owners to accept payments. Zero hardware, three payment methods, instant payouts to Payphone wallet. Available in all 50 states.</p>
+                </div>
+
+                <!-- Product Hero -->
+                <div style="background: linear-gradient(135deg, var(--naranja) 0%, var(--amarillo) 100%); border-radius: 20px; padding: 3rem; margin: 3rem 0; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -20%; right: -5%; width: 400px; height: 400px; background: var(--violeta); opacity: 0.15; border-radius: 50%;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h3 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1.5rem; color: white;">ONE App. THREE Payment Methods. ZERO Hardware.</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3.5rem; margin-bottom: 1rem;">📱</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">QR Code Payments</div>
+                                <div style="font-size: 0.9rem; opacity: 0.9;">Merchant generates QR, customer scans and pays</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 3.5rem; margin-bottom: 1rem;">💳</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Tap to Pay (NFC)</div>
+                                <div style="font-size: 0.9rem; opacity: 0.9;">Customer taps card on merchant's phone</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 3.5rem; margin-bottom: 1rem;">🔗</div>
+                                <div style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Link to Pay</div>
+                                <div style="font-size: 0.9rem; opacity: 0.9;">Share payment link via text, WhatsApp, email</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How Each Method Works -->
+                <div style="margin-top: 3rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; text-align: center;">How Each Payment Method Works</h3>
+
+                    <div style="display: grid; gap: 2rem;">
+                        <!-- QR Code Payments -->
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.15);">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">📱</div>
+                                <div>
+                                    <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">QR Code Payments</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.75;">Best for: Retail counters, food trucks, pop-up vendors</p>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Merchant Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Open Payphone Business app</li>
+                                        <li>Tap "Receive Payment"</li>
+                                        <li>Enter amount (e.g., $24.50)</li>
+                                        <li>Tap "Generate QR Code"</li>
+                                        <li>Show QR on screen or print for signage</li>
+                                        <li>Customer scans with any phone camera</li>
+                                        <li>Payment arrives in Payphone wallet instantly</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Customer Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Open phone camera or Payphone app</li>
+                                        <li>Scan merchant's QR code</li>
+                                        <li>Review payment details ($24.50 to "Taquería El Sabor")</li>
+                                        <li>Select payment method (Payphone wallet, card, bank)</li>
+                                        <li>Confirm payment with Face ID/fingerprint</li>
+                                        <li>Receive instant digital receipt</li>
+                                        <li>Merchant gets paid — transaction complete</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16,185,129,0.15); border-radius: 10px; border-left: 4px solid var(--secondary);">
+                                <strong style="font-size: 0.9rem; color: var(--secondary);">Stripe Infrastructure:</strong>
+                                <span style="font-size: 0.85rem; opacity: 0.9;"> Stripe Payment Intents API generates unique QR codes tied to payment sessions. Customer pays via Stripe Checkout (hosted) or Payphone wallet direct debit.</span>
+                            </div>
+                        </div>
+
+                        <!-- Tap to Pay (NFC) -->
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.15);">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--violeta), #8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">💳</div>
+                                <div>
+                                    <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Tap to Pay (NFC)</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.75;">Best for: In-person payments, mobile services, home contractors</p>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Merchant Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Open Payphone Business app</li>
+                                        <li>Tap "Tap to Pay" mode</li>
+                                        <li>Enter amount (e.g., $150.00 for plumbing service)</li>
+                                        <li>Tap "Ready to Accept Card"</li>
+                                        <li>Customer taps their credit/debit card on phone</li>
+                                        <li>Phone vibrates + shows "Payment Approved ✓"</li>
+                                        <li>Digital receipt sent to customer via SMS/email</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Customer Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Pull out credit/debit card (Visa, Mastercard, Amex, Discover)</li>
+                                        <li>Tap card on merchant's phone (NFC antenna area)</li>
+                                        <li>Wait 1-2 seconds for approval beep</li>
+                                        <li>Payment complete — no signature needed (<$100)</li>
+                                        <li>Receive SMS receipt with merchant name and details</li>
+                                        <li>Transaction appears on card statement instantly</li>
+                                        <li>No app download needed for customer</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16,185,129,0.15); border-radius: 10px; border-left: 4px solid var(--secondary);">
+                                <strong style="font-size: 0.9rem; color: var(--secondary);">Stripe Infrastructure:</strong>
+                                <span style="font-size: 0.85rem; opacity: 0.9;"> Stripe Terminal SDK (Tap to Pay on iPhone/Android) converts merchant's phone into PCI-compliant NFC terminal. No hardware reader required. Works with all contactless cards and wallets.</span>
+                            </div>
+
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(99,102,241,0.15); border-radius: 10px; border-left: 4px solid var(--primary);">
+                                <strong style="font-size: 0.9rem; color: #818cf8;">Device Compatibility:</strong>
+                                <span style="font-size: 0.85rem; opacity: 0.9;"> iPhone XS and newer (iOS 15.4+), Android phones with NFC (Android 10+). Covers 95%+ of US smartphones.</span>
+                            </div>
+                        </div>
+
+                        <!-- Link to Pay -->
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.15);">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #34d399); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">🔗</div>
+                                <div>
+                                    <h4 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Link to Pay</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.75;">Best for: Remote invoices, professional services, recurring billing</p>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Merchant Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Open Payphone Business app</li>
+                                        <li>Tap "Create Payment Link"</li>
+                                        <li>Enter amount + description ("Tax prep service - Maria Rodriguez")</li>
+                                        <li>Add customer's phone/email (optional)</li>
+                                        <li>Tap "Generate Link"</li>
+                                        <li>Share via WhatsApp, SMS, email, or social media</li>
+                                        <li>Track link status (sent, viewed, paid) in app</li>
+                                        <li>Get notified when customer pays</li>
+                                    </ol>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; color: var(--amarillo);">Customer Flow</div>
+                                    <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+                                        <li>Receive payment link via text, WhatsApp, email</li>
+                                        <li>Tap link to open secure Payphone payment page</li>
+                                        <li>Review merchant name, amount, description</li>
+                                        <li>Enter card details (or use saved payment method)</li>
+                                        <li>Tap "Pay $500.00" to confirm</li>
+                                        <li>Receive instant receipt and confirmation</li>
+                                        <li>Payment link expires after use (single-use security)</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(16,185,129,0.15); border-radius: 10px; border-left: 4px solid var(--secondary);">
+                                <strong style="font-size: 0.9rem; color: var(--secondary);">Stripe Infrastructure:</strong>
+                                <span style="font-size: 0.85rem; opacity: 0.9;"> Stripe Payment Links API generates unique, secure URLs tied to merchant account. Supports one-time and recurring payments, auto-expiration, and mobile-optimized checkout.</span>
+                            </div>
+
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(245,158,11,0.15); border-radius: 10px; border-left: 4px solid var(--accent);">
+                                <strong style="font-size: 0.9rem; color: var(--accent);">Advanced Features:</strong>
+                                <span style="font-size: 0.85rem; opacity: 0.9;"> Payment plans (split $1,500 invoice into 3 monthly $500 charges), recurring billing (auto-charge $100/month for retainer), link expiration (24-hour payment windows), custom branding (merchant logo on payment page).</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitive Comparison -->
+                <div style="margin-top: 4rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; text-align: center;">Payphone Business vs Competitors</h3>
+
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; min-width: 900px; border-collapse: collapse; background: rgba(255,255,255,0.05); border-radius: 12px; overflow: hidden;">
+                            <thead style="background: rgba(255,100,0,0.2);">
+                                <tr>
+                                    <th style="padding: 1rem; text-align: left; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Feature</th>
+                                    <th style="padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--naranja), var(--amarillo)); color: white;">Payphone Business</th>
+                                    <th style="padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Cash App Business</th>
+                                    <th style="padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Square</th>
+                                    <th style="padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Venmo Business</th>
+                                    <th style="padding: 1rem; text-align: center; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">PayPal Zettle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Transaction Fee</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--amarillo);">2.7% + $0.05</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">2.75%</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">2.6% + $0.10</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">1.9% + $0.10</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">2.29% + $0.09</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Monthly Fee</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">$0</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">$0</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">$0 (basic)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">$0</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">$0</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Tap to Pay (NFC)</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓ (iOS + Android)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ (iOS only)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ (iOS + Android)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ (limited)</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">QR Code Payments</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Payment Links</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Instant Payouts</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓ (to Payphone wallet)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ (to Cash App)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ ($1.50% fee)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓ (to Venmo)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Next day</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Bilingual Support (Spanish)</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓ (Spanish-first)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Limited</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Limited</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Limited</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Limited</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Remittance Integration</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓ (LATAM)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">✗</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; font-size: 0.9rem;">Combined Consumer + Merchant App</td>
+                                    <td style="padding: 1rem; text-align: center; font-weight: 700; color: var(--secondary);">✓ (one ecosystem)</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Separate apps</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.8;">✓</td>
+                                    <td style="padding: 1rem; text-align: center; opacity: 0.6;">Separate apps</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Key Differentiators -->
+                <div style="margin-top: 4rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; text-align: center;">What Makes Payphone Business Different</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--naranja);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🇪🇸</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Bilingual (Spanish-First)</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">Full Spanish-language UX, customer support, receipts, and help docs. Designed for Hispanic SMB owners who prefer conducting business in Spanish. Square/Cash App are English-first with limited Spanish.</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--amarillo);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">⚡</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Instant Payout to Payphone Wallet</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">Merchant gets paid to Payphone wallet instantly (not next-day). Can spend immediately, send to family, or withdraw to bank. Critical for cash flow-sensitive SMBs. Square charges 1.5% for instant payout; Payphone free for 3 months.</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--violeta);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🌎</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Remittance Integration (Ecuador, Colombia, Mexico)</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">Merchant receives payment in US, can send portion to family in Ecuador/Colombia/Mexico instantly via Payphone remittance network. No other US payment processor offers this. Unique value prop for immigrant SMB owners.</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid var(--secondary);">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">💰</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Zero Hardware Cost</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">No card reader to buy ($0 vs $49-$299 for Square terminals). Merchant's phone becomes the terminal via NFC. QR codes and payment links require zero hardware. Lower barrier to entry than all competitors.</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid #8b5cf6;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🔗</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Integrated P2P + Merchant Ecosystem</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">One app for everything: receive payments as a merchant, send money to friends/family, pay bills, send remittances, manage debit card. Cash App and Venmo offer this; Square does not (separate consumer/merchant apps).</p>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; border-left: 4px solid #f59e0b;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">📊</div>
+                            <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.75rem;">Built-In Business Analytics</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.85; line-height: 1.6;">Real-time sales dashboard, customer tracking, revenue trends, top products, peak hours. All in Spanish and English. Helps merchants understand their business without paying for Square POS Pro ($60/mo).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue Model for Payment Acceptance -->
+                <div style="margin-top: 4rem; background: linear-gradient(135deg, rgba(255,100,0,0.15), rgba(255,160,0,0.15)); border-radius: 20px; padding: 3rem; border: 1px solid rgba(255,100,0,0.3);">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; text-align: center;">Revenue Model — Payment Acceptance Product</h3>
+                    <p style="text-align: center; font-size: 0.95rem; opacity: 0.9; margin-bottom: 2rem;">How Payphone makes money when merchants accept payments (all three methods)</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; opacity: 0.8;">Processing Margin</div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--amarillo); margin-bottom: 0.5rem;">0.45%</div>
+                            <div style="font-size: 0.85rem; opacity: 0.85; line-height: 1.5;">Payphone charges merchant 2.7% + $0.05, pays Stripe 2.25% + $0.05, keeps 0.45% margin</div>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.8rem; opacity: 0.75;">$27/month per merchant @ $6K GMV</div>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; opacity: 0.8;">Instant Payout Fees</div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--amarillo); margin-bottom: 0.5rem;">1.5%</div>
+                            <div style="font-size: 0.85rem; opacity: 0.85; line-height: 1.5;">Free for first 3 months (acquisition hook), then 1.5% fee for instant payout to Payphone wallet. Next-day payout always free.</div>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.8rem; opacity: 0.75;">$9/month per merchant (50% adopt instant after trial)</div>
+                        </div>
+
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; opacity: 0.8;">Pro Subscription</div>
+                            <div style="font-size: 2.5rem; font-weight: 800; color: var(--amarillo); margin-bottom: 0.5rem;">$29/mo</div>
+                            <div style="font-size: 0.85rem; opacity: 0.85; line-height: 1.5;">Optional upgrade: analytics dashboard, customer database, recurring billing, payment plans, priority support. 20% attach rate.</div>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.8rem; opacity: 0.75;">$14/month per merchant (blended across 100% merchant base)</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2.5rem; padding: 2rem; background: rgba(16,185,129,0.2); border-radius: 14px; text-align: center; border: 2px solid var(--secondary);">
+                        <div style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; opacity: 0.9;">Total Revenue Per Merchant (Monthly Average)</div>
+                        <div style="font-size: 3.5rem; font-weight: 800; color: var(--secondary);">$50</div>
+                        <div style="font-size: 0.9rem; opacity: 0.85; margin-top: 0.75rem;">$27 (processing) + $9 (instant payouts) + $14 (subscriptions) = $50/merchant/month</div>
+                        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1rem; font-weight: 700;">10,000 merchants × $50 × 12 months = <span style="color: var(--amarillo);">$6M ARR</span> (Year 2 target)</div>
+                    </div>
+                </div>
+
+                <!-- Integration with Consumer App -->
+                <div style="margin-top: 4rem; background: rgba(255,255,255,0.08); border-radius: 20px; padding: 3rem; border: 1px solid rgba(255,255,255,0.15);">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem;">One App, Complete Ecosystem: Consumer + Merchant</h3>
+                    <p style="font-size: 1rem; opacity: 0.85; margin-bottom: 2rem;">Payphone Business is built INTO the main Payphone consumer app — not a separate download. Users toggle between "Personal" and "Business" mode.</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 3rem;">
+                        <div>
+                            <div style="background: linear-gradient(135deg, var(--violeta), #8b5cf6); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Personal Mode (P2P + Consumer)</h4>
+                                <ul style="list-style: none; margin: 0; padding: 0; font-size: 0.9rem; line-height: 2;">
+                                    <li>✓ Send money to friends/family (P2P)</li>
+                                    <li>✓ Pay with Payphone card (debit)</li>
+                                    <li>✓ Pay bills (utilities, phone, insurance)</li>
+                                    <li>✓ Send remittances (Ecuador, Colombia, Mexico)</li>
+                                    <li>✓ Buy insurance, betting, assistance plans</li>
+                                    <li>✓ Check balance, transaction history</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">Business Mode (Merchant Acceptance)</h4>
+                                <ul style="list-style: none; margin: 0; padding: 0; font-size: 0.9rem; line-height: 2;">
+                                    <li>✓ Accept QR code payments</li>
+                                    <li>✓ Accept Tap to Pay (NFC)</li>
+                                    <li>✓ Create and share payment links</li>
+                                    <li>✓ Track sales and revenue</li>
+                                    <li>✓ Manage customers and invoices</li>
+                                    <li>✓ Instant payout to Payphone wallet → spend or withdraw</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(16,185,129,0.15); border-radius: 12px; border-left: 4px solid var(--secondary);">
+                        <strong style="font-size: 1rem; color: var(--secondary);">Strategic Advantage:</strong>
+                        <p style="font-size: 0.9rem; opacity: 0.9; margin-top: 0.5rem; line-height: 1.6;">Users who start as consumers (P2P, remittances) can instantly activate Business mode when they start a side hustle or small business. Viral merchant acquisition: "Your friend paid you via Payphone? Turn on Business mode and accept payments from customers too." Seamless ecosystem increases LTV and retention.</p>
+                    </div>
+                </div>
+
+                <!-- Mockup/Wireframe Descriptions -->
+                <div style="margin-top: 4rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; text-align: center;">Merchant Experience — Accept Payment Screen</h3>
+
+                    <div style="background: rgba(255,255,255,0.08); border-radius: 20px; padding: 3rem; border: 1px solid rgba(255,255,255,0.15);">
+                        <div style="background: #1a1a1a; border-radius: 16px; padding: 2rem; max-width: 400px; margin: 0 auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+                            <div style="text-align: center; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <div style="font-size: 0.85rem; color: #888; margin-bottom: 0.5rem;">Business Mode</div>
+                                <div style="font-size: 1.5rem; font-weight: 800; color: white;">Accept Payment</div>
+                            </div>
+
+                            <div style="margin: 2rem 0;">
+                                <div style="background: #2a2a2a; border-radius: 12px; padding: 1.5rem; text-align: center;">
+                                    <div style="font-size: 0.8rem; color: #888; margin-bottom: 0.5rem;">Amount to Charge</div>
+                                    <div style="font-size: 3rem; font-weight: 800; color: var(--amarillo); font-family: 'JetBrains Mono', monospace;">$24.50</div>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div style="background: linear-gradient(135deg, var(--naranja), var(--amarillo)); border-radius: 12px; padding: 1.25rem; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">📱</div>
+                                    <div style="font-size: 0.95rem; font-weight: 700; color: white;">Generate QR Code</div>
+                                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 0.25rem;">Customer scans to pay</div>
+                                </div>
+
+                                <div style="background: linear-gradient(135deg, var(--violeta), #8b5cf6); border-radius: 12px; padding: 1.25rem; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">💳</div>
+                                    <div style="font-size: 0.95rem; font-weight: 700; color: white;">Tap to Pay</div>
+                                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 0.25rem;">Customer taps card on phone</div>
+                                </div>
+
+                                <div style="background: linear-gradient(135deg, #10b981, #34d399); border-radius: 12px; padding: 1.25rem; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;">
+                                    <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔗</div>
+                                    <div style="font-size: 0.95rem; font-weight: 700; color: white;">Create Payment Link</div>
+                                    <div style="font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 0.25rem;">Share via text, WhatsApp, email</div>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                                <div style="font-size: 0.75rem; color: #888;">Today's Sales: $450.00 (18 transactions)</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; text-align: center; font-size: 0.9rem; opacity: 0.8; line-height: 1.6;">
+                            <strong>Merchant Workflow:</strong> Enter amount → Choose payment method → Accept payment → Money in Payphone wallet instantly → Spend, send, or withdraw
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Strategy (unchanged) -->
+        <section class="section" id="pricing" style="background: linear-gradient(180deg, #f8fafc 0%, #fef2f2 100%); max-width: 100%; padding: 3rem 2rem;">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <div class="section-header">
+                    <div class="section-badge badge-orange">Pricing</div>
+                    <h2 class="section-title">Competitive Pricing Strategy (Nationwide)</h2>
+                    <p class="section-description">Undercut legacy processors on headline rate, match Square/Clover, beat them on value (instant payouts, bilingual support, no monthly fees). Consistent pricing across all states.</p>
+                </div>
+
+                <div class="pricing-comparison">
+                    <table class="pricing-table">
+                        <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Transaction Fee</th>
+                                <th>Monthly Fee</th>
+                                <th>Hardware Cost</th>
+                                <th>Payout Speed</th>
+                                <th>Onboarding Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: rgba(255,100,0,0.05);">
+                                <td><strong style="color: var(--naranja);">Payphone (Stripe)</strong></td>
+                                <td><span class="pricing-highlight">2.7% + $0.05</span></td>
+                                <td>$0</td>
+                                <td>$0 (TAP) or $59 (reader)</td>
+                                <td><strong>Instant</strong> (fee waived 3 mo)</td>
+                                <td><strong>10 minutes</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="pricing-competitor">Square</td>
+                                <td>2.6% + $0.10</td>
+                                <td>$0 (basic) / $60+ (Plus)</td>
+                                <td>$49 - $299</td>
+                                <td>Next day ($1.50% instant)</td>
+                                <td>15 minutes</td>
+                            </tr>
+                            <tr>
+                                <td class="pricing-competitor">Clover</td>
+                                <td>2.3% + $0.10 (negotiable)</td>
+                                <td>$14.95 - $84.95</td>
+                                <td>$69 - $1,649 (lease)</td>
+                                <td>2-3 days</td>
+                                <td>2-5 business days</td>
+                            </tr>
+                            <tr>
+                                <td class="pricing-competitor">PayPal/Zettle</td>
+                                <td>2.29% + $0.09</td>
+                                <td>$0</td>
+                                <td>$29 - $199</td>
+                                <td>Next day</td>
+                                <td>1 day</td>
+                            </tr>
+                            <tr>
+                                <td class="pricing-competitor">Shopify POS</td>
+                                <td>2.7% + $0.00</td>
+                                <td>$89/mo (POS Pro)</td>
+                                <td>$49 - $399</td>
+                                <td>2-3 days</td>
+                                <td>1 day</td>
+                            </tr>
+                            <tr>
+                                <td class="pricing-competitor">Traditional Banks (Chase, BofA)</td>
+                                <td>2.9% + $0.25</td>
+                                <td>$15 - $50</td>
+                                <td>$300 - $800</td>
+                                <td>3-5 days</td>
+                                <td>7-14 days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card" style="margin-top: 2rem; background: linear-gradient(135deg, var(--naranja) 0%, var(--amarillo) 100%); color: white;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem;">Payphone Pricing Advantage</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">Lower Than Square</div>
+                            <div style="font-size: 1.5rem; font-weight: 800;">0.1% cheaper</div>
+                            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem;">On $10K/month = $10 savings</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">Zero Monthly Fees</div>
+                            <div style="font-size: 1.5rem; font-weight: 800;">$0/month</div>
+                            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem;">vs $15-$85 Clover/Shopify</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 0.5rem;">Free Instant Payouts</div>
+                            <div style="font-size: 1.5rem; font-weight: 800;">3 months</div>
+                            <div style="font-size: 0.75rem; opacity: 0.7; margin-top: 0.5rem;">vs $1.50% Square (saves $150 on $10K)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack (unchanged) -->
+        <section class="section" id="tech">
+            <div class="section-header">
+                <div class="section-badge badge-blue">Technology</div>
+                <h2 class="section-title">Stripe-Powered Multi-State Infrastructure</h2>
+                <p class="section-description">Unified technology stack enabling instant merchant onboarding across all 50 US states. Stripe Connect handles state-specific compliance automatically.</p>
+            </div>
+
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h4>🔗 Stripe Connect</h4>
+                    <p>Platform architecture for multi-state merchant onboarding. Merchants are Custom Connected Accounts. Handles state tax compliance, payouts, KYC.</p>
+                    <div class="tech-code">stripe.accounts.create({<br>  type: 'custom',<br>  country: 'US',<br>  capabilities: ['card_payments', 'transfers']<br>})</div>
+                </div>
+
+                <div class="tech-item">
+                    <h4>📱 Stripe Terminal SDK</h4>
+                    <p>TAP-to-pay on iPhone/Android. No hardware purchase needed. Works offline. PCI-compliant out of the box.</p>
+                    <div class="tech-code">StripeTerminal.setReaderDisplay({<br>  type: 'cart',<br>  cart: {line_items: [...], tax: $2.50}<br>})</div>
+                </div>
+
+                <div class="tech-item">
+                    <h4>💸 Stripe Instant Payouts</h4>
+                    <p>Real-time transfers to merchant Payphone wallet or bank account. Critical for cash flow-sensitive SMBs.</p>
+                    <div class="tech-code">stripe.payouts.create({<br>  amount: 5000,<br>  currency: 'usd',<br>  method: 'instant'<br>})</div>
+                </div>
+
+                <div class="tech-item">
+                    <h4>🏦 Stripe Treasury</h4>
+                    <p>Optional merchant business checking accounts. FDIC-insured via Stripe banking partners. Routing + account numbers.</p>
+                    <div class="tech-code">stripe.financialAccounts.create({<br>  supported_currencies: ['usd'],<br>  features: {deposit_insurance: true}<br>})</div>
+                </div>
+
+                <div class="tech-item">
+                    <h4>💰 Stripe Capital</h4>
+                    <p>Merchant cash advances based on sales history. $500 - $100K loans. Automatic repayment from daily sales.</p>
+                    <div class="tech-code">stripe.financing.offers.retrieve({<br>  financing_type: 'financing_offer',<br>  merchant_id: 'acct_merchant123'<br>})</div>
+                </div>
+
+                <div class="tech-item">
+                    <h4>🔐 Multi-State Compliance</h4>
+                    <p>Stripe handles state-specific payment regulations, tax reporting, and money transmitter licensing. Zero custom work per state.</p>
+                    <div class="tech-code">// Stripe auto-handles:<br>// - State tax withholding<br>// - Money transmitter compliance<br>// - 1099-K reporting</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Revenue Model (unchanged) -->
+        <section class="section" id="revenue">
+            <div class="revenue-card">
+                <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">Revenue Model — Per Merchant Economics</h3>
+                <p style="opacity: 0.9; margin-bottom: 1.5rem;">Conservative monthly revenue per merchant across all states. Blended average assumes 60% basic tier, 20% pro tier, 20% premium tier.</p>
+
+                <div class="revenue-grid">
+                    <div class="revenue-item">
+                        <h4>Payment Processing Margin</h4>
+                        <div class="big-number">$27</div>
+                        <p>0.45% markup on $6K avg GMV (Payphone: 2.7%, Stripe cost: 2.25%)</p>
+                    </div>
+                    <div class="revenue-item">
+                        <h4>Instant Payout Fees</h4>
+                        <div class="big-number">$9</div>
+                        <p>1.5% fee after 3-month free period (50% adoption × $1,200 monthly payouts)</p>
+                    </div>
+                    <div class="revenue-item">
+                        <h4>Pro Subscription</h4>
+                        <div class="big-number">$14</div>
+                        <p>$29/mo Pro tier (20% attach), $49/mo Premium (10% attach), $0 Basic (70%)</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); text-align: center;">
+                    <div style="font-size: 1rem; opacity: 0.8; margin-bottom: 0.5rem;">Total Revenue Per Merchant</div>
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--amarillo);">$50/month</div>
+                    <div style="font-size: 0.9rem; opacity: 0.7; margin-top: 0.5rem;">10,000 merchants × $50 × 12 months = <strong>$6M ARR (Year 2)</strong></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Metrics (unchanged) -->
+        <section class="section" id="metrics">
+            <div class="section-header">
+                <div class="section-badge badge-green">Success Metrics</div>
+                <h2 class="section-title">18-Month Targets by Phase</h2>
+                <p class="section-description">Conservative merchant acquisition and revenue goals. Track by state to identify highest-performing markets.</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Phase 1 Target (Q2 2026)</div>
+                    <div class="metric-value">50</div>
+                    <div class="metric-subtext">merchants (FL, TX, CA)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Phase 2 Target (Q3-Q4 2026)</div>
+                    <div class="metric-value">500</div>
+                    <div class="metric-subtext">merchants (Tier 1 states)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Phase 3 Target (Q1-Q2 2027)</div>
+                    <div class="metric-value">2,500</div>
+                    <div class="metric-subtext">merchants (Tier 1 + Tier 2)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Phase 4 Target (Q3-Q4 2027)</div>
+                    <div class="metric-value">10,000</div>
+                    <div class="metric-subtext">merchants (all tiers)</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 1.5rem;">Key Performance Indicators (All States)</h3>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">CAC Target</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--secondary);">≤$150</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">per merchant (Year 1)</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Retention Rate</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--secondary);">≥85%</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">month-over-month</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Activation Rate</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--secondary);">≥80%</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">first payment within 7 days</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Organic/Referral</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">≥50%</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">of new merchants (by Month 12)</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">Average GMV</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">≥$6,000</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">per merchant per month</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.5rem;">NPS Score</strong>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">≥60</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">world-class merchant satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Payphone Merchant Acquiring Roadmap — State-Based Expansion Strategy + Payphone Business Product v2.1</p>
+            <p style="margin-top: 0.5rem; opacity: 0.6;">Last Updated: March 19, 2026 (Evening Update — Payphone Business Product) | Confidential — Internal Use Only</p>
+        </footer>
+    </div>
+    </div>
+
+    <script>
+        // Password protection
+        const correctPassword = 'payphone2026';
+        const passwordScreen = document.getElementById('passwordScreen');
+        const contentWrapper = document.getElementById('contentWrapper');
+        const passwordForm = document.getElementById('passwordForm');
+        const passwordInput = document.getElementById('passwordInput');
+        const errorMsg = document.getElementById('errorMsg');
+
+        passwordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === correctPassword) {
+                passwordScreen.classList.add('hidden');
+                contentWrapper.classList.add('unlocked');
+            } else {
+                passwordInput.classList.add('error');
+                errorMsg.classList.add('show');
+                setTimeout(() => {
+                    passwordInput.classList.remove('error');
+                    errorMsg.classList.remove('show');
+                }, 2000);
+            }
+        });
+
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('open');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    sidebar.classList.remove('open');
+                    sidebarOverlay.classList.remove('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

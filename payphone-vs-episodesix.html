@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payphone vs Episode Six — Platform Comparison</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5; --secondary: #10b981; --accent: #f59e0b;
+            --danger: #ef4444; --dark: #1e1b4b; --text: #374151; --text-light: #6b7280;
+            --bg: #f8fafc; --white: #ffffff; --border: #e5e7eb;
+            --e6: #0ea5e9; --e6-dark: #0284c7;
+        }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .header { background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, var(--primary-dark) 100%); color: white; padding: 4rem 2rem 3.5rem; position: relative; overflow: hidden; }
+        .header::before { content: ''; position: absolute; top: -30%; right: -10%; width: 500px; height: 500px; background: var(--primary); opacity: 0.06; border-radius: 50%; }
+        .header::after { content: ''; position: absolute; bottom: -40%; left: -5%; width: 400px; height: 400px; background: var(--e6); opacity: 0.05; border-radius: 50%; }
+        .header-content { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+        .header-badges { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .header-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-vs { background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.4); }
+        .badge-info { background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.25); }
+        .header h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.75rem; line-height: 1.2; }
+        .header h1 .pp { color: var(--secondary); }
+        .header h1 .e6 { color: var(--e6); }
+        .header > .header-content > p { font-size: 1.05rem; opacity: 0.85; max-width: 750px; }
+
+        .vs-badges { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        .vs-badge { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.06); border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); flex: 1; min-width: 220px; }
+        .vs-badge-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+        .vs-badge-label { font-weight: 700; font-size: 0.9rem; }
+        .vs-badge-desc { font-size: 0.75rem; opacity: 0.7; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .section-badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem; }
+        .badge-blue { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .badge-green { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .badge-orange { background: rgba(245,158,11,0.1); color: var(--accent); }
+        .badge-cyan { background: rgba(14,165,233,0.1); color: var(--e6); }
+        .badge-red { background: rgba(239,68,68,0.1); color: var(--danger); }
+        .badge-purple { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+        .section-title { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem; }
+        .section-description { font-size: 1rem; color: var(--text-light); margin-bottom: 2rem; }
+
+        /* Cards */
+        .card { background: var(--white); border-radius: 16px; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+
+        /* Identity Cards */
+        .identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+        .identity-card { border-top: 4px solid; padding-top: 1.25rem; }
+        .identity-card.pp { border-top-color: var(--secondary); }
+        .identity-card.e6 { border-top-color: var(--e6); }
+        .identity-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .identity-card .subtitle { font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem; }
+        .identity-card .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 8px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem; }
+        .identity-card.pp .tag { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .identity-card.e6 .tag { background: rgba(14,165,233,0.1); color: var(--e6); }
+        .identity-list { list-style: none; }
+        .identity-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--text); }
+        .identity-list li::before { content: '\2713'; font-weight: 700; flex-shrink: 0; }
+        .identity-card.pp .identity-list li::before { color: var(--secondary); }
+        .identity-card.e6 .identity-list li::before { color: var(--e6); }
+
+        /* Comparison Table */
+        .comp-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 2rem; }
+        .comp-table thead th { background: #0f0a2e; color: white; padding: 1rem 1.25rem; font-size: 0.85rem; font-weight: 700; text-align: left; }
+        .comp-table thead th:first-child { width: 200px; }
+        .comp-table thead th.pp-col { background: linear-gradient(135deg, #065f46, #047857); }
+        .comp-table thead th.e6-col { background: linear-gradient(135deg, #0c4a6e, #0369a1); }
+        .comp-table tbody td { padding: 0.85rem 1.25rem; font-size: 0.88rem; border-bottom: 1px solid var(--border); background: white; vertical-align: top; }
+        .comp-table tbody tr:last-child td { border-bottom: none; }
+        .comp-table tbody td:first-child { font-weight: 600; color: var(--dark); background: #f9fafb; }
+        .comp-table tbody td .yes { color: var(--secondary); font-weight: 600; }
+        .comp-table tbody td .no { color: var(--text-light); }
+        .comp-table tbody td .partial { color: var(--accent); font-weight: 500; }
+
+        /* Verdict Cards */
+        .verdict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .verdict-card { padding: 1.5rem; border-radius: 16px; }
+        .verdict-card.pros { background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.2); }
+        .verdict-card.cons { background: rgba(239,68,68,0.04); border: 1px solid rgba(239,68,68,0.15); }
+        .verdict-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .verdict-card.pros h4 { color: var(--secondary); }
+        .verdict-card.cons h4 { color: var(--danger); }
+        .verdict-list { list-style: none; }
+        .verdict-list li { font-size: 0.88rem; margin-bottom: 0.5rem; padding-left: 1.25rem; position: relative; }
+        .verdict-list li::before { position: absolute; left: 0; font-weight: 700; }
+        .verdict-card.pros .verdict-list li::before { content: '+'; color: var(--secondary); }
+        .verdict-card.cons .verdict-list li::before { content: '\2212'; color: var(--danger); }
+
+        /* Bottom Line */
+        .bottom-line { background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 100%); color: white; border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden; margin-top: 2rem; }
+        .bottom-line::before { content: ''; position: absolute; top: -20%; right: -10%; width: 300px; height: 300px; background: var(--accent); opacity: 0.06; border-radius: 50%; }
+        .bottom-line h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; }
+        .bottom-line p { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; margin-bottom: 1rem; }
+        .bottom-line .highlight { color: var(--secondary); font-weight: 700; }
+        .bottom-line .phase-tags { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+        .bottom-line .phase-tag { padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.82rem; font-weight: 600; }
+
+        .footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: var(--text-light); }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .identity-grid, .verdict-grid { grid-template-columns: 1fr; }
+            .comp-table { font-size: 0.8rem; }
+            .comp-table thead th, .comp-table tbody td { padding: 0.6rem 0.75rem; }
+            .vs-badges { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="header-badges">
+                <span class="header-badge badge-vs">Platform Comparison</span>
+                <span class="header-badge badge-info">Infrastructure Analysis</span>
+                <span class="header-badge badge-info">March 2026</span>
+            </div>
+            <h1><span class="pp">Payphone (Stripe)</span> vs <span class="e6">Episode Six</span></h1>
+            <p>Side-by-side comparison of Payphone's Stripe-only U.S. architecture against Episode Six's issuer-processor platform. Two fundamentally different layers of the payments stack.</p>
+
+            <div class="vs-badges">
+                <div class="vs-badge">
+                    <div class="vs-badge-dot" style="background: var(--secondary); box-shadow: 0 0 10px rgba(16,185,129,0.4);"></div>
+                    <div>
+                        <div class="vs-badge-label">Payphone</div>
+                        <div class="vs-badge-desc">Consumer/merchant fintech app built on Stripe</div>
+                    </div>
+                </div>
+                <div class="vs-badge">
+                    <div class="vs-badge-dot" style="background: var(--e6); box-shadow: 0 0 10px rgba(14,165,233,0.4);"></div>
+                    <div>
+                        <div class="vs-badge-label">Episode Six</div>
+                        <div class="vs-badge-desc">Infrastructure issuer-processor platform</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What They Are -->
+    <div class="container">
+        <div class="section-badge badge-orange">Fundamentals</div>
+        <h2 class="section-title">What They Are</h2>
+        <p class="section-description">Payphone and Episode Six operate at completely different layers. Payphone is a consumer product; Episode Six is infrastructure that powers products like Payphone.</p>
+
+        <div class="identity-grid">
+            <div class="card identity-card pp">
+                <h3 style="color: var(--secondary);">Payphone (Stripe Architecture)</h3>
+                <p class="subtitle">Consumer/Merchant Fintech Application</p>
+                <span class="tag">Application Layer</span>
+                <ul class="identity-list">
+                    <li>End-user mobile app for payments, spending, and funding</li>
+                    <li>Built entirely on Stripe ecosystem (Connect, Treasury, Issuing, Terminal)</li>
+                    <li>Targets Latino immigrants, unbanked/underbanked, small business owners</li>
+                    <li>4 pillars: COBRAR (accept), GASTAR (spend), CARGAR (fund), ENVIAR (remit)</li>
+                    <li>No MSB license required &mdash; Stripe is the PayFac</li>
+                    <li>Revenue: 1% platform fee + 1.5% interchange + cash load fees</li>
+                </ul>
+            </div>
+            <div class="card identity-card e6">
+                <h3 style="color: var(--e6);">Episode Six</h3>
+                <p class="subtitle">Issuer-Processor / Payments Infrastructure</p>
+                <span class="tag">Middleware / Infrastructure Layer</span>
+                <ul class="identity-list">
+                    <li>API-first processing platform for banks, fintechs, and lenders</li>
+                    <li>Real-time RESTful API processing with enterprise-grade compliance</li>
+                    <li>Serves global banks, digital banks, fintechs, crypto platforms, governments</li>
+                    <li>Full card spectrum: prepaid, debit, credit, commercial, installment, virtual</li>
+                    <li>Native ledger engine: virtual accounts, revolving credit, loans, deposits</li>
+                    <li>"The World's Local Processor" &mdash; built for multi-country from day one</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Comparison -->
+    <div style="background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%); padding: 3rem 0;">
+        <div class="container" style="padding-top: 0; padding-bottom: 0;">
+            <div class="section-badge badge-blue">Architecture</div>
+            <h2 class="section-title">Architecture Approach</h2>
+            <p class="section-description">How each platform is structured, where it sits in the stack, and what it depends on.</p>
+
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th class="pp-col">Payphone (Stripe)</th>
+                        <th class="e6-col">Episode Six</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Core Dependency</td>
+                        <td>Stripe ecosystem (Connect, Treasury, Issuing, Terminal)</td>
+                        <td>Own proprietary processing platform</td>
+                    </tr>
+                    <tr>
+                        <td>API Model</td>
+                        <td>Consumes Stripe APIs</td>
+                        <td>Provides RESTful APIs for others to consume</td>
+                    </tr>
+                    <tr>
+                        <td>Card Issuing</td>
+                        <td>Via Stripe Issuing (BIN sponsor: Fifth Third / Evolve)</td>
+                        <td>Native issuer-processor (prepaid, debit, credit, virtual, commercial)</td>
+                    </tr>
+                    <tr>
+                        <td>Ledger / Wallet</td>
+                        <td>Stripe Treasury Financial Accounts</td>
+                        <td>Native ledger engine (virtual accounts, revolving credit, deposits, loans)</td>
+                    </tr>
+                    <tr>
+                        <td>Configuration</td>
+                        <td>Stripe dashboard + app logic</td>
+                        <td>Real-time self-service config (rates, fees, risk controls)</td>
+                    </tr>
+                    <tr>
+                        <td>Compliance Owner</td>
+                        <td>Stripe = PayFac / PCI; Payphone = KYC / platform</td>
+                        <td>E6 provides tooling; client's bank holds the license</td>
+                    </tr>
+                    <tr>
+                        <td>Vendor Lock-in</td>
+                        <td>High &mdash; all-in on Stripe</td>
+                        <td>Lower &mdash; API-first, can swap components</td>
+                    </tr>
+                    <tr>
+                        <td>Time to Market</td>
+                        <td><span class="yes">Fast</span> &mdash; Stripe handles infrastructure</td>
+                        <td><span class="partial">Slower</span> &mdash; need BIN sponsor + build app layer</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Feature Comparison -->
+    <div class="container">
+        <div class="section-badge badge-green">Features</div>
+        <h2 class="section-title">Product Capabilities</h2>
+        <p class="section-description">Feature-by-feature comparison across payments, cards, accounts, funding, and expansion.</p>
+
+        <table class="comp-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="pp-col">Payphone (Stripe)</th>
+                    <th class="e6-col">Episode Six</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Payment Acceptance (POS)</td>
+                    <td><span class="yes">TAP-to-pay via Stripe Terminal SDK</span></td>
+                    <td><span class="no">Not a POS solution</span></td>
+                </tr>
+                <tr>
+                    <td>Card Issuing</td>
+                    <td>Visa debit only (virtual + physical)</td>
+                    <td><span class="yes">Full spectrum: prepaid, debit, credit, installment, commercial</span></td>
+                </tr>
+                <tr>
+                    <td>Wallet / Accounts</td>
+                    <td>Single wallet (Financial Account w/ routing #)</td>
+                    <td><span class="yes">Multi-ledger: virtual accounts, revolving credit, term deposits</span></td>
+                </tr>
+                <tr>
+                    <td>Cash Loading</td>
+                    <td><span class="yes">InComm VanillaDirect &mdash; 525K+ retail locations</span></td>
+                    <td><span class="no">Not in scope (separate integration needed)</span></td>
+                </tr>
+                <tr>
+                    <td>ACH / Bank Transfers</td>
+                    <td><span class="yes">Stripe-powered ACH in/out, Plaid bank linking</span></td>
+                    <td><span class="partial">Depends on bank partner integration</span></td>
+                </tr>
+                <tr>
+                    <td>Cross-Border / Multi-Currency</td>
+                    <td><span class="partial">Phase 2 via Bridge (stablecoin to LATAM)</span></td>
+                    <td><span class="yes">Global multi-currency processing built-in</span></td>
+                </tr>
+                <tr>
+                    <td>Rewards / Loyalty</td>
+                    <td><span class="no">Not yet planned</span></td>
+                    <td><span class="yes">Native rewards engine + Mastercard integrations</span></td>
+                </tr>
+                <tr>
+                    <td>Credit / Lending</td>
+                    <td><span class="no">Not in scope</span></td>
+                    <td><span class="yes">Revolving credit, installments, loans</span></td>
+                </tr>
+                <tr>
+                    <td>Fraud Tools</td>
+                    <td>Stripe Radar + custom fraud monitoring</td>
+                    <td>Ethoca fraud tools + configurable risk controls</td>
+                </tr>
+                <tr>
+                    <td>FDIC Insurance</td>
+                    <td><span class="yes">Pass-through via Fifth Third / Evolve</span></td>
+                    <td><span class="partial">Depends on bank partner</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- If E6 Were Used Instead -->
+    <div style="background: linear-gradient(180deg, #f8fafc 0%, #fef2f2 0%, #f8fafc 100%); padding: 3rem 0;">
+        <div class="container" style="padding-top: 0; padding-bottom: 0;">
+            <div class="section-badge badge-red">Scenario Analysis</div>
+            <h2 class="section-title">What If Payphone Used Episode Six Instead of Stripe?</h2>
+            <p class="section-description">Episode Six isn't a competitor to Payphone &mdash; it's a potential alternative infrastructure layer. Here's what that tradeoff looks like.</p>
+
+            <div class="verdict-grid">
+                <div class="verdict-card pros">
+                    <h4>Potential Advantages of E6</h4>
+                    <ul class="verdict-list">
+                        <li>Full card program control (credit, installments, multi-currency cards)</li>
+                        <li>Native ledger flexibility &mdash; could build lending, interest-bearing accounts, rewards</li>
+                        <li>Less vendor lock-in than Stripe's all-in-one ecosystem</li>
+                        <li>Better suited for Phase 2+ global expansion with multi-currency built in</li>
+                        <li>Real-time self-service config changes without vendor dependency</li>
+                        <li>Could support a BNPL or credit product line in the future</li>
+                    </ul>
+                </div>
+                <div class="verdict-card cons">
+                    <h4>Tradeoffs vs. Current Stripe Architecture</h4>
+                    <ul class="verdict-list">
+                        <li>Lose Stripe's turnkey PayFac model &mdash; would need own BIN sponsor relationship</li>
+                        <li>No built-in TAP-to-pay (Terminal SDK) &mdash; need separate POS solution</li>
+                        <li>No Treasury / Financial Accounts out of the box &mdash; need banking partner</li>
+                        <li>Significantly more complexity and longer time to market</li>
+                        <li>Likely need an MSB license or separate banking partner for money movement</li>
+                        <li>No InComm-like cash loading integration included &mdash; must build separately</li>
+                        <li>Higher upfront cost and integration effort</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Line -->
+    <div class="container">
+        <div class="section-badge badge-purple">Recommendation</div>
+        <h2 class="section-title">Bottom Line</h2>
+        <p class="section-description">Where each platform fits in Payphone's strategy.</p>
+
+        <div class="bottom-line">
+            <h3>Stripe is the Right Call for Phase 1</h3>
+            <p>Your current Stripe-only architecture is the <span class="highlight">fastest path to market</span> for the U.S. launch. It handles PayFac, PCI, card issuing, treasury, and payment acceptance in a single ecosystem with no MSB license requirement. This lets Payphone focus on the product, user acquisition, and merchant onboarding.</p>
+
+            <h3 style="margin-top: 1.5rem;">Episode Six Becomes Interesting for Phase 3+</h3>
+            <p>Episode Six is worth bookmarking as Payphone scales beyond what Stripe offers. It becomes relevant when you need:</p>
+            <ul style="list-style: none; margin-top: 0.75rem;">
+                <li style="padding: 0.3rem 0; font-size: 0.92rem; opacity: 0.9;">&rarr; Credit products or lending (BNPL, installments, revolving credit)</li>
+                <li style="padding: 0.3rem 0; font-size: 0.92rem; opacity: 0.9;">&rarr; Multi-currency accounts beyond USD</li>
+                <li style="padding: 0.3rem 0; font-size: 0.92rem; opacity: 0.9;">&rarr; Deeper card program control (commercial cards, custom BINs)</li>
+                <li style="padding: 0.3rem 0; font-size: 0.92rem; opacity: 0.9;">&rarr; Expansion beyond the Stripe ecosystem's limitations</li>
+                <li style="padding: 0.3rem 0; font-size: 0.92rem; opacity: 0.9;">&rarr; Native rewards and loyalty programs</li>
+            </ul>
+
+            <div class="phase-tags">
+                <span class="phase-tag" style="background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399;">Phase 1: Stripe &mdash; Ship fast, validate market</span>
+                <span class="phase-tag" style="background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4); color: #fbbf24;">Phase 2: Stripe + Bridge &mdash; Add ENVIAR remittances</span>
+                <span class="phase-tag" style="background: rgba(14,165,233,0.2); border: 1px solid rgba(14,165,233,0.4); color: #38bdf8;">Phase 3+: Evaluate E6 &mdash; Credit, multi-currency, global scale</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Payphone vs Episode Six &mdash; Platform Comparison &middot; March 2026 &middot; Confidential</p>
+    </div>
+
+</body>
+</html>
