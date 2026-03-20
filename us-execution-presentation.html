@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payphone — U.S. Execution Roadmap Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --naranja: #FF6400;
+  --violeta: #5A00B4;
+  --amarillo: #FFA000;
+  --dark: #222222;
+  --dark2: #1a1a1a;
+  --dark3: #2a2a2a;
+  --dark4: #333333;
+  --border: rgba(255,255,255,.08);
+  --text: #ffffff;
+  --text2: #cccccc;
+  --text3: #888888;
+  --green: #22c55e;
+  --red: #ef4444;
+  --yellow: #eab308;
+  --blue: #3b82f6;
+  --radius: 16px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:#111; color:var(--text); overflow:hidden; -webkit-font-smoothing:antialiased; }
+
+/* ===== PASSWORD ===== */
+.pw-screen { position:fixed; inset:0; background:var(--dark); display:flex; align-items:center; justify-content:center; z-index:9999; }
+.pw-screen.hidden { display:none; }
+.pw-box { background:var(--dark2); border:1px solid var(--border); padding:3rem; border-radius:24px; text-align:center; max-width:420px; width:90%; }
+.pw-logo { width:80px; height:80px; margin:0 auto 1.5rem; }
+.pw-box h2 { font-size:1.5rem; font-weight:800; margin-bottom:.5rem; }
+.pw-box p { color:var(--text3); margin-bottom:2rem; font-size:.9rem; }
+.pw-input { width:100%; padding:1rem; border:2px solid rgba(255,255,255,.1); border-radius:12px; font-size:1rem; font-family:inherit; background:var(--dark3); color:var(--text); transition:.2s; }
+.pw-input:focus { outline:none; border-color:var(--naranja); box-shadow:0 0 0 4px rgba(255,100,0,.15); }
+.pw-input.error { border-color:var(--red); animation:shake .5s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.pw-btn { width:100%; padding:1rem; background:linear-gradient(135deg,var(--naranja),var(--amarillo)); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; margin-top:1rem; transition:.2s; font-family:inherit; }
+.pw-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,100,0,.3); }
+.pw-err { color:var(--red); font-size:.8rem; margin-top:.75rem; display:none; }
+.pw-err.show { display:block; }
+
+/* ===== PRESENTATION CONTAINER ===== */
+.deck { display:none; width:100vw; height:100vh; position:relative; }
+.deck.unlocked { display:block; }
+
+/* ===== SLIDE BASE ===== */
+.slide {
+  position:absolute; inset:0; width:100vw; height:100vh;
+  display:flex; flex-direction:column;
+  padding:60px 80px;
+  background:var(--dark);
+  opacity:0; pointer-events:none;
+  transition:opacity .5s ease, transform .5s ease;
+  transform:translateX(40px);
+  overflow:hidden;
+}
+.slide.active {
+  opacity:1; pointer-events:auto; transform:translateX(0);
+}
+.slide.prev {
+  opacity:0; transform:translateX(-40px);
+}
+
+/* ===== SLIDE BACKGROUNDS ===== */
+.slide::before, .slide::after { content:''; position:absolute; border-radius:50%; pointer-events:none; }
+.bg-glow-orange::before { top:-300px; right:-200px; width:800px; height:800px; background:radial-gradient(circle,rgba(255,100,0,.1) 0%,transparent 70%); }
+.bg-glow-violet::after { bottom:-200px; left:-100px; width:500px; height:500px; background:radial-gradient(circle,rgba(90,0,180,.08) 0%,transparent 70%); }
+.bg-glow-yellow::before { top:-200px; left:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(255,160,0,.08) 0%,transparent 70%); }
+
+/* ===== TYPOGRAPHY ===== */
+.slide-badge { display:inline-flex; background:rgba(255,100,0,.1); border:1px solid rgba(255,100,0,.2); padding:6px 16px; border-radius:100px; font-size:10px; font-weight:700; color:var(--naranja); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px; width:fit-content; }
+.slide h1 { font-size:clamp(36px,5vw,64px); font-weight:900; line-height:1.05; letter-spacing:-2px; }
+.slide h1 .accent { background:linear-gradient(135deg,var(--naranja),var(--amarillo)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.slide h1 .accent-v { background:linear-gradient(135deg,var(--violeta),var(--naranja)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.slide h2 { font-size:clamp(28px,3.5vw,48px); font-weight:900; line-height:1.1; letter-spacing:-1px; margin-bottom:8px; }
+.slide h2 .accent { background:linear-gradient(135deg,var(--naranja),var(--amarillo)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.slide-sub { font-size:clamp(14px,1.5vw,18px); color:var(--text2); max-width:700px; line-height:1.5; margin-bottom:32px; font-weight:300; }
+.section-label { font-size:11px; font-weight:700; color:var(--naranja); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+
+/* ===== STAT ROW ===== */
+.stat-row { display:flex; gap:40px; flex-wrap:wrap; margin-top:auto; }
+.stat .val { font-size:clamp(28px,3vw,44px); font-weight:900; line-height:1; }
+.stat .val.orange { color:var(--naranja); }
+.stat .val.green { color:var(--green); }
+.stat .val.blue { color:var(--blue); }
+.stat .val.yellow { color:var(--amarillo); }
+.stat .val.purple { color:var(--violeta); }
+.stat .label { font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+
+/* ===== CARDS / MODULES (brand: rounded corners) ===== */
+.mod { background:var(--dark2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+.mod-accent { border-left:3px solid var(--naranja); }
+.mod-violet { border-left:3px solid var(--violeta); }
+.mod-green { border-left:3px solid var(--green); }
+.mod-yellow { border-left:3px solid var(--amarillo); }
+.mod h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+.mod h4 { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:6px; }
+.mod p { font-size:13px; color:var(--text2); line-height:1.5; }
+.mod-sm { padding:16px; }
+.mod-sm h3 { font-size:14px; margin-bottom:4px; }
+.mod-sm p { font-size:12px; }
+
+/* ===== GRID LAYOUTS ===== */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:16px; }
+.g5 { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+.flex-grow { flex:1; min-height:0; overflow:hidden; }
+
+/* ===== TABLES ===== */
+.tbl { width:100%; border-collapse:collapse; font-size:12px; }
+.tbl thead { background:rgba(255,100,0,.06); }
+.tbl th { text-align:left; padding:10px 14px; font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.8px; color:var(--naranja); border-bottom:1px solid var(--border); white-space:nowrap; }
+.tbl td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.03); color:var(--text2); }
+.tbl td strong { color:var(--text); font-weight:600; }
+.tbl tr:last-child td { border-bottom:none; }
+.sg { color:var(--green)!important; font-weight:600; }
+.sy { color:var(--yellow)!important; font-weight:600; }
+.sr { color:var(--red)!important; font-weight:600; }
+
+/* ===== GATE CARDS ===== */
+.gate { position:relative; overflow:hidden; }
+.gate::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.gate:nth-child(1)::before { background:var(--naranja); }
+.gate:nth-child(2)::before { background:var(--violeta); }
+.gate:nth-child(3)::before { background:var(--amarillo); }
+.gate-num { font-size:56px; font-weight:900; color:rgba(255,255,255,.03); position:absolute; top:4px; right:12px; line-height:1; }
+.gate-date { font-size:11px; font-weight:600; color:var(--naranja); margin-bottom:10px; }
+.gate li { font-size:11px; color:var(--text2); padding:3px 0; list-style:none; padding-left:12px; position:relative; }
+.gate li::before { content:'>'; position:absolute; left:0; color:var(--naranja); font-weight:700; font-size:10px; }
+
+/* ===== ALERTS ===== */
+.alert { border-radius:12px; padding:16px 20px; margin-top:12px; }
+.alert-orange { background:rgba(255,100,0,.06); border:1px solid rgba(255,100,0,.15); }
+.alert-green { background:rgba(34,197,94,.06); border:1px solid rgba(34,197,94,.15); }
+.alert-red { background:rgba(239,68,68,.06); border:1px solid rgba(239,68,68,.15); }
+.alert h4 { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.alert-orange h4 { color:var(--naranja); }
+.alert-green h4 { color:var(--green); }
+.alert-red h4 { color:var(--red); }
+.alert p { font-size:12px; color:var(--text2); line-height:1.5; }
+
+/* ===== TIER BADGES ===== */
+.tier { display:inline-block; padding:3px 10px; border-radius:100px; font-size:9px; font-weight:700; letter-spacing:1px; }
+.tier-1 { background:rgba(34,197,94,.12); color:var(--green); }
+.tier-2 { background:rgba(255,160,0,.12); color:var(--amarillo); }
+.tier-3 { background:rgba(90,0,180,.12); color:var(--violeta); }
+
+/* ===== COMPETITOR CARDS ===== */
+.comp-badge { display:inline-block; padding:3px 8px; border-radius:100px; font-size:9px; font-weight:700; letter-spacing:.5px; }
+.comp-high { background:rgba(239,68,68,.12); color:var(--red); }
+.comp-modhigh { background:rgba(234,179,8,.12); color:var(--yellow); }
+.comp-mod { background:rgba(255,160,0,.12); color:var(--amarillo); }
+
+/* ===== ADVANTAGE BARS ===== */
+.adv { position:relative; overflow:hidden; }
+.adv::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom,var(--naranja),var(--amarillo)); }
+.adv-num { font-size:28px; font-weight:900; color:rgba(255,100,0,.08); line-height:1; }
+
+/* ===== TIMELINE ===== */
+.tl { position:relative; padding-left:24px; }
+.tl::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--naranja),var(--violeta),var(--amarillo)); border-radius:2px; }
+.tl-item { position:relative; margin-bottom:12px; padding:10px 14px; background:var(--dark2); border:1px solid var(--border); border-radius:10px; }
+.tl-item::before { content:''; position:absolute; left:-21px; top:14px; width:8px; height:8px; border-radius:50%; background:var(--naranja); border:2px solid var(--dark); }
+.tl-q { font-size:9px; font-weight:700; color:var(--naranja); text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; }
+.tl-item p { font-size:11px; color:var(--text2); }
+.tl-item p strong { color:var(--text); }
+
+/* ===== FINANCIAL CARDS ===== */
+.fin { text-align:center; }
+.fin .val { font-size:clamp(24px,2.5vw,36px); font-weight:900; }
+.fin .sub { font-size:10px; color:var(--text3); margin-top:2px; }
+
+/* ===== CHECKLIST ===== */
+.check li { font-size:11px; color:var(--text2); padding:4px 0 4px 18px; position:relative; list-style:none; }
+.check li::before { content:''; position:absolute; left:0; top:8px; width:10px; height:10px; border-radius:3px; border:2px solid rgba(255,255,255,.15); }
+.check li strong { color:var(--naranja); font-weight:600; }
+
+/* ===== NAVIGATION ===== */
+.nav-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:100;
+  background:rgba(17,17,17,.95); backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 32px; height:56px;
+}
+.nav-bar.hidden { display:none; }
+.nav-left { display:flex; align-items:center; gap:12px; }
+.nav-logo-small { display:flex; align-items:center; gap:8px; }
+.nav-logo-small svg { width:24px; height:24px; }
+.nav-logo-small span { font-weight:800; font-size:13px; color:var(--text2); }
+.nav-center { display:flex; align-items:center; gap:16px; }
+.nav-btn { background:none; border:1px solid var(--border); color:var(--text2); width:36px; height:36px; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:.2s; font-family:inherit; }
+.nav-btn:hover { background:var(--dark3); color:var(--text); border-color:var(--naranja); }
+.nav-counter { font-size:12px; color:var(--text3); font-weight:600; min-width:60px; text-align:center; }
+.nav-right { display:flex; align-items:center; gap:16px; }
+.nav-dots { display:flex; gap:4px; }
+.nav-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.1); transition:.3s; cursor:pointer; }
+.nav-dot.active { background:var(--naranja); width:18px; border-radius:3px; }
+.nav-conf { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text3); opacity:.5; }
+
+/* ===== PROGRESS BAR ===== */
+.progress-bar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--naranja),var(--amarillo)); z-index:100; transition:width .4s ease; }
+
+/* ===== SLIDE FOOTER META ===== */
+.slide-footer { position:absolute; bottom:72px; left:80px; right:80px; display:flex; justify-content:space-between; font-size:10px; color:var(--text3); }
+
+/* ===== COVER SPECIFIC ===== */
+.cover-slide { justify-content:center; padding:80px 100px; }
+.cover-slide h1 { font-size:clamp(44px,6vw,80px); letter-spacing:-3px; margin-bottom:12px; }
+.cover-tagline { font-size:clamp(16px,2vw,24px); font-weight:300; color:var(--text2); margin-bottom:48px; max-width:700px; line-height:1.4; }
+
+/* ===== QUOTE BOX ===== */
+.quote-box { background:linear-gradient(135deg,rgba(255,100,0,.08),rgba(90,0,180,.08)); border:1px solid rgba(255,100,0,.12); border-radius:var(--radius); padding:24px; text-align:center; margin-top:16px; }
+.quote-box blockquote { font-size:20px; font-weight:700; font-style:italic; margin-bottom:4px; }
+.quote-box p { font-size:12px; color:var(--text3); }
+
+/* ===== END SLIDE ===== */
+.end-slide { justify-content:center; align-items:center; text-align:center; }
+.end-slide h1 { margin-bottom:16px; }
+
+/* ===== RESPONSIVE (mainly for smaller screens) ===== */
+@media(max-width:1200px) {
+  .slide { padding:40px 48px; }
+  .cover-slide { padding:60px 48px; }
+  .g3 { grid-template-columns:1fr 1fr; }
+  .g4 { grid-template-columns:1fr 1fr; }
+  .g5 { grid-template-columns:repeat(3,1fr); }
+}
+@media(max-width:768px) {
+  .slide { padding:32px 24px; }
+  .g2,.g3,.g4,.g5 { grid-template-columns:1fr; }
+  .stat-row { gap:20px; }
+  .nav-dots { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== PASSWORD SCREEN ===== -->
+<div class="pw-screen" id="pwScreen">
+  <div class="pw-box">
+    <svg class="pw-logo" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="80" rx="20" fill="url(#pwGrad)"/>
+      <path d="M40 20C32 20 24 28 24 36C24 42 28 48 34 50L34 56C34 58 36 60 38 60L42 60C44 60 46 58 46 56L46 50C52 48 56 42 56 36C56 28 48 20 40 20ZM36 44L36 36C36 33.8 37.8 32 40 32C42.2 32 44 33.8 44 36L44 44" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
+      <defs><linearGradient id="pwGrad" x1="0" y1="0" x2="80" y2="80"><stop stop-color="#FF6400"/><stop offset="1" stop-color="#FFA000"/></linearGradient></defs>
+    </svg>
+    <h2>Payphone Global</h2>
+    <p>U.S. Execution Roadmap — Confidential Presentation</p>
+    <input type="password" class="pw-input" id="pwInput" placeholder="Enter access code" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Access Presentation</button>
+    <div class="pw-err" id="pwErr">Incorrect access code. Try again.</div>
+  </div>
+</div>
+
+<!-- ===== PROGRESS BAR ===== -->
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<!-- ===== PRESENTATION DECK ===== -->
+<div class="deck" id="deck">
+
+<!-- ======================================== -->
+<!-- SLIDE 0: COVER                          -->
+<!-- ======================================== -->
+<div class="slide cover-slide bg-glow-orange bg-glow-violet" data-slide="0">
+  <div class="slide-badge">Confidential &bull; Internal Use Only</div>
+  <h1>U.S. <span class="accent">Execution</span><br>Roadmap</h1>
+  <div class="cover-tagline">Card issuance, merchant acquiring, LATAM expansion, and sports betting — the complete operational playbook for 2026-2027.</div>
+  <div class="stat-row">
+    <div class="stat"><div class="val orange">$900B+</div><div class="label">Hispanic Buying Power</div></div>
+    <div class="stat"><div class="val purple">64.7M</div><div class="label">U.S. Hispanic Pop.</div></div>
+    <div class="stat"><div class="val yellow">80.3%</div><div class="label">Foreign-Born Unbanked</div></div>
+    <div class="stat"><div class="val green">$54B</div><div class="label">LATAM Betting Market</div></div>
+  </div>
+  <div class="slide-footer">
+    <span>Prepared for Val Infante, CGO &bull; March 2026</span>
+    <span>Next Review: April 15, 2026 (Gate 1)</span>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 1: EXECUTIVE DASHBOARD            -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="1">
+  <div class="section-label">Section 01</div>
+  <h2>Executive <span class="accent">Dashboard</span></h2>
+  <p class="slide-sub">Real-time status across all workstreams. Updated March 2026.</p>
+
+  <div class="g5" style="margin-bottom:20px">
+    <div class="mod mod-sm fin"><div class="val orange" style="font-size:22px">Q3 2026</div><div class="sub">Phase 1 Launch</div></div>
+    <div class="mod mod-sm fin"><div class="val green" style="font-size:22px">Pre-Approved</div><div class="sub">Stripe Status</div></div>
+    <div class="mod mod-sm fin"><div class="val blue" style="font-size:22px">11 States</div><div class="sub">Geographic Target</div></div>
+    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:22px">10K</div><div class="sub">Merchant Goal (18mo)</div></div>
+    <div class="mod mod-sm fin"><div class="val purple" style="font-size:22px">9 Countries</div><div class="sub">LATAM Pipeline</div></div>
+  </div>
+
+  <div class="g2 flex-grow">
+    <div class="mod mod-accent">
+      <h3>U.S. Launch Status</h3>
+      <table class="tbl">
+        <tr><td><strong>Stripe EDD</strong></td><td class="sy">In Progress (3-6mo)</td></tr>
+        <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Pre-approved</td></tr>
+        <tr><td><strong>Episode Six</strong></td><td class="sy">Awaiting Sponsor Bank</td></tr>
+        <tr><td><strong>Highnote</strong></td><td class="sy">Awaiting Confirmation</td></tr>
+        <tr><td><strong>KYC/CIP</strong></td><td class="sy">Under Evaluation</td></tr>
+        <tr><td><strong>Payphone Business</strong></td><td class="sg">Product Designed</td></tr>
+      </table>
+    </div>
+    <div class="mod mod-violet">
+      <h3>LATAM Expansion Status</h3>
+      <table class="tbl">
+        <tr><td><strong>Panama (PayCaddy)</strong></td><td class="sg">Active — Q2 2026</td></tr>
+        <tr><td><strong>Mexico (Card)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
+        <tr><td><strong>Colombia (Card + Betting)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
+        <tr><td><strong>Worldpay (Colombia)</strong></td><td class="sg">Live since May 2025</td></tr>
+        <tr><td><strong>Worldpay (Mexico)</strong></td><td class="sy">Pending — Q4 2026</td></tr>
+        <tr><td><strong>PagueloFacil (Panama)</strong></td><td class="sy">Exploratory</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 2: DECISION GATE FRAMEWORK        -->
+<!-- ======================================== -->
+<div class="slide bg-glow-violet" data-slide="2">
+  <div class="section-label">Section 02</div>
+  <h2>Decision Gate <span class="accent">Framework</span></h2>
+  <p class="slide-sub">Three hard deadlines that prevent indefinite drift. Miss a gate, force a decision.</p>
+
+  <div class="g3 flex-grow" style="align-items:start">
+    <div class="mod gate">
+      <span class="gate-num">01</span>
+      <h3>Shortlist Lock</h3>
+      <div class="gate-date">April 15, 2026</div>
+      <ul style="list-style:none;padding:0">
+        <li>Stripe EDD questionnaire complete</li>
+        <li>Episode Six sponsor bank: yes or no</li>
+        <li>Highnote partner intro: confirmed</li>
+        <li>If no response &rarr; drop & go all-in Stripe</li>
+      </ul>
+    </div>
+    <div class="mod gate">
+      <span class="gate-num">02</span>
+      <h3>Provider Commitment</h3>
+      <div class="gate-date">June 30, 2026</div>
+      <ul style="list-style:none;padding:0">
+        <li>Stripe EDD cleared or Q3 timeline</li>
+        <li>Integration docs in hand</li>
+        <li>Tap to Pay waiver secured</li>
+        <li>If RED on 2+ signals &rarr; pivot to Highnote</li>
+      </ul>
+    </div>
+    <div class="mod gate">
+      <span class="gate-num">03</span>
+      <h3>Launch Go/No-Go</h3>
+      <div class="gate-date">September 15, 2026</div>
+      <ul style="list-style:none;padding:0">
+        <li>Card program live in sandbox</li>
+        <li>KYC/CIP tested with 100+ users</li>
+        <li>Spanish support operational</li>
+        <li>First 500 beta users identified</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-orange" style="margin-top:12px">
+    <h4>Recommendation</h4>
+    <p><strong>Promote Highnote to #2 over Episode Six.</strong> Highnote offers issuance + acquiring on a single API ($750M+ valuation). Episode Six is issuance-only — more vendors, more integration, more time.</p>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 3: PROVIDER COMPARISON            -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="3">
+  <div class="section-label">Section 02 &bull; Deep Dive</div>
+  <h2>Provider <span class="accent">Landscape</span></h2>
+  <p class="slide-sub">Current provider evaluation status and signal matrix for Gate 2 decision.</p>
+
+  <div class="mod" style="margin-bottom:16px">
+    <h3>Provider Comparison</h3>
+    <table class="tbl">
+      <thead><tr><th>Criteria</th><th>Stripe</th><th>Episode Six</th><th>Highnote</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Card Issuance</strong></td><td class="sg">Yes</td><td class="sg">Yes</td><td class="sg">Yes</td></tr>
+        <tr><td><strong>Merchant Acquiring</strong></td><td class="sg">Yes</td><td class="sr">No</td><td class="sg">Yes</td></tr>
+        <tr><td><strong>No SSN/ITIN</strong></td><td class="sg">Yes (Tap to Pay)</td><td class="sy">TBD</td><td class="sy">TBD</td></tr>
+        <tr><td><strong>Timeline to Live</strong></td><td>3-6 months</td><td>6-8 wk eval + build</td><td>Unknown</td></tr>
+        <tr><td><strong>Scale</strong></td><td>Public ($70B+)</td><td>Private (FIS)</td><td>Private ($750M+)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mod">
+    <h3>Gate 2 — Stripe Signal Matrix</h3>
+    <table class="tbl">
+      <thead><tr><th>Signal</th><th style="color:var(--green)">Green (Proceed)</th><th style="color:var(--yellow)">Yellow (Escalate)</th><th style="color:var(--red)">Red (Pivot)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>EDD Status</strong></td><td class="sg">Cleared / Q3 timeline</td><td class="sy">"In review" — no date</td><td class="sr">Rejected / 60+ days silence</td></tr>
+        <tr><td><strong>Bank Relationship</strong></td><td class="sg">Integration docs in hand</td><td class="sy">Docs promised, delayed</td><td class="sr">Bank unresponsive</td></tr>
+        <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Secured</td><td class="sy">Under review</td><td class="sr">Denied</td></tr>
+        <tr><td><strong>Technical Sandbox</strong></td><td class="sg">Active, tested</td><td class="sy">Access granted, untested</td><td class="sr">No access</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 4: PHASE 1 — CONSUMER CARDS       -->
+<!-- ======================================== -->
+<div class="slide bg-glow-yellow" data-slide="4">
+  <div class="section-label">Section 03</div>
+  <h2>Phase 1: Consumer <span class="accent">Card Issuance</span></h2>
+  <p class="slide-sub">Payphone-branded debit card for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee.</p>
+
+  <div class="g5" style="margin-bottom:16px">
+    <div class="mod mod-sm fin"><div class="val orange" style="font-size:20px">~50M</div><div class="sub">U.S. Immigrants</div></div>
+    <div class="mod mod-sm fin"><div class="val green" style="font-size:20px">80.3%</div><div class="sub">Foreign-Born Unbanked</div></div>
+    <div class="mod mod-sm fin"><div class="val blue" style="font-size:20px">$900B+</div><div class="sub">Buying Power</div></div>
+    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:20px">21.7%</div><div class="sub">Underbanked</div></div>
+    <div class="mod mod-sm fin"><div class="val purple" style="font-size:20px">9.5%</div><div class="sub">Fully Unbanked</div></div>
+  </div>
+
+  <div class="g3 flex-grow">
+    <div class="mod mod-accent">
+      <h3>Consumer Onboarding</h3>
+      <ul class="check">
+        <li>International gov ID (passport, Matricula, cedula)</li>
+        <li>Proof of U.S. residence</li>
+        <li>Biometric verification (selfie + liveness)</li>
+        <li>Spanish-first UI + English option</li>
+        <li>Complete in &lt; 5 minutes</li>
+      </ul>
+    </div>
+    <div class="mod mod-violet">
+      <h3>Card Issuance</h3>
+      <ul class="check">
+        <li>Virtual card issued instantly</li>
+        <li>Physical card in 5-7 business days</li>
+        <li>Payphone-branded (Naranja #FF6400)</li>
+        <li>NFC-enabled contactless</li>
+        <li>FDIC-insured (via sponsor bank)</li>
+      </ul>
+    </div>
+    <div class="mod mod-green">
+      <h3>Account Features</h3>
+      <ul class="check">
+        <li>Direct deposit (routing + account #)</li>
+        <li>Cash load at retail (Walmart, CVS)</li>
+        <li>Real-time push notifications</li>
+        <li>Card lock/unlock from app</li>
+        <li>In-app Spanish support</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    <blockquote>"Tu banco. Tu idioma. Sin Social Security."</blockquote>
+    <p>Your bank. Your language. No Social Security.</p>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 5: PHASE 1 KPIs & REVENUE         -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="5">
+  <div class="section-label">Section 03 &bull; Metrics</div>
+  <h2>Phase 1 <span class="accent">Targets</span></h2>
+  <p class="slide-sub">Success metrics and recommended revenue model for consumer card program.</p>
+
+  <div class="g2 flex-grow">
+    <div class="mod">
+      <h3>Success Metrics</h3>
+      <table class="tbl">
+        <thead><tr><th>KPI</th><th>3 Months</th><th>6 Months</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cards Issued</strong></td><td>10,000</td><td>50,000</td></tr>
+          <tr><td><strong>Monthly Active Users</strong></td><td>5,000</td><td>30,000</td></tr>
+          <tr><td><strong>Onboarding Completion</strong></td><td>> 70%</td><td>> 80%</td></tr>
+          <tr><td><strong>Avg Monthly Spend</strong></td><td>$500</td><td>$750</td></tr>
+          <tr><td><strong>Direct Deposit Adoption</strong></td><td>20%</td><td>40%</td></tr>
+          <tr><td><strong>NPS</strong></td><td>> 60</td><td>> 70</td></tr>
+          <tr><td><strong>CPA</strong></td><td>< $25</td><td>< $20</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="mod" style="margin-bottom:16px">
+        <h3>Revenue Model — Decision Needed</h3>
+        <table class="tbl">
+          <thead><tr><th>Model</th><th>Used By</th><th>Pros</th></tr></thead>
+          <tbody>
+            <tr style="background:rgba(255,100,0,.04)"><td><strong style="color:var(--naranja)">Zero-fee *</strong></td><td>Comun, Fortu</td><td>Max adoption</td></tr>
+            <tr><td><strong>$5.99/mo</strong></td><td>Majority</td><td>Predictable revenue</td></tr>
+            <tr><td><strong>$150/yr</strong></td><td>Maza</td><td>One-time decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-orange">
+        <h4>Recommendation</h4>
+        <p>Launch <strong>zero-fee</strong> to maximize adoption. Monetize via interchange (1-2% of volume). Build premium features as paid upgrades in Phase 2+.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 6: PHASE 2 — PAYPHONE BUSINESS    -->
+<!-- ======================================== -->
+<div class="slide bg-glow-violet" data-slide="6">
+  <div class="section-label">Section 04</div>
+  <h2>Phase 2: Payphone <span class="accent">Business</span></h2>
+  <p class="slide-sub">Mobile payment acceptance. Zero hardware. Three payment methods. The blue ocean play.</p>
+
+  <div class="g4" style="margin-bottom:16px">
+    <div class="mod mod-sm fin"><div class="val orange" style="font-size:24px">1.1M+</div><div class="sub">Hispanic SMBs</div></div>
+    <div class="mod mod-sm fin"><div class="val green" style="font-size:24px">$0</div><div class="sub">Hardware Cost</div></div>
+    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:24px">$50/mo</div><div class="sub">Rev per Merchant</div></div>
+    <div class="mod mod-sm fin"><div class="val blue" style="font-size:24px">$6M ARR</div><div class="sub">Year 2 Target</div></div>
+  </div>
+
+  <div class="g3" style="margin-bottom:16px">
+    <div class="mod mod-accent">
+      <h3>QR Code Payments</h3>
+      <p><strong>How:</strong> Merchant displays QR, customer scans</p>
+      <p style="margin-top:6px"><strong>Best for:</strong> Restaurants, food trucks, bodegas</p>
+      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Payment Intents API</p>
+    </div>
+    <div class="mod mod-violet">
+      <h3>Tap to Pay (NFC)</h3>
+      <p><strong>How:</strong> Customer taps on merchant's phone</p>
+      <p style="margin-top:6px"><strong>Best for:</strong> Home services, mobile vendors</p>
+      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Terminal SDK</p>
+    </div>
+    <div class="mod mod-yellow">
+      <h3>Link to Pay</h3>
+      <p><strong>How:</strong> Payment link via WhatsApp/SMS</p>
+      <p style="margin-top:6px"><strong>Best for:</strong> Professional services, invoicing</p>
+      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Payment Links API</p>
+    </div>
+  </div>
+
+  <div class="alert alert-green">
+    <h4>Why Payphone Business Wins</h4>
+    <p><strong>Spanish-first UX</strong> (no competitor offers this) &bull; <strong>Instant payout</strong> to wallet (not next-day) &bull; <strong>Zero hardware</strong> (Square: $49-$299) &bull; <strong>Remittance integration</strong> — earn &amp; send home in one app &bull; <strong>iOS + Android NFC</strong> (Cash App: iOS only)</p>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 7: PAYPHONE BUSINESS — COMPETITIVE -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="7">
+  <div class="section-label">Section 04 &bull; Competitive</div>
+  <h2>Payphone Business vs. <span class="accent">Competitors</span></h2>
+  <p class="slide-sub">Feature-by-feature comparison against the U.S. merchant payment landscape.</p>
+
+  <div class="mod flex-grow" style="margin-bottom:16px">
+    <table class="tbl">
+      <thead><tr><th>Feature</th><th style="color:var(--naranja)">Payphone Business</th><th>Cash App Biz</th><th>Square</th><th>Venmo Biz</th><th>PayPal Zettle</th></tr></thead>
+      <tbody>
+        <tr><td><strong>NFC Tap to Pay</strong></td><td class="sg">iOS + Android</td><td class="sy">iOS only</td><td>Via hardware</td><td class="sr">No</td><td>Via hardware</td></tr>
+        <tr><td><strong>Hardware Cost</strong></td><td class="sg"><strong>$0</strong></td><td>$0</td><td>$49-$299</td><td>$0</td><td>$29-$249</td></tr>
+        <tr><td><strong>Instant Payouts</strong></td><td class="sg"><strong>Free 3mo</strong></td><td>1.5% fee</td><td>1.5% fee</td><td>1.75% fee</td><td class="sr">Next-day only</td></tr>
+        <tr><td><strong>Spanish-First</strong></td><td class="sg"><strong>Yes</strong></td><td class="sr">No</td><td class="sy">Partial</td><td class="sr">No</td><td class="sy">Partial</td></tr>
+        <tr><td><strong>Remittance</strong></td><td class="sg"><strong>Built-in</strong></td><td class="sr">No</td><td class="sr">No</td><td class="sr">No</td><td class="sr">No</td></tr>
+        <tr><td><strong>Processing Rate</strong></td><td><strong>2.7% + $0.05</strong></td><td>2.75%</td><td>2.6% + $0.10</td><td>1.9% + $0.10</td><td>2.29% + $0.09</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g3">
+    <div class="mod mod-sm fin"><div class="val orange" style="font-size:28px">$27</div><div class="sub">Processing Margin/mo</div></div>
+    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:28px">$9</div><div class="sub">Instant Payout Fees/mo</div></div>
+    <div class="mod mod-sm fin"><div class="val green" style="font-size:28px">$14</div><div class="sub">Premium Subscriptions/mo</div></div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 8: GEOGRAPHIC STRATEGY            -->
+<!-- ======================================== -->
+<div class="slide bg-glow-yellow" data-slide="8">
+  <div class="section-label">Section 06</div>
+  <h2>Geographic <span class="accent">Execution</span></h2>
+  <p class="slide-sub">11 priority states covering 70%+ of U.S. Hispanic population.</p>
+
+  <div style="margin-bottom:12px">
+    <span class="tier tier-1">TIER 1</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">Launch First — Q2 2026</span>
+  </div>
+  <div class="mod" style="margin-bottom:16px;padding:12px 16px">
+    <table class="tbl">
+      <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Remittance Corridor</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Florida</strong></td><td>6M</td><td>27%</td><td>180K+</td><td>Miami-Dade, Orlando, Tampa</td><td>Ecuador, Venezuela, Colombia</td></tr>
+        <tr><td><strong>Texas</strong></td><td>12M</td><td>40%</td><td>360K+</td><td>Houston, Dallas, San Antonio</td><td>Mexico (#1 corridor)</td></tr>
+        <tr><td><strong>California</strong></td><td>15.5M</td><td>40%</td><td>465K+</td><td>LA County, SF Bay, San Diego</td><td>Mexico, Guatemala, El Salvador</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="g2">
+    <div>
+      <div style="margin-bottom:8px"><span class="tier tier-2">TIER 2</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">Q3-Q4 2026</span></div>
+      <div class="mod" style="padding:12px 16px">
+        <table class="tbl">
+          <tbody>
+            <tr><td><strong>New York</strong></td><td>4M (20%)</td><td>120K+ SMBs</td><td>Ecuadorian diaspora</td></tr>
+            <tr><td><strong>Georgia</strong></td><td>1.2M (11%)</td><td>36K+ SMBs</td><td>Sun Belt growth</td></tr>
+            <tr><td><strong>North Carolina</strong></td><td>1.1M (10%)</td><td>33K+ SMBs</td><td>+47K intl migration</td></tr>
+            <tr><td><strong>Arizona</strong></td><td>2.3M (31%)</td><td>69K+ SMBs</td><td>Mexico border</td></tr>
+            <tr><td><strong>New Jersey</strong></td><td>2M (23%)</td><td>60K+ SMBs</td><td>Colombia, Ecuador</td></tr>
+            <tr><td><strong>Illinois</strong></td><td>2.5M (18%)</td><td>75K+ SMBs</td><td>Mexican community</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div style="margin-bottom:8px"><span class="tier tier-3">TIER 3</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">2027+</span></div>
+      <div class="mod" style="padding:12px 16px;margin-bottom:12px">
+        <table class="tbl">
+          <tbody>
+            <tr><td><strong>South Carolina</strong></td><td>1.5% pop growth (highest US)</td></tr>
+            <tr><td><strong>ND/SD</strong></td><td>>50% relative Hispanic growth</td></tr>
+            <tr><td><strong>NV, CO, WA, MA, VA</strong></td><td>Large established communities</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mod mod-sm" style="background:linear-gradient(135deg,var(--dark2),rgba(90,0,180,.06))">
+        <h3 style="font-size:12px">Migration Intelligence</h3>
+        <p style="font-size:11px">Domestic: CA/NY/NJ &rarr; FL/TX/NC/SC/AZ</p>
+        <p style="font-size:11px;margin-top:4px">Fastest: Venezuelan <span class="sg">+100%</span> &bull; Ecuadorian <span class="sg">+48%</span> &bull; Colombian <span class="sg">+43%</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 9: LATAM EXPANSION                -->
+<!-- ======================================== -->
+<div class="slide bg-glow-violet" data-slide="9">
+  <div class="section-label">Section 07</div>
+  <h2>LATAM Market <span class="accent">Expansion</span></h2>
+  <p class="slide-sub">Card issuance via PayCaddy + local banks + Mastercard across 9 markets in 3 tiers.</p>
+
+  <div class="g2 flex-grow">
+    <div>
+      <div class="mod" style="margin-bottom:12px">
+        <h3>Tier Prioritization</h3>
+        <table class="tbl">
+          <thead><tr><th></th><th>Country</th><th>Timeline</th><th>Risk</th></tr></thead>
+          <tbody>
+            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Panama</strong></td><td>Q2 2026</td><td class="sg">Low</td></tr>
+            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Mexico</strong></td><td>Q3 2026</td><td class="sy">Low-Mod</td></tr>
+            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Colombia</strong></td><td>Q3 2026</td><td class="sy">Moderate</td></tr>
+            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Peru</strong></td><td>Q1 2027</td><td class="sy">Moderate</td></tr>
+            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Chile</strong></td><td>Q1 2027</td><td class="sy">Moderate</td></tr>
+            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Ecuador</strong></td><td>Q1 2027</td><td class="sr">Mod-High</td></tr>
+            <tr><td><span class="tier tier-3">T3</span></td><td><strong>DR / Costa Rica / Guatemala</strong></td><td>2027+</td><td class="sr">High</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tl">
+      <div class="tl-item"><div class="tl-q">Q2 2026</div><p><strong>Panama</strong> — Card issuance live via PayCaddy</p></div>
+      <div class="tl-item"><div class="tl-q">Q3 2026</div><p><strong>Mexico</strong> (card) + <strong>Colombia</strong> (card + betting)</p></div>
+      <div class="tl-item"><div class="tl-q">Q4 2026</div><p><strong>Mexico</strong> — Worldpay betting (World Cup buildup)</p></div>
+      <div class="tl-item"><div class="tl-q">Q1 2027</div><p><strong>Peru + Chile</strong> (card) | <strong>Ecuador</strong> (pending regs)</p></div>
+      <div class="tl-item"><div class="tl-q">Q2 2027</div><p><strong>Panama</strong> — Worldpay/PagueloFacil betting</p></div>
+      <div class="tl-item"><div class="tl-q">H2 2027+</div><p><strong>DR, Costa Rica</strong> (if frameworks mature)</p></div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 10: SPORTS BETTING                -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="10">
+  <div class="section-label">Section 08</div>
+  <h2>Sports Betting <span class="accent">Processing</span></h2>
+  <p class="slide-sub">Worldpay-powered processing across LATAM. The $54B market that subsidizes card program growth.</p>
+
+  <div class="alert alert-orange" style="margin-bottom:16px">
+    <h4>2026 World Cup Impact</h4>
+    <p>5M tourists expected across LATAM. <strong>$54B projected LATAM sports betting market.</strong> Mexico hosts key matches — this is the single biggest near-term catalyst for Worldpay activation in Mexico.</p>
+  </div>
+
+  <div class="mod flex-grow">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Country</th><th>Status</th><th>Key Facts</th><th>Revenue</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:var(--naranja)">#1</strong></td><td><strong>Colombia</strong></td><td>Mature, since 2016</td><td>Coljuegos license. New 16% tax. COP-only. Worldpay live.</td><td class="sg">High</td></tr>
+        <tr><td><strong style="color:var(--naranja)">#2</strong></td><td><strong>Mexico</strong></td><td>Regulated, reform</td><td>DGJS permit. MXN-only. SEGOB reform 2026. World Cup catalyst.</td><td class="sg">Very High</td></tr>
+        <tr><td><strong style="color:var(--naranja)">#3</strong></td><td><strong>Panama</strong></td><td>Upgrade recommended</td><td>JCJ license: $40K + $20K/yr. USD. iGaming +53% in 2025. $4.9B by 2032.</td><td class="sy">Mod-High</td></tr>
+        <tr><td><strong style="color:var(--naranja)">#4</strong></td><td><strong>Dominican Rep.</strong></td><td>Newly regulated</td><td>Resolution 136-2024. $346K licensing fee.</td><td class="sy">Moderate</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert alert-green" style="margin-top:12px">
+    <h4>Revenue Diversification</h4>
+    <p>Betting processing is <strong>additive</strong> — a completely separate business line. At scale across 4 LATAM markets: <strong>$5-10M+ ARR by 2027.</strong></p>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 11: COMPETITIVE INTELLIGENCE      -->
+<!-- ======================================== -->
+<div class="slide bg-glow-yellow" data-slide="11">
+  <div class="section-label">Section 09</div>
+  <h2>Competitive <span class="accent">Intelligence</span></h2>
+  <p class="slide-sub">Who we're up against and why we win.</p>
+
+  <div class="g3" style="margin-bottom:16px">
+    <div class="mod" style="border-top:3px solid var(--red)">
+      <h3>Comun</h3>
+      <span class="comp-badge comp-high">HIGH</span>
+      <p style="margin-top:8px">$26M funded. 50x revenue growth. Zero-fee, Spanish-first, 100+ ID types.</p>
+      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Beat on cross-border + cobranza. No merchant play.</p>
+    </div>
+    <div class="mod" style="border-top:3px solid var(--yellow)">
+      <h3>Majority</h3>
+      <span class="comp-badge comp-modhigh">MOD-HIGH</span>
+      <p style="margin-top:8px">$83.5M+ funded. $5.99/mo subscription. Physical meet-up centers.</p>
+      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Zero-fee undercuts. Broad = less Latino focus.</p>
+    </div>
+    <div class="mod" style="border-top:3px solid var(--amarillo)">
+      <h3>Maza</h3>
+      <span class="comp-badge comp-mod">MODERATE</span>
+      <p style="margin-top:8px">a16z backed. $8M. ITIN filing. $150/yr limits adoption.</p>
+      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Add ITIN in Phase 3. Pricing limits scale.</p>
+    </div>
+  </div>
+
+  <div class="g4">
+    <div class="mod adv mod-sm" style="padding-left:20px">
+      <div class="adv-num">01</div>
+      <h3>Cross-Border Network</h3>
+      <p>Existing LATAM user base = built-in distribution</p>
+    </div>
+    <div class="mod adv mod-sm" style="padding-left:20px">
+      <div class="adv-num">02</div>
+      <h3>Cobranza / Tap to Pay</h3>
+      <p>Zero competitors offer Spanish-first SoftPOS</p>
+    </div>
+    <div class="mod adv mod-sm" style="padding-left:20px">
+      <div class="adv-num">03</div>
+      <h3>Betting Revenue</h3>
+      <p>Separate revenue line subsidizes card growth</p>
+    </div>
+    <div class="mod adv mod-sm" style="padding-left:20px">
+      <div class="adv-num">04</div>
+      <h3>Ecuador Moat</h3>
+      <p>Home market first-mover in new reg framework</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 12: FINANCIAL PROJECTIONS         -->
+<!-- ======================================== -->
+<div class="slide bg-glow-violet" data-slide="12">
+  <div class="section-label">Section 10</div>
+  <h2>Financial <span class="accent">Projections</span></h2>
+  <p class="slide-sub">Revenue model, unit economics, and path to profitability.</p>
+
+  <div class="g2 flex-grow">
+    <div class="mod mod-accent">
+      <h3>Consumer Card Revenue (Phase 1)</h3>
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Mo 3</th><th>Mo 6</th><th>Mo 12</th><th>Mo 18</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cards Issued</strong></td><td>10K</td><td>50K</td><td>150K</td><td>300K</td></tr>
+          <tr><td><strong>MAU</strong></td><td>5K</td><td>30K</td><td>100K</td><td>200K</td></tr>
+          <tr><td><strong>Avg Spend/Mo</strong></td><td>$500</td><td>$750</td><td>$900</td><td>$1,000</td></tr>
+          <tr><td><strong>Monthly GMV</strong></td><td>$2.5M</td><td>$22.5M</td><td>$90M</td><td>$200M</td></tr>
+          <tr><td><strong>Annual Run Rate</strong></td><td>$450K</td><td>$4.05M</td><td class="sg">$16.2M</td><td class="sg">$36M</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mod mod-green">
+      <h3>Merchant Revenue (Phase 2)</h3>
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Ph 1</th><th>Ph 2</th><th>Ph 3</th><th>Ph 4</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Merchants</strong></td><td>50</td><td>500</td><td>2,500</td><td>10,000</td></tr>
+          <tr><td><strong>Rev/Merchant</strong></td><td>$50</td><td>$50</td><td>$50</td><td>$50</td></tr>
+          <tr><td><strong>Monthly Rev</strong></td><td>$2.5K</td><td>$25K</td><td>$125K</td><td>$500K</td></tr>
+          <tr><td><strong>Annual Run Rate</strong></td><td>$30K</td><td>$300K</td><td class="sg">$1.5M</td><td class="sg">$6M</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="g3" style="margin-top:16px">
+    <div class="mod fin"><div class="val orange" style="font-size:32px">$16.2M</div><div class="label" style="font-size:11px;color:var(--text3)">Consumer ARR (Mo 12)</div></div>
+    <div class="mod fin"><div class="val yellow" style="font-size:32px">$6M</div><div class="label" style="font-size:11px;color:var(--text3)">Merchant ARR (Year 2)</div></div>
+    <div class="mod fin" style="border:1px solid rgba(255,100,0,.3);background:rgba(255,100,0,.04)"><div class="val green" style="font-size:32px">$22M+</div><div class="label" style="font-size:11px;color:var(--text2)">Combined ARR (excl. betting)</div></div>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 13: 90-DAY EXECUTION PLAN         -->
+<!-- ======================================== -->
+<div class="slide bg-glow-orange" data-slide="13">
+  <div class="section-label">Section 11</div>
+  <h2>90-Day <span class="accent">Action Plan</span></h2>
+  <p class="slide-sub">March 20 — June 18, 2026. Every action item, every owner, every deadline.</p>
+
+  <div class="g4 flex-grow">
+    <div class="mod" style="border-top:3px solid var(--naranja)">
+      <h3>March</h3>
+      <p style="font-size:10px;color:var(--text3);margin-bottom:10px">Weeks 1-2 remaining</p>
+      <ul class="check">
+        <li><strong>Pedro:</strong> Complete Stripe EDD</li>
+        <li><strong>Pedro:</strong> Follow-up E6 + Highnote</li>
+        <li><strong>Val:</strong> Begin LATAM BD search</li>
+        <li><strong>Both:</strong> Confirm PayCaddy Panama</li>
+        <li><strong>Val:</strong> Align CTO on tech timeline</li>
+      </ul>
+    </div>
+    <div class="mod" style="border-top:3px solid var(--naranja)">
+      <h3>April</h3>
+      <p style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:10px">GATE 1: April 15</p>
+      <ul class="check">
+        <li><strong>GATE 1:</strong> Lock provider shortlist</li>
+        <li><strong>LATAM:</strong> Onboard new BD lead</li>
+        <li><strong>Product:</strong> Phase 1 UX design</li>
+        <li><strong>Product:</strong> Evaluate KYC vendors</li>
+        <li><strong>Val:</strong> Finalize revenue model</li>
+      </ul>
+    </div>
+    <div class="mod" style="border-top:3px solid var(--violeta)">
+      <h3>May</h3>
+      <p style="font-size:10px;color:var(--text3);margin-bottom:10px">Build + Expand</p>
+      <ul class="check">
+        <li><strong>Product:</strong> MVP in staging</li>
+        <li><strong>Pedro:</strong> Stripe docs or Highnote</li>
+        <li><strong>LATAM:</strong> Colombia + Worldpay</li>
+        <li><strong>Marketing:</strong> Miami pre-launch</li>
+        <li><strong>Val:</strong> Panama betting decision</li>
+      </ul>
+    </div>
+    <div class="mod" style="border-top:3px solid var(--amarillo)">
+      <h3>June</h3>
+      <p style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:10px">GATE 2: June 30</p>
+      <ul class="check">
+        <li><strong>GATE 2:</strong> Provider commitment</li>
+        <li><strong>Product:</strong> MVP feature-complete</li>
+        <li><strong>Compliance:</strong> Full KYC review</li>
+        <li><strong>Marketing:</strong> Waiting list launch</li>
+        <li><strong>LATAM:</strong> Panama live / Mexico terms</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-red" style="margin-top:12px">
+    <h4>Critical Gap</h4>
+    <p>LATAM items need a <strong>dedicated partnerships lead</strong>. Pedro cannot run U.S. provider evaluation AND LATAM rollout simultaneously. <strong>Hire a LATAM BD person by end of April.</strong></p>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 14: OPEN DECISIONS                -->
+<!-- ======================================== -->
+<div class="slide bg-glow-violet" data-slide="14">
+  <div class="section-label">Section 12</div>
+  <h2>Open <span class="accent">Decisions</span></h2>
+  <p class="slide-sub">Seven calls that need to be made to keep the roadmap on track.</p>
+
+  <div class="mod flex-grow">
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
+      <tbody>
+        <tr><td><strong style="color:var(--naranja)">1</strong></td><td><strong>Highnote to #2?</strong></td><td>Highnote (issuance+acquiring) vs. E6 (issuance only)</td><td class="sg"><strong>Highnote</strong></td><td>April 15</td></tr>
+        <tr><td><strong style="color:var(--naranja)">2</strong></td><td><strong>Revenue model</strong></td><td>Zero-fee vs. Subscription vs. Annual</td><td class="sg"><strong>Zero-fee</strong></td><td>Before launch</td></tr>
+        <tr><td><strong style="color:var(--naranja)">3</strong></td><td><strong>Card network</strong></td><td>Visa vs. Mastercard</td><td>Depends on provider</td><td>At commitment</td></tr>
+        <tr><td><strong style="color:var(--naranja)">4</strong></td><td><strong>LATAM BD hire</strong></td><td>Internal vs. External vs. Contractor</td><td class="sg"><strong>External hire</strong></td><td>End of April</td></tr>
+        <tr><td><strong style="color:var(--naranja)">5</strong></td><td><strong>Ecuador priority</strong></td><td>Tier 1 vs. Tier 2 (reg risk)</td><td class="sg"><strong>Tier 2</strong></td><td>Now</td></tr>
+        <tr><td><strong style="color:var(--naranja)">6</strong></td><td><strong>Panama betting</strong></td><td>Keep exploratory vs. Activate</td><td class="sg"><strong>Activate</strong></td><td>Now</td></tr>
+        <tr><td><strong style="color:var(--naranja)">7</strong></td><td><strong>Phase 1 launch city</strong></td><td>Miami first vs. Multi-city</td><td class="sg"><strong>Miami first</strong></td><td>June</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
+</div>
+
+<!-- ======================================== -->
+<!-- SLIDE 15: CLOSING                       -->
+<!-- ======================================== -->
+<div class="slide end-slide bg-glow-orange bg-glow-violet" data-slide="15">
+  <div class="slide-badge">Payphone Global &bull; 2026</div>
+  <h1><span class="accent">Existe un mundo</span><br>mas simple.</h1>
+  <p style="font-size:18px;color:var(--text2);margin-top:16px;margin-bottom:40px;font-weight:300">There is a simpler world.</p>
+  <div class="stat-row" style="justify-content:center;gap:48px">
+    <div class="stat" style="text-align:center"><div class="val orange">$22M+</div><div class="label">Combined ARR Target</div></div>
+    <div class="stat" style="text-align:center"><div class="val purple">11 States</div><div class="label">U.S. Expansion</div></div>
+    <div class="stat" style="text-align:center"><div class="val yellow">9 Countries</div><div class="label">LATAM Pipeline</div></div>
+  </div>
+  <p style="margin-top:48px;font-size:13px;color:var(--text3)">Prepared for Val Infante, CGO &bull; March 2026</p>
+  <p style="margin-top:4px;font-size:13px;color:var(--text3)">Next Review: <strong style="color:var(--naranja)">April 15, 2026 (Gate 1)</strong></p>
+  <p style="margin-top:32px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);opacity:.4">Confidential &bull; Internal Use Only</p>
+</div>
+
+</div><!-- end deck -->
+
+<!-- ===== NAVIGATION BAR ===== -->
+<nav class="nav-bar hidden" id="navBar">
+  <div class="nav-left">
+    <div class="nav-logo-small">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 4C10.5 4 6 10 6 15C6 19 9 23.5 13 25L13 28C13 29 14 30 15 30L17 30C18 30 19 29 19 28L19 25C23 23.5 26 19 26 15C26 10 21.5 4 16 4Z" fill="url(#navGrad)" opacity=".9"/>
+        <defs><linearGradient id="navGrad" x1="6" y1="4" x2="26" y2="30"><stop stop-color="#FF6400"/><stop offset="1" stop-color="#FFA000"/></linearGradient></defs>
+      </svg>
+      <span>payphone</span>
+    </div>
+  </div>
+  <div class="nav-center">
+    <button class="nav-btn" onclick="prevSlide()" title="Previous (Left Arrow)">&#8592;</button>
+    <div class="nav-counter" id="navCounter">1 / 16</div>
+    <button class="nav-btn" onclick="nextSlide()" title="Next (Right Arrow)">&#8594;</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-dots" id="navDots"></div>
+    <div class="nav-conf">Confidential</div>
+  </div>
+</nav>
+
+<script>
+// ===== PASSWORD =====
+function checkPw() {
+  const input = document.getElementById('pwInput');
+  const err = document.getElementById('pwErr');
+  if (input.value === 'unicron2025') {
+    document.getElementById('pwScreen').classList.add('hidden');
+    document.getElementById('deck').classList.add('unlocked');
+    document.getElementById('navBar').classList.remove('hidden');
+    initDeck();
+  } else {
+    input.classList.add('error');
+    err.classList.add('show');
+    setTimeout(() => input.classList.remove('error'), 500);
+  }
+}
+
+// ===== DECK ENGINE =====
+let current = 0;
+const slides = [];
+let totalSlides = 0;
+
+function initDeck() {
+  document.querySelectorAll('.slide').forEach(s => slides.push(s));
+  totalSlides = slides.length;
+
+  // Build dots
+  const dotsEl = document.getElementById('navDots');
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToSlide(i);
+    dotsEl.appendChild(dot);
+  }
+
+  goToSlide(0);
+}
+
+function goToSlide(n) {
+  if (n < 0 || n >= totalSlides) return;
+
+  slides.forEach((s, i) => {
+    s.classList.remove('active', 'prev');
+    if (i < n) s.classList.add('prev');
+  });
+  slides[n].classList.add('active');
+
+  current = n;
+
+  // Update counter
+  document.getElementById('navCounter').textContent = (n + 1) + ' / ' + totalSlides;
+
+  // Update dots
+  document.querySelectorAll('.nav-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n);
+  });
+
+  // Update progress bar
+  const pct = totalSlides > 1 ? (n / (totalSlides - 1)) * 100 : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function nextSlide() { goToSlide(current + 1); }
+function prevSlide() { goToSlide(current - 1); }
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (document.getElementById('pwScreen').classList.contains('hidden')) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
+  }
+});
+
+// Touch/swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  const diff = e.changedTouches[0].screenX - touchStartX;
+  if (Math.abs(diff) > 50) {
+    if (diff < 0) nextSlide();
+    else prevSlide();
+  }
+});
+</script>
+</body>
+</html>
