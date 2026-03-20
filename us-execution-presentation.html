@@ -3,1035 +3,1664 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payphone — U.S. Execution Roadmap Presentation</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Payphone — U.S. Execution Roadmap</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 :root {
-  --naranja: #FF6400;
-  --violeta: #5A00B4;
-  --amarillo: #FFA000;
-  --dark: #222222;
-  --dark2: #1a1a1a;
-  --dark3: #2a2a2a;
-  --dark4: #333333;
-  --border: rgba(255,255,255,.08);
-  --text: #ffffff;
-  --text2: #cccccc;
-  --text3: #888888;
+  --orange: #FF6400;
+  --orange-glow: rgba(255,100,0,0.4);
+  --purple: #5A00B4;
+  --amber: #FFA000;
+  --dark: #111111;
+  --dark-2: #161616;
+  --glass: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
   --green: #22c55e;
   --red: #ef4444;
-  --yellow: #eab308;
-  --blue: #3b82f6;
-  --radius: 16px;
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:#111; color:var(--text); overflow:hidden; -webkit-font-smoothing:antialiased; }
-
-/* ===== PASSWORD ===== */
-.pw-screen { position:fixed; inset:0; background:var(--dark); display:flex; align-items:center; justify-content:center; z-index:9999; }
-.pw-screen.hidden { display:none; }
-.pw-box { background:var(--dark2); border:1px solid var(--border); padding:3rem; border-radius:24px; text-align:center; max-width:420px; width:90%; }
-.pw-logo { width:80px; height:80px; margin:0 auto 1.5rem; }
-.pw-box h2 { font-size:1.5rem; font-weight:800; margin-bottom:.5rem; }
-.pw-box p { color:var(--text3); margin-bottom:2rem; font-size:.9rem; }
-.pw-input { width:100%; padding:1rem; border:2px solid rgba(255,255,255,.1); border-radius:12px; font-size:1rem; font-family:inherit; background:var(--dark3); color:var(--text); transition:.2s; }
-.pw-input:focus { outline:none; border-color:var(--naranja); box-shadow:0 0 0 4px rgba(255,100,0,.15); }
-.pw-input.error { border-color:var(--red); animation:shake .5s; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-.pw-btn { width:100%; padding:1rem; background:linear-gradient(135deg,var(--naranja),var(--amarillo)); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; margin-top:1rem; transition:.2s; font-family:inherit; }
-.pw-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,100,0,.3); }
-.pw-err { color:var(--red); font-size:.8rem; margin-top:.75rem; display:none; }
-.pw-err.show { display:block; }
-
-/* ===== PRESENTATION CONTAINER ===== */
-.deck { display:none; width:100vw; height:100vh; position:relative; }
-.deck.unlocked { display:block; }
-
-/* ===== SLIDE BASE ===== */
-.slide {
-  position:absolute; inset:0; width:100vw; height:100vh;
-  display:flex; flex-direction:column;
-  padding:60px 80px;
-  background:var(--dark);
-  opacity:0; pointer-events:none;
-  transition:opacity .5s ease, transform .5s ease;
-  transform:translateX(40px);
-  overflow:hidden;
-}
-.slide.active {
-  opacity:1; pointer-events:auto; transform:translateX(0);
-}
-.slide.prev {
-  opacity:0; transform:translateX(-40px);
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--dark);
+  color: #fff;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ===== SLIDE BACKGROUNDS ===== */
-.slide::before, .slide::after { content:''; position:absolute; border-radius:50%; pointer-events:none; }
-.bg-glow-orange::before { top:-300px; right:-200px; width:800px; height:800px; background:radial-gradient(circle,rgba(255,100,0,.1) 0%,transparent 70%); }
-.bg-glow-violet::after { bottom:-200px; left:-100px; width:500px; height:500px; background:radial-gradient(circle,rgba(90,0,180,.08) 0%,transparent 70%); }
-.bg-glow-yellow::before { top:-200px; left:-200px; width:600px; height:600px; background:radial-gradient(circle,rgba(255,160,0,.08) 0%,transparent 70%); }
+/* ===== WHALE TAIL SVG SYMBOL (hidden, reused everywhere) ===== */
+.whale-svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ===== CUSTOM CURSOR (desktop only) ===== */
+.whale-cursor {
+  position: fixed;
+  width: 36px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.15s;
+  display: none;
+  filter: drop-shadow(0 0 6px rgba(255,100,0,0.4));
+}
+.whale-cursor img {
+  width: 100%;
+  height: auto;
+}
+body.desktop-mode .whale-cursor { display: block; }
+body.desktop-mode, body.desktop-mode * { cursor: none !important; }
+
+/* ===== WHALE TRAIL PARTICLES ===== */
+.whale-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 1;
+  transition: none;
+  will-change: transform, opacity;
+}
+
+/* ===== SWIMMING WHALES BACKGROUND ===== */
+.swimming-whales-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.swimming-whale {
+  position: absolute;
+  will-change: transform;
+}
+
+/* ===== SCROLL PROGRESS BAR ===== */
+.scroll-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 201;
+  background: rgba(255,255,255,0.04);
+}
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--amber), var(--purple));
+  width: 0%;
+  position: relative;
+  transition: width 0.08s linear;
+}
+.scroll-progress-knob {
+  position: absolute;
+  right: -10px;
+  top: -8px;
+  width: 20px;
+  height: auto;
+}
+
+/* ===== PASSWORD GATE ===== */
+#password-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 1s ease, transform 1s ease;
+}
+#password-gate.breaching {
+  /* whale breach animation triggered by JS */
+}
+#password-gate.hidden {
+  opacity: 0;
+  transform: scale(1.1);
+  pointer-events: none;
+}
+.gate-whale-svg {
+  width: 140px;
+  height: auto;
+  margin-bottom: 32px;
+  animation: gatePulse 3s ease-in-out infinite;
+}
+@keyframes gatePulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255,100,0,0.3)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 40px rgba(255,100,0,0.6)); }
+}
+.gate-whale-svg.breach {
+  animation: whaleBreach 1.2s ease-out forwards;
+}
+@keyframes whaleBreach {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  40% { transform: translateY(-200px) rotate(-15deg) scale(1.3); }
+  60% { transform: translateY(-250px) rotate(-10deg) scale(1.2); }
+  100% { transform: translateY(-800px) rotate(-5deg) scale(0.5); opacity: 0; }
+}
+.splash-particles {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10001;
+}
+.splash-drop {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  animation: splashFall 1s ease-out forwards;
+}
+@keyframes splashFall {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+.gate-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.gate-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.gate-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+.gate-input-wrap {
+  position: relative;
+  width: 320px;
+}
+.gate-input-wrap input {
+  width: 100%;
+  padding: 16px 56px 16px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.gate-input-wrap input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 30px rgba(255,100,0,0.15);
+}
+.gate-input-wrap input::placeholder { color: rgba(255,255,255,0.25); }
+.gate-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--orange);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gate-btn:hover { transform: translateY(-50%) scale(1.05); box-shadow: 0 0 20px var(--orange-glow); }
+.gate-btn svg { width: 18px; height: 18px; fill: #fff; }
+.gate-error {
+  color: var(--red);
+  font-size: 13px;
+  margin-top: 12px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.gate-error.show { opacity: 1; }
+
+/* ===== MAIN CONTENT ===== */
+#main-content {
+  display: none;
+  opacity: 0;
+  transition: opacity 1s ease 0.3s;
+}
+#main-content.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed;
+  top: 4px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(17,17,17,0.7);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: transform 0.4s;
+}
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-logo img { width: 22px; height: auto; }
+.nav-dots {
+  display: flex;
+  gap: 8px;
+}
+.nav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.nav-dot.active {
+  background: var(--orange);
+  box-shadow: 0 0 12px var(--orange-glow);
+  width: 24px;
+  border-radius: 4px;
+}
+.nav-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+}
+
+/* ===== SECTIONS ===== */
+section {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 80px 80px;
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  section { padding: 100px 24px 60px; }
+  .nav { padding: 16px 24px; }
+}
+
+/* ===== SECTION WHALE DIVIDERS ===== */
+.section-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0;
+  position: relative;
+  z-index: 1;
+}
+.section-divider img {
+  width: 32px;
+  height: auto;
+  opacity: 0.15;
+  transition: all 0.6s ease;
+}
+.section-divider.in-view img {
+  opacity: 0.5;
+  animation: dividerWave 2s ease-in-out infinite;
+}
+@keyframes dividerWave {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(8deg) scale(1.05); }
+  75% { transform: rotate(-8deg) scale(1.05); }
+}
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.15s; }
+.reveal-delay-2 { transition-delay: 0.3s; }
+.reveal-delay-3 { transition-delay: 0.45s; }
+.reveal-delay-4 { transition-delay: 0.6s; }
+.reveal-delay-5 { transition-delay: 0.75s; }
+
+/* ===== GLOW ORBS ===== */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.3;
+}
 
 /* ===== TYPOGRAPHY ===== */
-.slide-badge { display:inline-flex; background:rgba(255,100,0,.1); border:1px solid rgba(255,100,0,.2); padding:6px 16px; border-radius:100px; font-size:10px; font-weight:700; color:var(--naranja); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px; width:fit-content; }
-.slide h1 { font-size:clamp(36px,5vw,64px); font-weight:900; line-height:1.05; letter-spacing:-2px; }
-.slide h1 .accent { background:linear-gradient(135deg,var(--naranja),var(--amarillo)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.slide h1 .accent-v { background:linear-gradient(135deg,var(--violeta),var(--naranja)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.slide h2 { font-size:clamp(28px,3.5vw,48px); font-weight:900; line-height:1.1; letter-spacing:-1px; margin-bottom:8px; }
-.slide h2 .accent { background:linear-gradient(135deg,var(--naranja),var(--amarillo)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-.slide-sub { font-size:clamp(14px,1.5vw,18px); color:var(--text2); max-width:700px; line-height:1.5; margin-bottom:32px; font-weight:300; }
-.section-label { font-size:11px; font-weight:700; color:var(--naranja); letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
-
-/* ===== STAT ROW ===== */
-.stat-row { display:flex; gap:40px; flex-wrap:wrap; margin-top:auto; }
-.stat .val { font-size:clamp(28px,3vw,44px); font-weight:900; line-height:1; }
-.stat .val.orange { color:var(--naranja); }
-.stat .val.green { color:var(--green); }
-.stat .val.blue { color:var(--blue); }
-.stat .val.yellow { color:var(--amarillo); }
-.stat .val.purple { color:var(--violeta); }
-.stat .label { font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
-
-/* ===== CARDS / MODULES (brand: rounded corners) ===== */
-.mod { background:var(--dark2); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
-.mod-accent { border-left:3px solid var(--naranja); }
-.mod-violet { border-left:3px solid var(--violeta); }
-.mod-green { border-left:3px solid var(--green); }
-.mod-yellow { border-left:3px solid var(--amarillo); }
-.mod h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
-.mod h4 { font-size:13px; font-weight:600; color:var(--text2); margin-bottom:6px; }
-.mod p { font-size:13px; color:var(--text2); line-height:1.5; }
-.mod-sm { padding:16px; }
-.mod-sm h3 { font-size:14px; margin-bottom:4px; }
-.mod-sm p { font-size:12px; }
-
-/* ===== GRID LAYOUTS ===== */
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
-.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:16px; }
-.g5 { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
-.flex-grow { flex:1; min-height:0; overflow:hidden; }
-
-/* ===== TABLES ===== */
-.tbl { width:100%; border-collapse:collapse; font-size:12px; }
-.tbl thead { background:rgba(255,100,0,.06); }
-.tbl th { text-align:left; padding:10px 14px; font-weight:600; font-size:10px; text-transform:uppercase; letter-spacing:.8px; color:var(--naranja); border-bottom:1px solid var(--border); white-space:nowrap; }
-.tbl td { padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.03); color:var(--text2); }
-.tbl td strong { color:var(--text); font-weight:600; }
-.tbl tr:last-child td { border-bottom:none; }
-.sg { color:var(--green)!important; font-weight:600; }
-.sy { color:var(--yellow)!important; font-weight:600; }
-.sr { color:var(--red)!important; font-weight:600; }
-
-/* ===== GATE CARDS ===== */
-.gate { position:relative; overflow:hidden; }
-.gate::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
-.gate:nth-child(1)::before { background:var(--naranja); }
-.gate:nth-child(2)::before { background:var(--violeta); }
-.gate:nth-child(3)::before { background:var(--amarillo); }
-.gate-num { font-size:56px; font-weight:900; color:rgba(255,255,255,.03); position:absolute; top:4px; right:12px; line-height:1; }
-.gate-date { font-size:11px; font-weight:600; color:var(--naranja); margin-bottom:10px; }
-.gate li { font-size:11px; color:var(--text2); padding:3px 0; list-style:none; padding-left:12px; position:relative; }
-.gate li::before { content:'>'; position:absolute; left:0; color:var(--naranja); font-weight:700; font-size:10px; }
-
-/* ===== ALERTS ===== */
-.alert { border-radius:12px; padding:16px 20px; margin-top:12px; }
-.alert-orange { background:rgba(255,100,0,.06); border:1px solid rgba(255,100,0,.15); }
-.alert-green { background:rgba(34,197,94,.06); border:1px solid rgba(34,197,94,.15); }
-.alert-red { background:rgba(239,68,68,.06); border:1px solid rgba(239,68,68,.15); }
-.alert h4 { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
-.alert-orange h4 { color:var(--naranja); }
-.alert-green h4 { color:var(--green); }
-.alert-red h4 { color:var(--red); }
-.alert p { font-size:12px; color:var(--text2); line-height:1.5; }
-
-/* ===== TIER BADGES ===== */
-.tier { display:inline-block; padding:3px 10px; border-radius:100px; font-size:9px; font-weight:700; letter-spacing:1px; }
-.tier-1 { background:rgba(34,197,94,.12); color:var(--green); }
-.tier-2 { background:rgba(255,160,0,.12); color:var(--amarillo); }
-.tier-3 { background:rgba(90,0,180,.12); color:var(--violeta); }
-
-/* ===== COMPETITOR CARDS ===== */
-.comp-badge { display:inline-block; padding:3px 8px; border-radius:100px; font-size:9px; font-weight:700; letter-spacing:.5px; }
-.comp-high { background:rgba(239,68,68,.12); color:var(--red); }
-.comp-modhigh { background:rgba(234,179,8,.12); color:var(--yellow); }
-.comp-mod { background:rgba(255,160,0,.12); color:var(--amarillo); }
-
-/* ===== ADVANTAGE BARS ===== */
-.adv { position:relative; overflow:hidden; }
-.adv::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom,var(--naranja),var(--amarillo)); }
-.adv-num { font-size:28px; font-weight:900; color:rgba(255,100,0,.08); line-height:1; }
-
-/* ===== TIMELINE ===== */
-.tl { position:relative; padding-left:24px; }
-.tl::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom,var(--naranja),var(--violeta),var(--amarillo)); border-radius:2px; }
-.tl-item { position:relative; margin-bottom:12px; padding:10px 14px; background:var(--dark2); border:1px solid var(--border); border-radius:10px; }
-.tl-item::before { content:''; position:absolute; left:-21px; top:14px; width:8px; height:8px; border-radius:50%; background:var(--naranja); border:2px solid var(--dark); }
-.tl-q { font-size:9px; font-weight:700; color:var(--naranja); text-transform:uppercase; letter-spacing:1px; margin-bottom:2px; }
-.tl-item p { font-size:11px; color:var(--text2); }
-.tl-item p strong { color:var(--text); }
-
-/* ===== FINANCIAL CARDS ===== */
-.fin { text-align:center; }
-.fin .val { font-size:clamp(24px,2.5vw,36px); font-weight:900; }
-.fin .sub { font-size:10px; color:var(--text3); margin-top:2px; }
-
-/* ===== CHECKLIST ===== */
-.check li { font-size:11px; color:var(--text2); padding:4px 0 4px 18px; position:relative; list-style:none; }
-.check li::before { content:''; position:absolute; left:0; top:8px; width:10px; height:10px; border-radius:3px; border:2px solid rgba(255,255,255,.15); }
-.check li strong { color:var(--naranja); font-weight:600; }
-
-/* ===== NAVIGATION ===== */
-.nav-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:100;
-  background:rgba(17,17,17,.95); backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 32px; height:56px;
+.section-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 16px;
+  opacity: 0.7;
 }
-.nav-bar.hidden { display:none; }
-.nav-left { display:flex; align-items:center; gap:12px; }
-.nav-logo-small { display:flex; align-items:center; gap:8px; }
-.nav-logo-small svg { width:24px; height:24px; }
-.nav-logo-small span { font-weight:800; font-size:13px; color:var(--text2); }
-.nav-center { display:flex; align-items:center; gap:16px; }
-.nav-btn { background:none; border:1px solid var(--border); color:var(--text2); width:36px; height:36px; border-radius:8px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition:.2s; font-family:inherit; }
-.nav-btn:hover { background:var(--dark3); color:var(--text); border-color:var(--naranja); }
-.nav-counter { font-size:12px; color:var(--text3); font-weight:600; min-width:60px; text-align:center; }
-.nav-right { display:flex; align-items:center; gap:16px; }
-.nav-dots { display:flex; gap:4px; }
-.nav-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.1); transition:.3s; cursor:pointer; }
-.nav-dot.active { background:var(--naranja); width:18px; border-radius:3px; }
-.nav-conf { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text3); opacity:.5; }
-
-/* ===== PROGRESS BAR ===== */
-.progress-bar { position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--naranja),var(--amarillo)); z-index:100; transition:width .4s ease; }
-
-/* ===== SLIDE FOOTER META ===== */
-.slide-footer { position:absolute; bottom:72px; left:80px; right:80px; display:flex; justify-content:space-between; font-size:10px; color:var(--text3); }
-
-/* ===== COVER SPECIFIC ===== */
-.cover-slide { justify-content:center; padding:80px 100px; }
-.cover-slide h1 { font-size:clamp(44px,6vw,80px); letter-spacing:-3px; margin-bottom:12px; }
-.cover-tagline { font-size:clamp(16px,2vw,24px); font-weight:300; color:var(--text2); margin-bottom:48px; max-width:700px; line-height:1.4; }
-
-/* ===== QUOTE BOX ===== */
-.quote-box { background:linear-gradient(135deg,rgba(255,100,0,.08),rgba(90,0,180,.08)); border:1px solid rgba(255,100,0,.12); border-radius:var(--radius); padding:24px; text-align:center; margin-top:16px; }
-.quote-box blockquote { font-size:20px; font-weight:700; font-style:italic; margin-bottom:4px; }
-.quote-box p { font-size:12px; color:var(--text3); }
-
-/* ===== END SLIDE ===== */
-.end-slide { justify-content:center; align-items:center; text-align:center; }
-.end-slide h1 { margin-bottom:16px; }
-
-/* ===== RESPONSIVE (mainly for smaller screens) ===== */
-@media(max-width:1200px) {
-  .slide { padding:40px 48px; }
-  .cover-slide { padding:60px 48px; }
-  .g3 { grid-template-columns:1fr 1fr; }
-  .g4 { grid-template-columns:1fr 1fr; }
-  .g5 { grid-template-columns:repeat(3,1fr); }
+.mega {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(64px, 12vw, 160px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -4px;
+  background: linear-gradient(135deg, var(--orange), var(--amber), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-@media(max-width:768px) {
-  .slide { padding:32px 24px; }
-  .g2,.g3,.g4,.g5 { grid-template-columns:1fr; }
-  .stat-row { gap:20px; }
-  .nav-dots { display:none; }
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px, 4.5vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  max-width: 900px;
+}
+.subtitle {
+  font-size: clamp(16px, 1.8vw, 20px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.5);
+  max-width: 640px;
+  margin-top: 16px;
+}
+
+/* ===== GLASS CARDS (with 3D tilt) ===== */
+.glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  padding: 32px;
+  transition: border-color 0.4s, box-shadow 0.4s;
+  transform-style: preserve-3d;
+  perspective: 800px;
+  position: relative;
+  overflow: hidden;
+}
+.glass:hover {
+  border-color: rgba(255,100,0,0.2);
+  box-shadow: 0 20px 60px rgba(255,100,0,0.08);
+}
+.glass .whale-watermark {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 40px;
+  height: auto;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.glass:hover .whale-watermark {
+  opacity: 0.06;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+  max-width: 1000px;
+}
+@media (max-width: 900px) {
+  .card-grid { grid-template-columns: 1fr; }
+}
+.card-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--orange), var(--amber));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.card-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+}
+
+/* ===== COUNTER ANIMATION ===== */
+.counter { display: inline-block; }
+
+/* ===== SOLUTION SLIDE ===== */
+.solution-wrap {
+  background: linear-gradient(135deg, rgba(255,100,0,0.12), rgba(90,0,180,0.08));
+  border: 1px solid rgba(255,100,0,0.15);
+  border-radius: 24px;
+  padding: 48px;
+  margin-top: 40px;
+  max-width: 900px;
+  position: relative;
+  overflow: hidden;
+}
+.solution-wrap::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, var(--orange-glow), transparent 70%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s;
+  cursor: default;
+}
+.pill:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px var(--orange-glow);
+}
+
+/* ===== MOAT SLIDE ===== */
+.moat-card {
+  background: linear-gradient(135deg, rgba(90,0,180,0.1), rgba(255,160,0,0.05));
+  border: 1px solid rgba(90,0,180,0.15);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 20px;
+  max-width: 800px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.moat-card:hover {
+  transform: translateX(8px);
+  box-shadow: -4px 0 30px rgba(90,0,180,0.15);
+}
+.moat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+.moat-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.moat-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+/* ===== FINANCIALS TABLE ===== */
+.fin-table {
+  width: 100%;
+  max-width: 900px;
+  border-collapse: collapse;
+  margin-top: 32px;
+  font-size: 14px;
+}
+.fin-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.fin-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.fin-table tr:hover td { background: rgba(255,255,255,0.02); }
+.fin-table .hl { color: var(--orange); font-weight: 700; }
+.fin-table .neg { color: var(--red); }
+.fin-table .pos { color: var(--green); font-weight: 700; }
+
+/* ===== STRESS BOX ===== */
+.stress-box {
+  margin-top: 28px;
+  padding: 24px 28px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(34,197,94,0.06), rgba(255,160,0,0.04));
+  border: 1px solid rgba(34,197,94,0.15);
+  max-width: 800px;
+}
+.stress-box .s-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+.stress-box .s-body {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+/* ===== TWO COL ===== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 40px;
+  max-width: 1000px;
+}
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; gap: 32px; } }
+
+/* ===== SCROLL COMPANION WHALE ===== */
+.scroll-companion {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 150;
+  width: 44px;
+  height: 36px;
+  cursor: pointer;
+  animation: companionBob 2.5s ease-in-out infinite;
+  transition: filter 0.3s;
+  filter: drop-shadow(0 2px 8px rgba(255,100,0,0.3));
+}
+.scroll-companion:hover {
+  filter: drop-shadow(0 4px 16px rgba(255,100,0,0.6));
+}
+.scroll-companion.fast {
+  animation-duration: 0.6s;
+}
+@keyframes companionBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ===== WHALE CONFETTI ===== */
+.whale-confetti {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform, opacity;
+}
+
+/* ===== SCROLL HINT ===== */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+}
+.scroll-hint svg, .scroll-hint img {
+  width: 24px;
+  height: auto;
+  animation: hintBounce 2s ease-in-out infinite;
+}
+@keyframes hintBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* ===== ECON FLOW ===== */
+.econ-flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+.econ-step {
+  padding: 24px 28px;
+  border-radius: 14px;
+  text-align: center;
+  min-width: 130px;
+  transition: transform 0.3s;
+}
+.econ-step:hover { transform: scale(1.06); }
+.econ-step .e-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.econ-step .e-label { font-size: 12px; opacity: 0.5; }
+.econ-arrow {
+  font-size: 20px;
+  color: rgba(255,255,255,0.15);
+}
+
+/* ===== FUNNEL ===== */
+.funnel-step {
+  padding: 20px 28px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s;
+  cursor: default;
+}
+.funnel-step:hover { transform: scale(1.02); }
+.funnel-step .f-label { font-size: 14px; opacity: 0.7; }
+.funnel-step .f-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* ===== ALERT BOXES ===== */
+.alert {
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 20px 0;
+}
+.alert-danger{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2)}
+.alert-danger h4{color:var(--red);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.alert-rec{background:rgba(255,100,0,.06);border:1px solid rgba(255,100,0,.2)}
+.alert-rec h4{color:var(--orange);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.alert-success{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2)}
+.alert-success h4{color:var(--green);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.alert p{font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6}
+
+/* ===== GATE ORBS ===== */
+@keyframes gateOrbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -30px) scale(1.2); }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== PASSWORD SCREEN ===== -->
-<div class="pw-screen" id="pwScreen">
-  <div class="pw-box">
-    <svg class="pw-logo" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="80" height="80" rx="20" fill="url(#pwGrad)"/>
-      <path d="M40 20C32 20 24 28 24 36C24 42 28 48 34 50L34 56C34 58 36 60 38 60L42 60C44 60 46 58 46 56L46 50C52 48 56 42 56 36C56 28 48 20 40 20ZM36 44L36 36C36 33.8 37.8 32 40 32C42.2 32 44 33.8 44 36L44 44" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>
-      <defs><linearGradient id="pwGrad" x1="0" y1="0" x2="80" y2="80"><stop stop-color="#FF6400"/><stop offset="1" stop-color="#FFA000"/></linearGradient></defs>
-    </svg>
-    <h2>Payphone Global</h2>
-    <p>U.S. Execution Roadmap — Confidential Presentation</p>
-    <input type="password" class="pw-input" id="pwInput" placeholder="Enter access code" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="pw-btn" onclick="checkPw()">Access Presentation</button>
-    <div class="pw-err" id="pwErr">Incorrect access code. Try again.</div>
+<!-- ===== HIDDEN SVG DEFS (whale tail symbol, reused everywhere) ===== -->
+<svg class="whale-svg-defs" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <symbol id="whale-tail" viewBox="0 0 100 80">
+      <path fill-rule="evenodd" d="M50,78 C47,66 42,56 34,46 C24,34 14,24 6,16 C1,10 -1,4 4,1 C10,-1 18,1 26,8 C34,16 40,26 44,36 C46,42 48,46 50,50 C52,46 54,42 56,36 C60,26 66,16 74,8 C82,1 90,-1 96,1 C101,4 99,10 94,16 C86,24 76,34 66,46 C58,56 53,66 50,78Z M22,22 C17,14 14,8 18,4 C22,1 28,4 32,12 C36,20 34,28 28,30 C22,32 18,28 22,22Z M78,22 C83,14 86,8 82,4 C78,1 72,4 68,12 C64,20 66,28 72,30 C78,32 82,28 78,22Z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ===== CUSTOM WHALE CURSOR ===== -->
+<div class="whale-cursor" id="whaleCursor">
+  <img src="whale-logo.png" alt="" draggable="false" />
+</div>
+
+<!-- ===== SCROLL PROGRESS BAR ===== -->
+<div class="scroll-progress-track" id="scrollProgressTrack" style="display:none;">
+  <div class="scroll-progress-bar" id="scrollProgressBar">
+    <img class="scroll-progress-knob" src="whale-logo.png" alt="" />
   </div>
 </div>
 
-<!-- ===== PROGRESS BAR ===== -->
-<div class="progress-bar" id="progressBar" style="width:0%"></div>
+<!-- ===== SWIMMING WHALES BACKGROUND ===== -->
+<div class="swimming-whales-container" id="swimmingWhales"></div>
 
-<!-- ===== PRESENTATION DECK ===== -->
-<div class="deck" id="deck">
-
-<!-- ======================================== -->
-<!-- SLIDE 0: COVER                          -->
-<!-- ======================================== -->
-<div class="slide cover-slide bg-glow-orange bg-glow-violet" data-slide="0">
-  <div class="slide-badge">Confidential &bull; Internal Use Only</div>
-  <h1>U.S. <span class="accent">Execution</span><br>Roadmap</h1>
-  <div class="cover-tagline">Card issuance, merchant acquiring, LATAM expansion, and sports betting — the complete operational playbook for 2026-2027.</div>
-  <div class="stat-row">
-    <div class="stat"><div class="val orange">$900B+</div><div class="label">Hispanic Buying Power</div></div>
-    <div class="stat"><div class="val purple">64.7M</div><div class="label">U.S. Hispanic Pop.</div></div>
-    <div class="stat"><div class="val yellow">80.3%</div><div class="label">Foreign-Born Unbanked</div></div>
-    <div class="stat"><div class="val green">$54B</div><div class="label">LATAM Betting Market</div></div>
-  </div>
-  <div class="slide-footer">
-    <span>Prepared for Val Infante, CGO &bull; March 2026</span>
-    <span>Next Review: April 15, 2026 (Gate 1)</span>
+<!-- ===== PASSWORD GATE ===== -->
+<div id="password-gate">
+  <div class="glow-orb" style="width:200px;height:200px;background:radial-gradient(circle at 30% 30%, var(--orange), var(--purple), transparent);top:20%;left:30%;animation:gateOrbFloat 8s ease-in-out infinite;opacity:0.5;position:absolute;filter:blur(40px);"></div>
+  <div class="glow-orb" style="width:200px;height:200px;background:radial-gradient(circle, var(--purple), transparent);bottom:20%;right:25%;animation:gateOrbFloat 8s ease-in-out infinite;animation-delay:-3s;opacity:0.5;position:absolute;filter:blur(40px);"></div>
+  <div class="gate-content">
+    <img class="gate-whale-svg" id="gateWhale" src="whale-logo.png" alt="Payphone" draggable="false" />
+    <div class="gate-logo">payphone</div>
+    <div class="gate-subtitle">U.S. Execution Roadmap &bull; Confidential</div>
+    <div class="gate-input-wrap">
+      <input type="password" id="passwordInput" placeholder="Enter access code" autocomplete="off" />
+      <button class="gate-btn" id="passwordBtn" aria-label="Submit">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div class="gate-error" id="gateError">Invalid access code. Try again.</div>
+    <div class="splash-particles" id="splashParticles"></div>
   </div>
 </div>
 
-<!-- ======================================== -->
-<!-- SLIDE 1: EXECUTIVE DASHBOARD            -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="1">
-  <div class="section-label">Section 01</div>
-  <h2>Executive <span class="accent">Dashboard</span></h2>
-  <p class="slide-sub">Real-time status across all workstreams. Updated March 2026.</p>
-
-  <div class="g5" style="margin-bottom:20px">
-    <div class="mod mod-sm fin"><div class="val orange" style="font-size:22px">Q3 2026</div><div class="sub">Phase 1 Launch</div></div>
-    <div class="mod mod-sm fin"><div class="val green" style="font-size:22px">Pre-Approved</div><div class="sub">Stripe Status</div></div>
-    <div class="mod mod-sm fin"><div class="val blue" style="font-size:22px">11 States</div><div class="sub">Geographic Target</div></div>
-    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:22px">10K</div><div class="sub">Merchant Goal (18mo)</div></div>
-    <div class="mod mod-sm fin"><div class="val purple" style="font-size:22px">9 Countries</div><div class="sub">LATAM Pipeline</div></div>
+<!-- ===== NAV ===== -->
+<nav class="nav" id="mainNav" style="display:none;">
+  <div class="nav-logo">
+    <img src="whale-logo.png" alt="" />
+    payphone
   </div>
-
-  <div class="g2 flex-grow">
-    <div class="mod mod-accent">
-      <h3>U.S. Launch Status</h3>
-      <table class="tbl">
-        <tr><td><strong>Stripe EDD</strong></td><td class="sy">In Progress (3-6mo)</td></tr>
-        <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Pre-approved</td></tr>
-        <tr><td><strong>Episode Six</strong></td><td class="sy">Awaiting Sponsor Bank</td></tr>
-        <tr><td><strong>Highnote</strong></td><td class="sy">Awaiting Confirmation</td></tr>
-        <tr><td><strong>KYC/CIP</strong></td><td class="sy">Under Evaluation</td></tr>
-        <tr><td><strong>Payphone Business</strong></td><td class="sg">Product Designed</td></tr>
-      </table>
-    </div>
-    <div class="mod mod-violet">
-      <h3>LATAM Expansion Status</h3>
-      <table class="tbl">
-        <tr><td><strong>Panama (PayCaddy)</strong></td><td class="sg">Active — Q2 2026</td></tr>
-        <tr><td><strong>Mexico (Card)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
-        <tr><td><strong>Colombia (Card + Betting)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
-        <tr><td><strong>Worldpay (Colombia)</strong></td><td class="sg">Live since May 2025</td></tr>
-        <tr><td><strong>Worldpay (Mexico)</strong></td><td class="sy">Pending — Q4 2026</td></tr>
-        <tr><td><strong>PagueloFacil (Panama)</strong></td><td class="sy">Exploratory</td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 2: DECISION GATE FRAMEWORK        -->
-<!-- ======================================== -->
-<div class="slide bg-glow-violet" data-slide="2">
-  <div class="section-label">Section 02</div>
-  <h2>Decision Gate <span class="accent">Framework</span></h2>
-  <p class="slide-sub">Three hard deadlines that prevent indefinite drift. Miss a gate, force a decision.</p>
-
-  <div class="g3 flex-grow" style="align-items:start">
-    <div class="mod gate">
-      <span class="gate-num">01</span>
-      <h3>Shortlist Lock</h3>
-      <div class="gate-date">April 15, 2026</div>
-      <ul style="list-style:none;padding:0">
-        <li>Stripe EDD questionnaire complete</li>
-        <li>Episode Six sponsor bank: yes or no</li>
-        <li>Highnote partner intro: confirmed</li>
-        <li>If no response &rarr; drop & go all-in Stripe</li>
-      </ul>
-    </div>
-    <div class="mod gate">
-      <span class="gate-num">02</span>
-      <h3>Provider Commitment</h3>
-      <div class="gate-date">June 30, 2026</div>
-      <ul style="list-style:none;padding:0">
-        <li>Stripe EDD cleared or Q3 timeline</li>
-        <li>Integration docs in hand</li>
-        <li>Tap to Pay waiver secured</li>
-        <li>If RED on 2+ signals &rarr; pivot to Highnote</li>
-      </ul>
-    </div>
-    <div class="mod gate">
-      <span class="gate-num">03</span>
-      <h3>Launch Go/No-Go</h3>
-      <div class="gate-date">September 15, 2026</div>
-      <ul style="list-style:none;padding:0">
-        <li>Card program live in sandbox</li>
-        <li>KYC/CIP tested with 100+ users</li>
-        <li>Spanish support operational</li>
-        <li>First 500 beta users identified</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="alert alert-orange" style="margin-top:12px">
-    <h4>Recommendation</h4>
-    <p><strong>Promote Highnote to #2 over Episode Six.</strong> Highnote offers issuance + acquiring on a single API ($750M+ valuation). Episode Six is issuance-only — more vendors, more integration, more time.</p>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 3: PROVIDER COMPARISON            -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="3">
-  <div class="section-label">Section 02 &bull; Deep Dive</div>
-  <h2>Provider <span class="accent">Landscape</span></h2>
-  <p class="slide-sub">Current provider evaluation status and signal matrix for Gate 2 decision.</p>
-
-  <div class="mod" style="margin-bottom:16px">
-    <h3>Provider Comparison</h3>
-    <table class="tbl">
-      <thead><tr><th>Criteria</th><th>Stripe</th><th>Episode Six</th><th>Highnote</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Card Issuance</strong></td><td class="sg">Yes</td><td class="sg">Yes</td><td class="sg">Yes</td></tr>
-        <tr><td><strong>Merchant Acquiring</strong></td><td class="sg">Yes</td><td class="sr">No</td><td class="sg">Yes</td></tr>
-        <tr><td><strong>No SSN/ITIN</strong></td><td class="sg">Yes (Tap to Pay)</td><td class="sy">TBD</td><td class="sy">TBD</td></tr>
-        <tr><td><strong>Timeline to Live</strong></td><td>3-6 months</td><td>6-8 wk eval + build</td><td>Unknown</td></tr>
-        <tr><td><strong>Scale</strong></td><td>Public ($70B+)</td><td>Private (FIS)</td><td>Private ($750M+)</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="mod">
-    <h3>Gate 2 — Stripe Signal Matrix</h3>
-    <table class="tbl">
-      <thead><tr><th>Signal</th><th style="color:var(--green)">Green (Proceed)</th><th style="color:var(--yellow)">Yellow (Escalate)</th><th style="color:var(--red)">Red (Pivot)</th></tr></thead>
-      <tbody>
-        <tr><td><strong>EDD Status</strong></td><td class="sg">Cleared / Q3 timeline</td><td class="sy">"In review" — no date</td><td class="sr">Rejected / 60+ days silence</td></tr>
-        <tr><td><strong>Bank Relationship</strong></td><td class="sg">Integration docs in hand</td><td class="sy">Docs promised, delayed</td><td class="sr">Bank unresponsive</td></tr>
-        <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Secured</td><td class="sy">Under review</td><td class="sr">Denied</td></tr>
-        <tr><td><strong>Technical Sandbox</strong></td><td class="sg">Active, tested</td><td class="sy">Access granted, untested</td><td class="sr">No access</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 4: PHASE 1 — CONSUMER CARDS       -->
-<!-- ======================================== -->
-<div class="slide bg-glow-yellow" data-slide="4">
-  <div class="section-label">Section 03</div>
-  <h2>Phase 1: Consumer <span class="accent">Card Issuance</span></h2>
-  <p class="slide-sub">Payphone-branded debit card for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee.</p>
-
-  <div class="g5" style="margin-bottom:16px">
-    <div class="mod mod-sm fin"><div class="val orange" style="font-size:20px">~50M</div><div class="sub">U.S. Immigrants</div></div>
-    <div class="mod mod-sm fin"><div class="val green" style="font-size:20px">80.3%</div><div class="sub">Foreign-Born Unbanked</div></div>
-    <div class="mod mod-sm fin"><div class="val blue" style="font-size:20px">$900B+</div><div class="sub">Buying Power</div></div>
-    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:20px">21.7%</div><div class="sub">Underbanked</div></div>
-    <div class="mod mod-sm fin"><div class="val purple" style="font-size:20px">9.5%</div><div class="sub">Fully Unbanked</div></div>
-  </div>
-
-  <div class="g3 flex-grow">
-    <div class="mod mod-accent">
-      <h3>Consumer Onboarding</h3>
-      <ul class="check">
-        <li>International gov ID (passport, Matricula, cedula)</li>
-        <li>Proof of U.S. residence</li>
-        <li>Biometric verification (selfie + liveness)</li>
-        <li>Spanish-first UI + English option</li>
-        <li>Complete in &lt; 5 minutes</li>
-      </ul>
-    </div>
-    <div class="mod mod-violet">
-      <h3>Card Issuance</h3>
-      <ul class="check">
-        <li>Virtual card issued instantly</li>
-        <li>Physical card in 5-7 business days</li>
-        <li>Payphone-branded (Naranja #FF6400)</li>
-        <li>NFC-enabled contactless</li>
-        <li>FDIC-insured (via sponsor bank)</li>
-      </ul>
-    </div>
-    <div class="mod mod-green">
-      <h3>Account Features</h3>
-      <ul class="check">
-        <li>Direct deposit (routing + account #)</li>
-        <li>Cash load at retail (Walmart, CVS)</li>
-        <li>Real-time push notifications</li>
-        <li>Card lock/unlock from app</li>
-        <li>In-app Spanish support</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="quote-box">
-    <blockquote>"Tu banco. Tu idioma. Sin Social Security."</blockquote>
-    <p>Your bank. Your language. No Social Security.</p>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 5: PHASE 1 KPIs & REVENUE         -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="5">
-  <div class="section-label">Section 03 &bull; Metrics</div>
-  <h2>Phase 1 <span class="accent">Targets</span></h2>
-  <p class="slide-sub">Success metrics and recommended revenue model for consumer card program.</p>
-
-  <div class="g2 flex-grow">
-    <div class="mod">
-      <h3>Success Metrics</h3>
-      <table class="tbl">
-        <thead><tr><th>KPI</th><th>3 Months</th><th>6 Months</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Cards Issued</strong></td><td>10,000</td><td>50,000</td></tr>
-          <tr><td><strong>Monthly Active Users</strong></td><td>5,000</td><td>30,000</td></tr>
-          <tr><td><strong>Onboarding Completion</strong></td><td>> 70%</td><td>> 80%</td></tr>
-          <tr><td><strong>Avg Monthly Spend</strong></td><td>$500</td><td>$750</td></tr>
-          <tr><td><strong>Direct Deposit Adoption</strong></td><td>20%</td><td>40%</td></tr>
-          <tr><td><strong>NPS</strong></td><td>> 60</td><td>> 70</td></tr>
-          <tr><td><strong>CPA</strong></td><td>< $25</td><td>< $20</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div>
-      <div class="mod" style="margin-bottom:16px">
-        <h3>Revenue Model — Decision Needed</h3>
-        <table class="tbl">
-          <thead><tr><th>Model</th><th>Used By</th><th>Pros</th></tr></thead>
-          <tbody>
-            <tr style="background:rgba(255,100,0,.04)"><td><strong style="color:var(--naranja)">Zero-fee *</strong></td><td>Comun, Fortu</td><td>Max adoption</td></tr>
-            <tr><td><strong>$5.99/mo</strong></td><td>Majority</td><td>Predictable revenue</td></tr>
-            <tr><td><strong>$150/yr</strong></td><td>Maza</td><td>One-time decision</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="alert alert-orange">
-        <h4>Recommendation</h4>
-        <p>Launch <strong>zero-fee</strong> to maximize adoption. Monetize via interchange (1-2% of volume). Build premium features as paid upgrades in Phase 2+.</p>
-      </div>
-    </div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 6: PHASE 2 — PAYPHONE BUSINESS    -->
-<!-- ======================================== -->
-<div class="slide bg-glow-violet" data-slide="6">
-  <div class="section-label">Section 04</div>
-  <h2>Phase 2: Payphone <span class="accent">Business</span></h2>
-  <p class="slide-sub">Mobile payment acceptance. Zero hardware. Three payment methods. The blue ocean play.</p>
-
-  <div class="g4" style="margin-bottom:16px">
-    <div class="mod mod-sm fin"><div class="val orange" style="font-size:24px">1.1M+</div><div class="sub">Hispanic SMBs</div></div>
-    <div class="mod mod-sm fin"><div class="val green" style="font-size:24px">$0</div><div class="sub">Hardware Cost</div></div>
-    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:24px">$50/mo</div><div class="sub">Rev per Merchant</div></div>
-    <div class="mod mod-sm fin"><div class="val blue" style="font-size:24px">$6M ARR</div><div class="sub">Year 2 Target</div></div>
-  </div>
-
-  <div class="g3" style="margin-bottom:16px">
-    <div class="mod mod-accent">
-      <h3>QR Code Payments</h3>
-      <p><strong>How:</strong> Merchant displays QR, customer scans</p>
-      <p style="margin-top:6px"><strong>Best for:</strong> Restaurants, food trucks, bodegas</p>
-      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Payment Intents API</p>
-    </div>
-    <div class="mod mod-violet">
-      <h3>Tap to Pay (NFC)</h3>
-      <p><strong>How:</strong> Customer taps on merchant's phone</p>
-      <p style="margin-top:6px"><strong>Best for:</strong> Home services, mobile vendors</p>
-      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Terminal SDK</p>
-    </div>
-    <div class="mod mod-yellow">
-      <h3>Link to Pay</h3>
-      <p><strong>How:</strong> Payment link via WhatsApp/SMS</p>
-      <p style="margin-top:6px"><strong>Best for:</strong> Professional services, invoicing</p>
-      <p style="margin-top:6px;font-size:10px;color:var(--text3)">Stripe Payment Links API</p>
-    </div>
-  </div>
-
-  <div class="alert alert-green">
-    <h4>Why Payphone Business Wins</h4>
-    <p><strong>Spanish-first UX</strong> (no competitor offers this) &bull; <strong>Instant payout</strong> to wallet (not next-day) &bull; <strong>Zero hardware</strong> (Square: $49-$299) &bull; <strong>Remittance integration</strong> — earn &amp; send home in one app &bull; <strong>iOS + Android NFC</strong> (Cash App: iOS only)</p>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 7: PAYPHONE BUSINESS — COMPETITIVE -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="7">
-  <div class="section-label">Section 04 &bull; Competitive</div>
-  <h2>Payphone Business vs. <span class="accent">Competitors</span></h2>
-  <p class="slide-sub">Feature-by-feature comparison against the U.S. merchant payment landscape.</p>
-
-  <div class="mod flex-grow" style="margin-bottom:16px">
-    <table class="tbl">
-      <thead><tr><th>Feature</th><th style="color:var(--naranja)">Payphone Business</th><th>Cash App Biz</th><th>Square</th><th>Venmo Biz</th><th>PayPal Zettle</th></tr></thead>
-      <tbody>
-        <tr><td><strong>NFC Tap to Pay</strong></td><td class="sg">iOS + Android</td><td class="sy">iOS only</td><td>Via hardware</td><td class="sr">No</td><td>Via hardware</td></tr>
-        <tr><td><strong>Hardware Cost</strong></td><td class="sg"><strong>$0</strong></td><td>$0</td><td>$49-$299</td><td>$0</td><td>$29-$249</td></tr>
-        <tr><td><strong>Instant Payouts</strong></td><td class="sg"><strong>Free 3mo</strong></td><td>1.5% fee</td><td>1.5% fee</td><td>1.75% fee</td><td class="sr">Next-day only</td></tr>
-        <tr><td><strong>Spanish-First</strong></td><td class="sg"><strong>Yes</strong></td><td class="sr">No</td><td class="sy">Partial</td><td class="sr">No</td><td class="sy">Partial</td></tr>
-        <tr><td><strong>Remittance</strong></td><td class="sg"><strong>Built-in</strong></td><td class="sr">No</td><td class="sr">No</td><td class="sr">No</td><td class="sr">No</td></tr>
-        <tr><td><strong>Processing Rate</strong></td><td><strong>2.7% + $0.05</strong></td><td>2.75%</td><td>2.6% + $0.10</td><td>1.9% + $0.10</td><td>2.29% + $0.09</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="g3">
-    <div class="mod mod-sm fin"><div class="val orange" style="font-size:28px">$27</div><div class="sub">Processing Margin/mo</div></div>
-    <div class="mod mod-sm fin"><div class="val yellow" style="font-size:28px">$9</div><div class="sub">Instant Payout Fees/mo</div></div>
-    <div class="mod mod-sm fin"><div class="val green" style="font-size:28px">$14</div><div class="sub">Premium Subscriptions/mo</div></div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 8: GEOGRAPHIC STRATEGY            -->
-<!-- ======================================== -->
-<div class="slide bg-glow-yellow" data-slide="8">
-  <div class="section-label">Section 06</div>
-  <h2>Geographic <span class="accent">Execution</span></h2>
-  <p class="slide-sub">11 priority states covering 70%+ of U.S. Hispanic population.</p>
-
-  <div style="margin-bottom:12px">
-    <span class="tier tier-1">TIER 1</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">Launch First — Q2 2026</span>
-  </div>
-  <div class="mod" style="margin-bottom:16px;padding:12px 16px">
-    <table class="tbl">
-      <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Remittance Corridor</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Florida</strong></td><td>6M</td><td>27%</td><td>180K+</td><td>Miami-Dade, Orlando, Tampa</td><td>Ecuador, Venezuela, Colombia</td></tr>
-        <tr><td><strong>Texas</strong></td><td>12M</td><td>40%</td><td>360K+</td><td>Houston, Dallas, San Antonio</td><td>Mexico (#1 corridor)</td></tr>
-        <tr><td><strong>California</strong></td><td>15.5M</td><td>40%</td><td>465K+</td><td>LA County, SF Bay, San Diego</td><td>Mexico, Guatemala, El Salvador</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="g2">
-    <div>
-      <div style="margin-bottom:8px"><span class="tier tier-2">TIER 2</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">Q3-Q4 2026</span></div>
-      <div class="mod" style="padding:12px 16px">
-        <table class="tbl">
-          <tbody>
-            <tr><td><strong>New York</strong></td><td>4M (20%)</td><td>120K+ SMBs</td><td>Ecuadorian diaspora</td></tr>
-            <tr><td><strong>Georgia</strong></td><td>1.2M (11%)</td><td>36K+ SMBs</td><td>Sun Belt growth</td></tr>
-            <tr><td><strong>North Carolina</strong></td><td>1.1M (10%)</td><td>33K+ SMBs</td><td>+47K intl migration</td></tr>
-            <tr><td><strong>Arizona</strong></td><td>2.3M (31%)</td><td>69K+ SMBs</td><td>Mexico border</td></tr>
-            <tr><td><strong>New Jersey</strong></td><td>2M (23%)</td><td>60K+ SMBs</td><td>Colombia, Ecuador</td></tr>
-            <tr><td><strong>Illinois</strong></td><td>2.5M (18%)</td><td>75K+ SMBs</td><td>Mexican community</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div>
-      <div style="margin-bottom:8px"><span class="tier tier-3">TIER 3</span> <span style="font-size:11px;color:var(--text3);margin-left:4px">2027+</span></div>
-      <div class="mod" style="padding:12px 16px;margin-bottom:12px">
-        <table class="tbl">
-          <tbody>
-            <tr><td><strong>South Carolina</strong></td><td>1.5% pop growth (highest US)</td></tr>
-            <tr><td><strong>ND/SD</strong></td><td>>50% relative Hispanic growth</td></tr>
-            <tr><td><strong>NV, CO, WA, MA, VA</strong></td><td>Large established communities</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="mod mod-sm" style="background:linear-gradient(135deg,var(--dark2),rgba(90,0,180,.06))">
-        <h3 style="font-size:12px">Migration Intelligence</h3>
-        <p style="font-size:11px">Domestic: CA/NY/NJ &rarr; FL/TX/NC/SC/AZ</p>
-        <p style="font-size:11px;margin-top:4px">Fastest: Venezuelan <span class="sg">+100%</span> &bull; Ecuadorian <span class="sg">+48%</span> &bull; Colombian <span class="sg">+43%</span></p>
-      </div>
-    </div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 9: LATAM EXPANSION                -->
-<!-- ======================================== -->
-<div class="slide bg-glow-violet" data-slide="9">
-  <div class="section-label">Section 07</div>
-  <h2>LATAM Market <span class="accent">Expansion</span></h2>
-  <p class="slide-sub">Card issuance via PayCaddy + local banks + Mastercard across 9 markets in 3 tiers.</p>
-
-  <div class="g2 flex-grow">
-    <div>
-      <div class="mod" style="margin-bottom:12px">
-        <h3>Tier Prioritization</h3>
-        <table class="tbl">
-          <thead><tr><th></th><th>Country</th><th>Timeline</th><th>Risk</th></tr></thead>
-          <tbody>
-            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Panama</strong></td><td>Q2 2026</td><td class="sg">Low</td></tr>
-            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Mexico</strong></td><td>Q3 2026</td><td class="sy">Low-Mod</td></tr>
-            <tr><td><span class="tier tier-1">T1</span></td><td><strong>Colombia</strong></td><td>Q3 2026</td><td class="sy">Moderate</td></tr>
-            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Peru</strong></td><td>Q1 2027</td><td class="sy">Moderate</td></tr>
-            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Chile</strong></td><td>Q1 2027</td><td class="sy">Moderate</td></tr>
-            <tr><td><span class="tier tier-2">T2</span></td><td><strong>Ecuador</strong></td><td>Q1 2027</td><td class="sr">Mod-High</td></tr>
-            <tr><td><span class="tier tier-3">T3</span></td><td><strong>DR / Costa Rica / Guatemala</strong></td><td>2027+</td><td class="sr">High</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="tl">
-      <div class="tl-item"><div class="tl-q">Q2 2026</div><p><strong>Panama</strong> — Card issuance live via PayCaddy</p></div>
-      <div class="tl-item"><div class="tl-q">Q3 2026</div><p><strong>Mexico</strong> (card) + <strong>Colombia</strong> (card + betting)</p></div>
-      <div class="tl-item"><div class="tl-q">Q4 2026</div><p><strong>Mexico</strong> — Worldpay betting (World Cup buildup)</p></div>
-      <div class="tl-item"><div class="tl-q">Q1 2027</div><p><strong>Peru + Chile</strong> (card) | <strong>Ecuador</strong> (pending regs)</p></div>
-      <div class="tl-item"><div class="tl-q">Q2 2027</div><p><strong>Panama</strong> — Worldpay/PagueloFacil betting</p></div>
-      <div class="tl-item"><div class="tl-q">H2 2027+</div><p><strong>DR, Costa Rica</strong> (if frameworks mature)</p></div>
-    </div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 10: SPORTS BETTING                -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="10">
-  <div class="section-label">Section 08</div>
-  <h2>Sports Betting <span class="accent">Processing</span></h2>
-  <p class="slide-sub">Worldpay-powered processing across LATAM. The $54B market that subsidizes card program growth.</p>
-
-  <div class="alert alert-orange" style="margin-bottom:16px">
-    <h4>2026 World Cup Impact</h4>
-    <p>5M tourists expected across LATAM. <strong>$54B projected LATAM sports betting market.</strong> Mexico hosts key matches — this is the single biggest near-term catalyst for Worldpay activation in Mexico.</p>
-  </div>
-
-  <div class="mod flex-grow">
-    <table class="tbl">
-      <thead><tr><th>#</th><th>Country</th><th>Status</th><th>Key Facts</th><th>Revenue</th></tr></thead>
-      <tbody>
-        <tr><td><strong style="color:var(--naranja)">#1</strong></td><td><strong>Colombia</strong></td><td>Mature, since 2016</td><td>Coljuegos license. New 16% tax. COP-only. Worldpay live.</td><td class="sg">High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#2</strong></td><td><strong>Mexico</strong></td><td>Regulated, reform</td><td>DGJS permit. MXN-only. SEGOB reform 2026. World Cup catalyst.</td><td class="sg">Very High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#3</strong></td><td><strong>Panama</strong></td><td>Upgrade recommended</td><td>JCJ license: $40K + $20K/yr. USD. iGaming +53% in 2025. $4.9B by 2032.</td><td class="sy">Mod-High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#4</strong></td><td><strong>Dominican Rep.</strong></td><td>Newly regulated</td><td>Resolution 136-2024. $346K licensing fee.</td><td class="sy">Moderate</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="alert alert-green" style="margin-top:12px">
-    <h4>Revenue Diversification</h4>
-    <p>Betting processing is <strong>additive</strong> — a completely separate business line. At scale across 4 LATAM markets: <strong>$5-10M+ ARR by 2027.</strong></p>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 11: COMPETITIVE INTELLIGENCE      -->
-<!-- ======================================== -->
-<div class="slide bg-glow-yellow" data-slide="11">
-  <div class="section-label">Section 09</div>
-  <h2>Competitive <span class="accent">Intelligence</span></h2>
-  <p class="slide-sub">Who we're up against and why we win.</p>
-
-  <div class="g3" style="margin-bottom:16px">
-    <div class="mod" style="border-top:3px solid var(--red)">
-      <h3>Comun</h3>
-      <span class="comp-badge comp-high">HIGH</span>
-      <p style="margin-top:8px">$26M funded. 50x revenue growth. Zero-fee, Spanish-first, 100+ ID types.</p>
-      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Beat on cross-border + cobranza. No merchant play.</p>
-    </div>
-    <div class="mod" style="border-top:3px solid var(--yellow)">
-      <h3>Majority</h3>
-      <span class="comp-badge comp-modhigh">MOD-HIGH</span>
-      <p style="margin-top:8px">$83.5M+ funded. $5.99/mo subscription. Physical meet-up centers.</p>
-      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Zero-fee undercuts. Broad = less Latino focus.</p>
-    </div>
-    <div class="mod" style="border-top:3px solid var(--amarillo)">
-      <h3>Maza</h3>
-      <span class="comp-badge comp-mod">MODERATE</span>
-      <p style="margin-top:8px">a16z backed. $8M. ITIN filing. $150/yr limits adoption.</p>
-      <p style="margin-top:8px;font-size:11px;color:var(--naranja)"><strong>Mitigation:</strong> Add ITIN in Phase 3. Pricing limits scale.</p>
-    </div>
-  </div>
-
-  <div class="g4">
-    <div class="mod adv mod-sm" style="padding-left:20px">
-      <div class="adv-num">01</div>
-      <h3>Cross-Border Network</h3>
-      <p>Existing LATAM user base = built-in distribution</p>
-    </div>
-    <div class="mod adv mod-sm" style="padding-left:20px">
-      <div class="adv-num">02</div>
-      <h3>Cobranza / Tap to Pay</h3>
-      <p>Zero competitors offer Spanish-first SoftPOS</p>
-    </div>
-    <div class="mod adv mod-sm" style="padding-left:20px">
-      <div class="adv-num">03</div>
-      <h3>Betting Revenue</h3>
-      <p>Separate revenue line subsidizes card growth</p>
-    </div>
-    <div class="mod adv mod-sm" style="padding-left:20px">
-      <div class="adv-num">04</div>
-      <h3>Ecuador Moat</h3>
-      <p>Home market first-mover in new reg framework</p>
-    </div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 12: FINANCIAL PROJECTIONS         -->
-<!-- ======================================== -->
-<div class="slide bg-glow-violet" data-slide="12">
-  <div class="section-label">Section 10</div>
-  <h2>Financial <span class="accent">Projections</span></h2>
-  <p class="slide-sub">Revenue model, unit economics, and path to profitability.</p>
-
-  <div class="g2 flex-grow">
-    <div class="mod mod-accent">
-      <h3>Consumer Card Revenue (Phase 1)</h3>
-      <table class="tbl">
-        <thead><tr><th>Metric</th><th>Mo 3</th><th>Mo 6</th><th>Mo 12</th><th>Mo 18</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Cards Issued</strong></td><td>10K</td><td>50K</td><td>150K</td><td>300K</td></tr>
-          <tr><td><strong>MAU</strong></td><td>5K</td><td>30K</td><td>100K</td><td>200K</td></tr>
-          <tr><td><strong>Avg Spend/Mo</strong></td><td>$500</td><td>$750</td><td>$900</td><td>$1,000</td></tr>
-          <tr><td><strong>Monthly GMV</strong></td><td>$2.5M</td><td>$22.5M</td><td>$90M</td><td>$200M</td></tr>
-          <tr><td><strong>Annual Run Rate</strong></td><td>$450K</td><td>$4.05M</td><td class="sg">$16.2M</td><td class="sg">$36M</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="mod mod-green">
-      <h3>Merchant Revenue (Phase 2)</h3>
-      <table class="tbl">
-        <thead><tr><th>Metric</th><th>Ph 1</th><th>Ph 2</th><th>Ph 3</th><th>Ph 4</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Merchants</strong></td><td>50</td><td>500</td><td>2,500</td><td>10,000</td></tr>
-          <tr><td><strong>Rev/Merchant</strong></td><td>$50</td><td>$50</td><td>$50</td><td>$50</td></tr>
-          <tr><td><strong>Monthly Rev</strong></td><td>$2.5K</td><td>$25K</td><td>$125K</td><td>$500K</td></tr>
-          <tr><td><strong>Annual Run Rate</strong></td><td>$30K</td><td>$300K</td><td class="sg">$1.5M</td><td class="sg">$6M</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="g3" style="margin-top:16px">
-    <div class="mod fin"><div class="val orange" style="font-size:32px">$16.2M</div><div class="label" style="font-size:11px;color:var(--text3)">Consumer ARR (Mo 12)</div></div>
-    <div class="mod fin"><div class="val yellow" style="font-size:32px">$6M</div><div class="label" style="font-size:11px;color:var(--text3)">Merchant ARR (Year 2)</div></div>
-    <div class="mod fin" style="border:1px solid rgba(255,100,0,.3);background:rgba(255,100,0,.04)"><div class="val green" style="font-size:32px">$22M+</div><div class="label" style="font-size:11px;color:var(--text2)">Combined ARR (excl. betting)</div></div>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 13: 90-DAY EXECUTION PLAN         -->
-<!-- ======================================== -->
-<div class="slide bg-glow-orange" data-slide="13">
-  <div class="section-label">Section 11</div>
-  <h2>90-Day <span class="accent">Action Plan</span></h2>
-  <p class="slide-sub">March 20 — June 18, 2026. Every action item, every owner, every deadline.</p>
-
-  <div class="g4 flex-grow">
-    <div class="mod" style="border-top:3px solid var(--naranja)">
-      <h3>March</h3>
-      <p style="font-size:10px;color:var(--text3);margin-bottom:10px">Weeks 1-2 remaining</p>
-      <ul class="check">
-        <li><strong>Pedro:</strong> Complete Stripe EDD</li>
-        <li><strong>Pedro:</strong> Follow-up E6 + Highnote</li>
-        <li><strong>Val:</strong> Begin LATAM BD search</li>
-        <li><strong>Both:</strong> Confirm PayCaddy Panama</li>
-        <li><strong>Val:</strong> Align CTO on tech timeline</li>
-      </ul>
-    </div>
-    <div class="mod" style="border-top:3px solid var(--naranja)">
-      <h3>April</h3>
-      <p style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:10px">GATE 1: April 15</p>
-      <ul class="check">
-        <li><strong>GATE 1:</strong> Lock provider shortlist</li>
-        <li><strong>LATAM:</strong> Onboard new BD lead</li>
-        <li><strong>Product:</strong> Phase 1 UX design</li>
-        <li><strong>Product:</strong> Evaluate KYC vendors</li>
-        <li><strong>Val:</strong> Finalize revenue model</li>
-      </ul>
-    </div>
-    <div class="mod" style="border-top:3px solid var(--violeta)">
-      <h3>May</h3>
-      <p style="font-size:10px;color:var(--text3);margin-bottom:10px">Build + Expand</p>
-      <ul class="check">
-        <li><strong>Product:</strong> MVP in staging</li>
-        <li><strong>Pedro:</strong> Stripe docs or Highnote</li>
-        <li><strong>LATAM:</strong> Colombia + Worldpay</li>
-        <li><strong>Marketing:</strong> Miami pre-launch</li>
-        <li><strong>Val:</strong> Panama betting decision</li>
-      </ul>
-    </div>
-    <div class="mod" style="border-top:3px solid var(--amarillo)">
-      <h3>June</h3>
-      <p style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:10px">GATE 2: June 30</p>
-      <ul class="check">
-        <li><strong>GATE 2:</strong> Provider commitment</li>
-        <li><strong>Product:</strong> MVP feature-complete</li>
-        <li><strong>Compliance:</strong> Full KYC review</li>
-        <li><strong>Marketing:</strong> Waiting list launch</li>
-        <li><strong>LATAM:</strong> Panama live / Mexico terms</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="alert alert-red" style="margin-top:12px">
-    <h4>Critical Gap</h4>
-    <p>LATAM items need a <strong>dedicated partnerships lead</strong>. Pedro cannot run U.S. provider evaluation AND LATAM rollout simultaneously. <strong>Hire a LATAM BD person by end of April.</strong></p>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 14: OPEN DECISIONS                -->
-<!-- ======================================== -->
-<div class="slide bg-glow-violet" data-slide="14">
-  <div class="section-label">Section 12</div>
-  <h2>Open <span class="accent">Decisions</span></h2>
-  <p class="slide-sub">Seven calls that need to be made to keep the roadmap on track.</p>
-
-  <div class="mod flex-grow">
-    <table class="tbl">
-      <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
-      <tbody>
-        <tr><td><strong style="color:var(--naranja)">1</strong></td><td><strong>Highnote to #2?</strong></td><td>Highnote (issuance+acquiring) vs. E6 (issuance only)</td><td class="sg"><strong>Highnote</strong></td><td>April 15</td></tr>
-        <tr><td><strong style="color:var(--naranja)">2</strong></td><td><strong>Revenue model</strong></td><td>Zero-fee vs. Subscription vs. Annual</td><td class="sg"><strong>Zero-fee</strong></td><td>Before launch</td></tr>
-        <tr><td><strong style="color:var(--naranja)">3</strong></td><td><strong>Card network</strong></td><td>Visa vs. Mastercard</td><td>Depends on provider</td><td>At commitment</td></tr>
-        <tr><td><strong style="color:var(--naranja)">4</strong></td><td><strong>LATAM BD hire</strong></td><td>Internal vs. External vs. Contractor</td><td class="sg"><strong>External hire</strong></td><td>End of April</td></tr>
-        <tr><td><strong style="color:var(--naranja)">5</strong></td><td><strong>Ecuador priority</strong></td><td>Tier 1 vs. Tier 2 (reg risk)</td><td class="sg"><strong>Tier 2</strong></td><td>Now</td></tr>
-        <tr><td><strong style="color:var(--naranja)">6</strong></td><td><strong>Panama betting</strong></td><td>Keep exploratory vs. Activate</td><td class="sg"><strong>Activate</strong></td><td>Now</td></tr>
-        <tr><td><strong style="color:var(--naranja)">7</strong></td><td><strong>Phase 1 launch city</strong></td><td>Miami first vs. Multi-city</td><td class="sg"><strong>Miami first</strong></td><td>June</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="slide-footer"><span>Payphone Global &bull; U.S. Execution Roadmap</span><span></span></div>
-</div>
-
-<!-- ======================================== -->
-<!-- SLIDE 15: CLOSING                       -->
-<!-- ======================================== -->
-<div class="slide end-slide bg-glow-orange bg-glow-violet" data-slide="15">
-  <div class="slide-badge">Payphone Global &bull; 2026</div>
-  <h1><span class="accent">Existe un mundo</span><br>mas simple.</h1>
-  <p style="font-size:18px;color:var(--text2);margin-top:16px;margin-bottom:40px;font-weight:300">There is a simpler world.</p>
-  <div class="stat-row" style="justify-content:center;gap:48px">
-    <div class="stat" style="text-align:center"><div class="val orange">$22M+</div><div class="label">Combined ARR Target</div></div>
-    <div class="stat" style="text-align:center"><div class="val purple">11 States</div><div class="label">U.S. Expansion</div></div>
-    <div class="stat" style="text-align:center"><div class="val yellow">9 Countries</div><div class="label">LATAM Pipeline</div></div>
-  </div>
-  <p style="margin-top:48px;font-size:13px;color:var(--text3)">Prepared for Val Infante, CGO &bull; March 2026</p>
-  <p style="margin-top:4px;font-size:13px;color:var(--text3)">Next Review: <strong style="color:var(--naranja)">April 15, 2026 (Gate 1)</strong></p>
-  <p style="margin-top:32px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);opacity:.4">Confidential &bull; Internal Use Only</p>
-</div>
-
-</div><!-- end deck -->
-
-<!-- ===== NAVIGATION BAR ===== -->
-<nav class="nav-bar hidden" id="navBar">
-  <div class="nav-left">
-    <div class="nav-logo-small">
-      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 4C10.5 4 6 10 6 15C6 19 9 23.5 13 25L13 28C13 29 14 30 15 30L17 30C18 30 19 29 19 28L19 25C23 23.5 26 19 26 15C26 10 21.5 4 16 4Z" fill="url(#navGrad)" opacity=".9"/>
-        <defs><linearGradient id="navGrad" x1="6" y1="4" x2="26" y2="30"><stop stop-color="#FF6400"/><stop offset="1" stop-color="#FFA000"/></linearGradient></defs>
-      </svg>
-      <span>payphone</span>
-    </div>
-  </div>
-  <div class="nav-center">
-    <button class="nav-btn" onclick="prevSlide()" title="Previous (Left Arrow)">&#8592;</button>
-    <div class="nav-counter" id="navCounter">1 / 16</div>
-    <button class="nav-btn" onclick="nextSlide()" title="Next (Right Arrow)">&#8594;</button>
-  </div>
-  <div class="nav-right">
-    <div class="nav-dots" id="navDots"></div>
-    <div class="nav-conf">Confidential</div>
-  </div>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-label" id="navLabel">01 / 14</div>
 </nav>
 
+<!-- ===== SCROLL COMPANION WHALE ===== -->
+<img class="scroll-companion" id="scrollCompanion" src="whale-logo.png" alt="" style="display:none;" />
+
+<!-- ===== MAIN CONTENT ===== -->
+<div id="main-content">
+
+<!-- S0: COVER -->
+<section id="s0" data-label="Cover" style="justify-content: flex-end; padding-bottom: 12vh;">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,var(--orange-glow),transparent 70%);top:-10%;right:-10%;"></div>
+  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(90,0,180,0.2),transparent 70%);bottom:10%;left:-5%;"></div>
+  <div class="reveal" style="margin-bottom: 12px;">
+    <span style="display:inline-block;padding:6px 16px;border:1px solid rgba(255,255,255,0.1);border-radius:20px;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.35);text-transform:uppercase;">Confidential &bull; March 2026</span>
+  </div>
+  <img class="reveal reveal-delay-1" src="whale-logo.png" alt="Payphone" style="width: clamp(150px, 25vw, 300px); height: auto; margin-bottom: 24px;" />
+  <div class="mega reveal reveal-delay-2">payphone</div>
+  <div class="subtitle reveal reveal-delay-3" style="font-size: clamp(18px, 2.2vw, 24px); margin-top: 20px;">
+    U.S. Execution Roadmap<br><span style="font-size:0.75em;opacity:0.6;">Card issuance, merchant acquiring, LATAM expansion, sports betting</span>
+  </div>
+  <div class="reveal reveal-delay-4" style="margin-top: 40px; display: flex; gap: 40px; font-size: 13px; color: rgba(255,255,255,0.25); flex-wrap: wrap;">
+    <span>Val Infante, CGO</span>
+    <span>March 2026</span>
+    <span>Payphone Global</span>
+  </div>
+  <div class="scroll-hint reveal reveal-delay-5">
+    <span>Scroll to explore</span>
+    <img src="whale-logo.png" alt="" style="width:28px;height:auto;opacity:0.5;" />
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S1: EXECUTIVE DASHBOARD -->
+<section id="s1" data-label="Dashboard">
+  <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,100,0,0.15),transparent 70%);top:0;right:0;"></div>
+  <div class="section-num reveal">01 &mdash; Executive Dashboard</div>
+  <div class="mega reveal reveal-delay-1">$900B+</div>
+  <div class="title reveal reveal-delay-2" style="margin-top: 12px;">Hispanic buying power opportunity. 11 states, 9 LATAM countries, and the largest sports betting market in history.</div>
+  <div class="card-grid reveal reveal-delay-3">
+    <div class="glass">
+      <div class="card-num">Q3 2026</div>
+      <div class="card-label">Phase 1 Target Launch — consumer card issuance in the U.S.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num">Pre-Approved</div>
+      <div class="card-label">Stripe Tap to Pay waiver status — ready to activate</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num">11 States</div>
+      <div class="card-label">Geographic target covering 70%+ of U.S. Hispanic population</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num">10K</div>
+      <div class="card-label">Merchant goal for Payphone Business in 18 months</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num">9 Countries</div>
+      <div class="card-label">LATAM expansion pipeline with card issuance and betting</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="two-col reveal reveal-delay-4" style="margin-top: 48px;">
+    <div class="glass">
+      <div style="font-size: 12px; font-weight: 600; color: var(--orange); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">U.S. Launch Status</div>
+      <table class="fin-table" style="margin-top: 0;">
+        <tr><td style="opacity: 0.5;">Stripe EDD</td><td class="hl">In Progress (3-6 months)</td></tr>
+        <tr><td style="opacity: 0.5;">Tap to Pay Waiver</td><td class="pos">Pre-approved</td></tr>
+        <tr><td style="opacity: 0.5;">Episode Six</td><td class="hl">Awaiting Sponsor Bank</td></tr>
+        <tr><td style="opacity: 0.5;">Highnote</td><td class="hl">Awaiting Confirmation</td></tr>
+        <tr><td style="opacity: 0.5;">Payphone Business</td><td class="pos">Product Designed</td></tr>
+      </table>
+    </div>
+    <div class="glass">
+      <div style="font-size: 12px; font-weight: 600; color: var(--purple); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">LATAM Expansion Status</div>
+      <table class="fin-table" style="margin-top: 0;">
+        <tr><td style="opacity: 0.5;">Panama (PayCaddy)</td><td class="pos">Active — Q2 2026</td></tr>
+        <tr><td style="opacity: 0.5;">Mexico (Card)</td><td class="hl">In Progress — Q3 2026</td></tr>
+        <tr><td style="opacity: 0.5;">Colombia (Card + Betting)</td><td class="hl">In Progress — Q3 2026</td></tr>
+        <tr><td style="opacity: 0.5;">Worldpay (Colombia)</td><td class="pos">Live since May 2025</td></tr>
+        <tr><td style="opacity: 0.5;">Worldpay (Mexico)</td><td class="hl">Pending — Q4 2026</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S2: DECISION GATES -->
+<section id="s2" data-label="Decision Gates">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.12),transparent 70%);top:0;right:0;"></div>
+  <div class="section-num reveal">02 &mdash; Decision Gate Framework</div>
+  <div class="title reveal reveal-delay-1">Three hard deadlines that prevent indefinite drift. Miss a gate, force a decision.</div>
+  <div class="subtitle reveal reveal-delay-2">Stripe EDD timeline is "3-6 months" with no hard deadline. Episode Six and Highnote are in limbo. Without decision gates, we drift into Q4 with no card program live.</div>
+
+  <div class="card-grid reveal reveal-delay-3" style="grid-template-columns: repeat(3,1fr);">
+    <div class="glass" style="border-top: 3px solid var(--orange);">
+      <div class="card-num">01</div>
+      <div style="font-size:13px;font-weight:600;color:var(--orange);margin-bottom:12px;">April 15, 2026</div>
+      <div class="card-label"><strong style="color:#fff;">Shortlist Lock</strong><br>Stripe EDD questionnaire complete. Episode Six sponsor bank: yes or no. Highnote partner intro: confirmed. If no response &rarr; drop and go all-in Stripe.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top: 3px solid var(--purple);">
+      <div class="card-num" style="background:linear-gradient(135deg,var(--purple),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">02</div>
+      <div style="font-size:13px;font-weight:600;color:var(--purple);margin-bottom:12px;">June 30, 2026</div>
+      <div class="card-label"><strong style="color:#fff;">Provider Commitment</strong><br>Stripe EDD cleared or clear Q3 timeline. Integration docs in hand. Tap to Pay waiver secured. If RED on 2+ signals &rarr; pivot to Highnote.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top: 3px solid var(--amber);">
+      <div class="card-num" style="background:linear-gradient(135deg,var(--amber),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">03</div>
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px;">September 15, 2026</div>
+      <div class="card-label"><strong style="color:#fff;">Launch Go/No-Go</strong><br>Card program live in sandbox. KYC/CIP tested with 100+ users. Spanish support operational. First 500 beta users identified.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="glass reveal reveal-delay-4" style="margin-top:32px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Provider Comparison</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th></th><th>Stripe</th><th>Episode Six</th><th>Highnote</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Card Issuance</td><td class="pos">Yes</td><td class="pos">Yes</td><td class="pos">Yes</td></tr>
+        <tr><td style="font-weight:600;">Merchant Acquiring</td><td class="pos">Yes</td><td class="neg">No</td><td class="pos">Yes</td></tr>
+        <tr><td style="font-weight:600;">No SSN/ITIN</td><td class="pos">Yes (Tap to Pay)</td><td class="hl">TBD</td><td class="hl">TBD</td></tr>
+        <tr><td style="font-weight:600;">Timeline to Live</td><td>3-6 months</td><td>6-8 wk eval + build</td><td>Unknown</td></tr>
+        <tr><td style="font-weight:600;">Scale</td><td>Public ($70B+)</td><td>Private (FIS)</td><td>Private ($750M+)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="moat-card reveal reveal-delay-5" style="margin-top:24px;">
+    <div class="moat-num" style="color:var(--orange);">RECOMMENDATION</div>
+    <div class="moat-title">Promote Highnote to #2 over Episode Six</div>
+    <div class="moat-desc">Highnote offers issuance + acquiring on a single API ($750M+ valuation, Forbes Fintech 50 two consecutive years). Episode Six is issuance-only &mdash; more vendors, more integration, more time.</div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S3: PHASE 1 — CONSUMER CARDS -->
+<section id="s3" data-label="Consumer Cards">
+  <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,160,0,0.1),transparent 70%);bottom:0;left:0;"></div>
+  <div class="section-num reveal">03 &mdash; Phase 1: Consumer Card Issuance</div>
+  <div class="title reveal reveal-delay-1">Payphone-branded debit card for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee. Phase 1 is consumer onboarding + card issuance only.</div>
+
+  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns: repeat(5,1fr);">
+    <div class="glass"><div class="card-num" style="font-size:32px;">~50M</div><div class="card-label">U.S. Immigrants</div><img class="whale-watermark" src="whale-logo.png" alt="" /></div>
+    <div class="glass"><div class="card-num" style="font-size:32px;background:linear-gradient(135deg,var(--green),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">80.3%</div><div class="card-label">Foreign-Born Unbanked</div><img class="whale-watermark" src="whale-logo.png" alt="" /></div>
+    <div class="glass"><div class="card-num" style="font-size:32px;">$900B+</div><div class="card-label">Annual Buying Power</div><img class="whale-watermark" src="whale-logo.png" alt="" /></div>
+    <div class="glass"><div class="card-num" style="font-size:32px;background:linear-gradient(135deg,var(--amber),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">21.7%</div><div class="card-label">Underbanked</div><img class="whale-watermark" src="whale-logo.png" alt="" /></div>
+    <div class="glass"><div class="card-num" style="font-size:32px;background:linear-gradient(135deg,var(--purple),#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">9.5%</div><div class="card-label">Fully Unbanked</div><img class="whale-watermark" src="whale-logo.png" alt="" /></div>
+  </div>
+
+  <div class="card-grid reveal reveal-delay-3">
+    <div class="glass">
+      <div class="card-num" style="font-size:28px;">1</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:8px;">Consumer Onboarding</div>
+      <div class="card-label">International gov ID (passport, Matricula, cedula). Proof of U.S. residence. Biometric verification. Spanish-first UI. Complete in &lt; 5 minutes.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num" style="font-size:28px;">2</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:8px;">Card Issuance</div>
+      <div class="card-label">Virtual card issued instantly. Physical card in 5-7 days. Payphone-branded (Naranja #FF6400). NFC-enabled contactless. FDIC-insured.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div class="card-num" style="font-size:28px;">3</div>
+      <div style="font-weight:700;font-size:16px;margin-bottom:8px;">Account Features</div>
+      <div class="card-label">Direct deposit (routing + account #). Cash load at retail (Walmart, CVS). Real-time push notifications. Card lock/unlock from app. In-app Spanish support.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="solution-wrap reveal reveal-delay-4" style="margin-top:32px;">
+    <div style="font-size:28px;font-weight:700;font-style:italic;position:relative;z-index:1;">&ldquo;Tu banco. Tu idioma. Sin Social Security.&rdquo;</div>
+    <div style="font-size:14px;opacity:0.5;margin-top:8px;position:relative;z-index:1;">Your bank. Your language. No Social Security.</div>
+    <div style="font-size:13px;opacity:0.4;margin-top:12px;position:relative;z-index:1;">&ldquo;Ya nos conoces en Ecuador/Colombia. Ahora estamos aqu&iacute;.&rdquo;</div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S4: PHASE 1 TARGETS -->
+<section id="s4" data-label="Targets">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:10%;left:-10%;"></div>
+  <div class="section-num reveal">04 &mdash; Phase 1 Targets &amp; Revenue</div>
+  <div class="title reveal reveal-delay-1">Success metrics and revenue model for the consumer card program.</div>
+
+  <div class="two-col reveal reveal-delay-2" style="margin-top:40px;">
+    <div class="glass">
+      <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Success Metrics</div>
+      <table class="fin-table" style="margin-top:0;">
+        <thead><tr><th>KPI</th><th>3 Months</th><th>6 Months</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:600;">Cards Issued</td><td class="hl">10,000</td><td class="hl">50,000</td></tr>
+          <tr><td style="font-weight:600;">Monthly Active Users</td><td>5,000</td><td>30,000</td></tr>
+          <tr><td style="font-weight:600;">Onboarding Completion</td><td>> 70%</td><td>> 80%</td></tr>
+          <tr><td style="font-weight:600;">Avg Monthly Spend</td><td>$500</td><td>$750</td></tr>
+          <tr><td style="font-weight:600;">Direct Deposit Adoption</td><td>20%</td><td>40%</td></tr>
+          <tr><td style="font-weight:600;">NPS</td><td>> 60</td><td>> 70</td></tr>
+          <tr><td style="font-weight:600;">CPA</td><td>< $25</td><td>< $20</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="glass" style="margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Revenue Model</div>
+        <table class="fin-table" style="margin-top:0;">
+          <thead><tr><th>Model</th><th>Used By</th><th>Pros</th></tr></thead>
+          <tbody>
+            <tr style="background:rgba(255,100,0,0.04);"><td style="font-weight:600;"><span class="hl">Zero-fee *</span></td><td>Comun, Fortu</td><td>Max adoption</td></tr>
+            <tr><td style="font-weight:600;">$5.99/mo</td><td>Majority</td><td>Predictable revenue</td></tr>
+            <tr><td style="font-weight:600;">$150/yr</td><td>Maza</td><td>One-time decision</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="moat-card" style="border-color:rgba(255,100,0,0.2);background:linear-gradient(135deg,rgba(255,100,0,0.08),rgba(255,160,0,0.04));">
+        <div class="moat-num" style="color:var(--orange);">RECOMMENDATION</div>
+        <div class="moat-title">Launch zero-fee</div>
+        <div class="moat-desc">Maximize adoption and compete directly with Comun. Monetize via interchange (1-2% of volume). Build premium features as paid upgrades in Phase 2+.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S5: PAYPHONE BUSINESS -->
+<section id="s5" data-label="Payphone Business">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.12),transparent 70%);top:0;right:0;"></div>
+  <div class="section-num reveal">05 &mdash; Phase 2: Payphone Business</div>
+  <div class="mega reveal reveal-delay-1">1.1M+</div>
+  <div class="title reveal reveal-delay-2" style="margin-top:12px;">Hispanic-owned SMBs in the U.S. &mdash; zero hardware, three payment methods, phone becomes a payment terminal.</div>
+
+  <div class="card-grid reveal reveal-delay-3">
+    <div class="glass" style="border-top: 3px solid var(--orange);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:8px;">QR Code Payments</div>
+      <div class="card-label"><strong style="color:#fff;">How:</strong> Merchant displays QR, customer scans with Payphone app<br><strong style="color:#fff;margin-top:8px;display:inline-block;">Best for:</strong> Restaurants, food trucks, bodegas<br><span style="opacity:0.3;font-size:11px;margin-top:4px;display:inline-block;">Stripe Payment Intents API</span></div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top: 3px solid var(--purple);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:8px;">Tap to Pay (NFC)</div>
+      <div class="card-label"><strong style="color:#fff;">How:</strong> Customer taps card/phone on merchant&rsquo;s phone &mdash; zero hardware<br><strong style="color:#fff;margin-top:8px;display:inline-block;">Best for:</strong> Home services, mobile vendors<br><span style="opacity:0.3;font-size:11px;margin-top:4px;display:inline-block;">Stripe Terminal SDK</span></div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top: 3px solid var(--amber);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:8px;">Link to Pay</div>
+      <div class="card-label"><strong style="color:#fff;">How:</strong> Merchant sends payment link via WhatsApp, SMS, or email<br><strong style="color:#fff;margin-top:8px;display:inline-block;">Best for:</strong> Professional services, invoicing<br><span style="opacity:0.3;font-size:11px;margin-top:4px;display:inline-block;">Stripe Payment Links API</span></div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="stress-box reveal reveal-delay-4">
+    <div class="s-title" style="color:var(--orange);">Why Payphone Business Wins</div>
+    <div class="s-body"><strong style="color:rgba(255,255,255,0.8);">Spanish-first UX</strong> &mdash; no competitor offers this. <strong style="color:rgba(255,255,255,0.8);">Instant payout</strong> to Payphone wallet (not next-day). <strong style="color:rgba(255,255,255,0.8);">Zero hardware</strong> (Square: $49-$299). <strong style="color:rgba(255,255,255,0.8);">iOS + Android NFC</strong> (Cash App: iOS only). <strong style="color:rgba(255,255,255,0.8);">Remittance integration</strong> &mdash; earn and send home in one app.</div>
+  </div>
+
+  <div class="econ-flow reveal reveal-delay-5">
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$27</div>
+      <div class="e-label">Processing Margin</div>
+    </div>
+    <div class="econ-arrow">&plus;</div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">$9</div>
+      <div class="e-label">Instant Payouts</div>
+    </div>
+    <div class="econ-arrow">&plus;</div>
+    <div class="econ-step" style="background:rgba(90,0,180,0.08);border:1px solid rgba(90,0,180,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--purple);">$14</div>
+      <div class="e-label">Subscriptions</div>
+    </div>
+    <div class="econ-arrow">=</div>
+    <div class="econ-step" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--green);">$50</div>
+      <div class="e-label">Per Merchant/Mo</div>
+    </div>
+    <div class="econ-arrow">&times;</div>
+    <div class="econ-step" style="background:linear-gradient(135deg,rgba(255,100,0,0.12),rgba(90,0,180,0.08));border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$6M</div>
+      <div class="e-label">ARR @ 10K</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S6: GEOGRAPHIC STRATEGY -->
+<section id="s6" data-label="Geography">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,160,0,0.08),transparent 70%);bottom:0;right:0;"></div>
+  <div class="section-num reveal">06 &mdash; Geographic Execution</div>
+  <div class="title reveal reveal-delay-1">11 priority states covering 70%+ of the U.S. Hispanic population. Follow the migration flows.</div>
+
+  <div class="glass reveal reveal-delay-2" style="margin-top:32px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:700;color:var(--green);letter-spacing:2px;margin-bottom:12px;">TIER 1 &mdash; LAUNCH FIRST (Q2 2026)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Corridor</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Florida</td><td class="hl">6M</td><td>27%</td><td>180K+</td><td>Miami-Dade, Orlando, Tampa</td><td>Ecuador, Venezuela, Colombia</td></tr>
+        <tr><td style="font-weight:600;">Texas</td><td class="hl">12M</td><td>40%</td><td>360K+</td><td>Houston, Dallas, San Antonio</td><td>Mexico (#1 corridor)</td></tr>
+        <tr><td style="font-weight:600;">California</td><td class="hl">15.5M</td><td>40%</td><td>465K+</td><td>LA County, SF Bay, San Diego</td><td>Mexico, Guatemala, El Salvador</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="glass reveal reveal-delay-3" style="margin-top:20px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:700;color:var(--amber);letter-spacing:2px;margin-bottom:12px;">TIER 2 &mdash; EXPAND (Q3-Q4 2026)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <tbody>
+        <tr><td style="font-weight:600;">New York</td><td>4M (20%)</td><td>120K+ SMBs</td><td>Ecuadorian diaspora &mdash; Payphone brand leverage</td></tr>
+        <tr><td style="font-weight:600;">Georgia</td><td>1.2M (11%)</td><td>36K+ SMBs</td><td>Fast-growing Sun Belt destination</td></tr>
+        <tr><td style="font-weight:600;">North Carolina</td><td>1.1M (10%)</td><td>33K+ SMBs</td><td>+47K international migration 2024-25</td></tr>
+        <tr><td style="font-weight:600;">Arizona</td><td>2.3M (31%)</td><td>69K+ SMBs</td><td>Mexico border corridor</td></tr>
+        <tr><td style="font-weight:600;">New Jersey</td><td>2M (23%)</td><td>60K+ SMBs</td><td>Colombia, Ecuador communities</td></tr>
+        <tr><td style="font-weight:600;">Illinois</td><td>2.5M (18%)</td><td>75K+ SMBs</td><td>Largest Mexican community in Midwest</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-grid reveal reveal-delay-4" style="margin-top:24px;">
+    <div class="glass">
+      <div style="font-weight:700;margin-bottom:8px;">Domestic Flows</div>
+      <div class="card-label">CA/NY/NJ &rarr; FL/TX/NC/SC/AZ<br>Sun Belt migration accelerating. FL and TX gaining 100K+ Hispanics/year net.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div style="font-weight:700;margin-bottom:8px;">Fastest-Growing Origins</div>
+      <div class="card-label">Venezuelan <span class="pos">+100%</span><br>Ecuadorian <span class="pos">+48%</span><br>Colombian <span class="pos">+43%</span></div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass">
+      <div style="font-weight:700;margin-bottom:8px;">Stripe Advantage</div>
+      <div class="card-label">Single integration covers all 50 states. Automatic state tax + compliance handling. No per-state licensing needed.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S7: LATAM EXPANSION -->
+<section id="s7" data-label="LATAM">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);top:10%;right:10%;"></div>
+  <div class="section-num reveal">07 &mdash; LATAM Market Expansion</div>
+  <div class="title reveal reveal-delay-1">Card issuance via PayCaddy + local banks + Mastercard across 9 markets in 3 tiers.</div>
+
+  <div class="two-col reveal reveal-delay-2" style="margin-top:40px;">
+    <div class="glass">
+      <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Tier Prioritization</div>
+      <table class="fin-table" style="margin-top:0;">
+        <thead><tr><th></th><th>Country</th><th>Timeline</th><th>Risk</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:var(--green);font-weight:700;font-size:10px;">T1</span></td><td style="font-weight:600;">Panama</td><td>Q2 2026</td><td class="pos">Low</td></tr>
+          <tr><td><span style="color:var(--green);font-weight:700;font-size:10px;">T1</span></td><td style="font-weight:600;">Mexico</td><td>Q3 2026</td><td class="hl">Low-Mod</td></tr>
+          <tr><td><span style="color:var(--green);font-weight:700;font-size:10px;">T1</span></td><td style="font-weight:600;">Colombia</td><td>Q3 2026</td><td class="hl">Moderate</td></tr>
+          <tr><td><span style="color:var(--amber);font-weight:700;font-size:10px;">T2</span></td><td style="font-weight:600;">Peru</td><td>Q1 2027</td><td class="hl">Moderate</td></tr>
+          <tr><td><span style="color:var(--amber);font-weight:700;font-size:10px;">T2</span></td><td style="font-weight:600;">Chile</td><td>Q1 2027</td><td class="hl">Moderate</td></tr>
+          <tr><td><span style="color:var(--amber);font-weight:700;font-size:10px;">T2</span></td><td style="font-weight:600;">Ecuador</td><td>Q1 2027</td><td class="neg">Mod-High</td></tr>
+          <tr><td><span style="color:var(--purple);font-weight:700;font-size:10px;">T3</span></td><td style="font-weight:600;">DR / Costa Rica / Guatemala</td><td>2027+</td><td class="neg">High</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="moat-card"><div class="moat-num">Q2 2026</div><div class="moat-title">Panama</div><div class="moat-desc">Card issuance live via PayCaddy. USD economy, low risk.</div></div>
+      <div class="moat-card"><div class="moat-num">Q3 2026</div><div class="moat-title">Mexico + Colombia</div><div class="moat-desc">Mexico card issuance. Colombia card issuance + Worldpay betting live.</div></div>
+      <div class="moat-card"><div class="moat-num">Q4 2026</div><div class="moat-title">Mexico Betting</div><div class="moat-desc">Worldpay activation timed for 2026 World Cup buildup.</div></div>
+      <div class="moat-card"><div class="moat-num">Q1 2027</div><div class="moat-title">Peru + Chile + Ecuador</div><div class="moat-desc">Card issuance expansion. Ecuador pending regulatory clarity.</div></div>
+      <div class="moat-card"><div class="moat-num">H2 2027+</div><div class="moat-title">DR, Costa Rica, Guatemala</div><div class="moat-desc">If regulatory frameworks mature. Guatemala 2028+.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S8: SPORTS BETTING -->
+<section id="s8" data-label="Sports Betting">
+  <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,100,0,0.12),transparent 70%);top:-20%;left:20%;"></div>
+  <div class="section-num reveal">08 &mdash; Sports Betting Processing</div>
+  <div class="mega reveal reveal-delay-1">$54B</div>
+  <div class="title reveal reveal-delay-2" style="margin-top:12px;">projected LATAM sports betting market. Worldpay-powered processing that subsidizes card program growth.</div>
+
+  <div class="solution-wrap reveal reveal-delay-3" style="margin-top:32px;">
+    <div style="font-size:16px;line-height:1.7;color:rgba(255,255,255,0.7);position:relative;z-index:1;">
+      <strong style="color:rgba(255,255,255,0.9);">2026 World Cup Impact:</strong> 5M tourists expected across LATAM. Mexico hosts key matches &mdash; contactless payments and mobile wallets will surge. <strong style="color:rgba(255,255,255,0.9);">This is the single biggest near-term catalyst for Worldpay activation in Mexico.</strong>
+    </div>
+  </div>
+
+  <div class="glass reveal reveal-delay-4" style="margin-top:32px;max-width:1000px;">
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>#</th><th>Country</th><th>Status</th><th>Key Facts</th><th>Revenue</th></tr></thead>
+      <tbody>
+        <tr><td class="hl" style="font-weight:700;">#1</td><td style="font-weight:600;">Colombia</td><td>Mature, since 2016</td><td style="opacity:0.5;">Coljuegos license. New 16% tax. COP-only. Worldpay live.</td><td class="pos">High</td></tr>
+        <tr><td class="hl" style="font-weight:700;">#2</td><td style="font-weight:600;">Mexico</td><td>Regulated, reform</td><td style="opacity:0.5;">DGJS permit. MXN-only. SEGOB reform 2026. World Cup catalyst.</td><td class="pos">Very High</td></tr>
+        <tr><td class="hl" style="font-weight:700;">#3</td><td style="font-weight:600;">Panama</td><td>Upgrade recommended</td><td style="opacity:0.5;">JCJ license: $40K + $20K/yr. USD. iGaming +53% in 2025.</td><td class="hl">Mod-High</td></tr>
+        <tr><td class="hl" style="font-weight:700;">#4</td><td style="font-weight:600;">Dominican Rep.</td><td>Newly regulated</td><td style="opacity:0.5;">Resolution 136-2024. $346K licensing fee.</td><td class="hl">Moderate</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="stress-box reveal reveal-delay-5">
+    <div class="s-title">Revenue Diversification</div>
+    <div class="s-body">Sports betting processing via Worldpay is <strong style="color:rgba(255,255,255,0.8);">additive</strong> &mdash; a completely separate business line that subsidizes consumer growth. At scale across 4 LATAM markets: <strong style="color:rgba(255,255,255,0.8);">$5-10M+ ARR by 2027.</strong></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S9: COMPETITIVE INTELLIGENCE -->
+<section id="s9" data-label="Competition">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(239,68,68,0.08),transparent 70%);top:10%;right:10%;"></div>
+  <div class="section-num reveal">09 &mdash; Competitive Intelligence</div>
+  <div class="title reveal reveal-delay-1">Who we&rsquo;re up against and why we win. Everyone else stops short.</div>
+
+  <div class="card-grid reveal reveal-delay-2">
+    <div class="glass" style="border-top:3px solid var(--red);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Comun</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--red);margin-bottom:10px;">THREAT: HIGH</div>
+      <div class="card-label">$26M funded. 50x revenue growth. Zero-fee, Spanish-first, 100+ ID types. Same exact target market.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Beat on cross-border + cobranza. No merchant play.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid #eab308;">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Majority</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(234,179,8,0.12);color:#eab308;margin-bottom:10px;">THREAT: MOD-HIGH</div>
+      <div class="card-label">$83.5M+ funded. $5.99/mo subscription. Physical meet-up centers. Broad immigrant focus.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Zero-fee undercuts. Broad = less Latino focus.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Maza</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(255,160,0,0.12);color:var(--amber);margin-bottom:10px;">THREAT: MODERATE</div>
+      <div class="card-label">a16z backed. $8M. ITIN filing. $150/yr limits adoption.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Add ITIN in Phase 3. Pricing limits scale.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div style="margin-top:32px;">
+    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 01</div><div class="moat-title">Cross-Border Network</div><div class="moat-desc">Existing LATAM user base. Payphone users in Ecuador, Colombia who have family in the U.S. = built-in distribution channel. No U.S. competitor has this.</div></div>
+    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 02</div><div class="moat-title">Cobranza / Tap to Pay</div><div class="moat-desc">Zero competitors offer a Spanish-first SoftPOS for Latino micro-merchants in the U.S. Visa Tap to Phone grew 200% YoY. Genuine blue ocean.</div></div>
+    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 03</div><div class="moat-title">Sports Betting Revenue</div><div class="moat-desc">No U.S. immigrant neobank has a betting processing vertical. Completely separate revenue line that subsidizes card program growth.</div></div>
+    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 04</div><div class="moat-title">Ecuador Regulatory Moat</div><div class="moat-desc">First fintech regulation enacted Sept 2024. Payphone&rsquo;s home-market position = first-mover advantage while new entrants navigate nascent rules.</div></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S10: FINANCIAL PROJECTIONS -->
+<section id="s10" data-label="Financials">
+  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(34,197,94,0.08),transparent 70%);bottom:10%;right:10%;"></div>
+  <div class="section-num reveal">10 &mdash; Financial Projections</div>
+  <div class="title reveal reveal-delay-1">$22M+ combined ARR by Year 2 &mdash; consumer interchange + merchant acquiring. Excluding betting.</div>
+
+  <div class="glass reveal reveal-delay-2" style="margin-top:32px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Consumer Card Revenue (Phase 1)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>Metric</th><th>Month 3</th><th>Month 6</th><th>Month 12</th><th>Month 18</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Cards Issued</td><td>10K</td><td>50K</td><td>150K</td><td class="hl">300K</td></tr>
+        <tr><td style="font-weight:600;">MAU</td><td>5K</td><td>30K</td><td>100K</td><td class="hl">200K</td></tr>
+        <tr><td style="font-weight:600;">Avg Spend/Mo</td><td>$500</td><td>$750</td><td>$900</td><td>$1,000</td></tr>
+        <tr><td style="font-weight:600;">Monthly GMV</td><td>$2.5M</td><td>$22.5M</td><td>$90M</td><td>$200M</td></tr>
+        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$450K</td><td>$4.05M</td><td class="pos">$16.2M</td><td class="pos">$36M</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="glass reveal reveal-delay-3" style="margin-top:20px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Merchant Acquiring Revenue (Phase 2)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>Metric</th><th>Phase 1 (Q2'26)</th><th>Phase 2 (Q4'26)</th><th>Phase 3 (Q2'27)</th><th>Phase 4 (Q4'27)</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Active Merchants</td><td>50</td><td>500</td><td>2,500</td><td class="hl">10,000</td></tr>
+        <tr><td style="font-weight:600;">Rev/Merchant/Mo</td><td>$50</td><td>$50</td><td>$50</td><td>$50</td></tr>
+        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$30K</td><td>$300K</td><td class="pos">$1.5M</td><td class="pos">$6M</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="econ-flow reveal reveal-delay-4" style="justify-content:center;">
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$16.2M</div>
+      <div class="e-label">Consumer ARR (Mo 12)</div>
+    </div>
+    <div class="econ-arrow">&plus;</div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">$6M</div>
+      <div class="e-label">Merchant ARR (Year 2)</div>
+    </div>
+    <div class="econ-arrow">=</div>
+    <div class="econ-step" style="background:linear-gradient(135deg,rgba(255,100,0,0.15),rgba(90,0,180,0.08));border:1px solid rgba(255,100,0,0.3);border-radius:14px;">
+      <div class="e-val" style="color:var(--green);">$22M+</div>
+      <div class="e-label">Combined ARR</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S11: 90-DAY PLAN -->
+<section id="s11" data-label="Execution">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:0;left:0;"></div>
+  <div class="section-num reveal">11 &mdash; 90-Day Action Plan</div>
+  <div class="title reveal reveal-delay-1">March 20 &mdash; June 18, 2026. Every action, every owner, every deadline.</div>
+
+  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns:repeat(4,1fr);margin-top:40px;">
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">March</div>
+      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">Weeks 1-2 remaining</div>
+      <div class="card-label"><strong style="color:var(--orange);">Pedro:</strong> Complete Stripe EDD<br><strong style="color:var(--orange);">Pedro:</strong> Follow-up E6 + Highnote<br><strong style="color:var(--orange);">Val:</strong> Begin LATAM BD search<br><strong style="color:var(--orange);">Both:</strong> Confirm PayCaddy Panama<br><strong style="color:var(--orange);">Val:</strong> Align CTO on timeline</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">April</div>
+      <div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:12px;">GATE 1: April 15</div>
+      <div class="card-label"><strong style="color:var(--orange);">GATE 1:</strong> Lock provider shortlist<br><strong style="color:var(--orange);">LATAM:</strong> Onboard new BD lead<br><strong style="color:var(--orange);">Product:</strong> Phase 1 UX design<br><strong style="color:var(--orange);">Product:</strong> Evaluate KYC vendors<br><strong style="color:var(--orange);">Val:</strong> Finalize revenue model</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--purple);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">May</div>
+      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">Build + Expand</div>
+      <div class="card-label"><strong style="color:var(--orange);">Product:</strong> MVP in staging<br><strong style="color:var(--orange);">Pedro:</strong> Stripe docs / Highnote<br><strong style="color:var(--orange);">LATAM:</strong> Colombia + Worldpay<br><strong style="color:var(--orange);">Marketing:</strong> Miami pre-launch<br><strong style="color:var(--orange);">Val:</strong> Panama betting decision</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">June</div>
+      <div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:12px;">GATE 2: June 30</div>
+      <div class="card-label"><strong style="color:var(--orange);">GATE 2:</strong> Provider commitment<br><strong style="color:var(--orange);">Product:</strong> MVP feature-complete<br><strong style="color:var(--orange);">Compliance:</strong> Full KYC review<br><strong style="color:var(--orange);">Marketing:</strong> Waiting list launch<br><strong style="color:var(--orange);">LATAM:</strong> Panama live / Mexico terms</div>
+    </div>
+  </div>
+
+  <div class="moat-card reveal reveal-delay-3" style="margin-top:24px;border-color:rgba(239,68,68,0.2);background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(255,100,0,0.04));">
+    <div class="moat-num" style="color:var(--red);">CRITICAL GAP</div>
+    <div class="moat-title">LATAM items need a dedicated partnerships lead</div>
+    <div class="moat-desc">Pedro cannot run U.S. provider evaluation AND LATAM multi-country rollout simultaneously. <strong style="color:rgba(255,255,255,0.8);">Hire a LATAM BD person by end of April.</strong></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S12: OPEN DECISIONS -->
+<section id="s12" data-label="Decisions">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);bottom:0;left:10%;"></div>
+  <div class="section-num reveal">12 &mdash; Open Decisions</div>
+  <div class="title reveal reveal-delay-1">Seven calls that need to be made to keep the roadmap on track.</div>
+
+  <div class="glass reveal reveal-delay-2" style="margin-top:40px;max-width:1000px;">
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
+      <tbody>
+        <tr><td class="hl" style="font-weight:700;">1</td><td style="font-weight:600;">Highnote to #2?</td><td style="opacity:0.5;">Highnote (issuance+acquiring) vs. E6 (issuance only)</td><td class="pos"><strong>Highnote</strong></td><td>April 15</td></tr>
+        <tr><td class="hl" style="font-weight:700;">2</td><td style="font-weight:600;">Revenue model</td><td style="opacity:0.5;">Zero-fee vs. Subscription vs. Annual</td><td class="pos"><strong>Zero-fee</strong></td><td>Before launch</td></tr>
+        <tr><td class="hl" style="font-weight:700;">3</td><td style="font-weight:600;">Card network</td><td style="opacity:0.5;">Visa vs. Mastercard</td><td style="opacity:0.5;">Depends on provider</td><td>At commitment</td></tr>
+        <tr><td class="hl" style="font-weight:700;">4</td><td style="font-weight:600;">LATAM BD hire</td><td style="opacity:0.5;">Internal vs. External vs. Contractor</td><td class="pos"><strong>External hire</strong></td><td>End of April</td></tr>
+        <tr><td class="hl" style="font-weight:700;">5</td><td style="font-weight:600;">Ecuador priority</td><td style="opacity:0.5;">Tier 1 (home market) vs. Tier 2 (reg risk)</td><td class="pos"><strong>Tier 2</strong></td><td>Now</td></tr>
+        <tr><td class="hl" style="font-weight:700;">6</td><td style="font-weight:600;">Panama betting</td><td style="opacity:0.5;">Keep exploratory vs. Activate</td><td class="pos"><strong>Activate</strong></td><td>Now</td></tr>
+        <tr><td class="hl" style="font-weight:700;">7</td><td style="font-weight:600;">Phase 1 launch city</td><td style="opacity:0.5;">Miami first vs. Multi-city</td><td class="pos"><strong>Miami first</strong></td><td>June</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S13: CLOSE -->
+<section id="s13" data-label="Close" style="min-height:60vh;text-align:center;align-items:center;">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,var(--orange-glow),transparent 70%);top:0;left:30%;"></div>
+  <img class="reveal" src="whale-logo.png" alt="Payphone" style="width:80px;height:auto;margin-bottom:16px;" />
+  <div class="mega reveal reveal-delay-1" style="font-size:clamp(40px,6vw,64px);">payphone</div>
+  <div class="reveal reveal-delay-2" style="font-size:16px;opacity:0.4;margin-top:12px;">Existe un mundo mas simple.</div>
+  <div class="econ-flow reveal reveal-delay-3" style="justify-content:center;margin-top:40px;">
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$22M+</div>
+      <div class="e-label">Combined ARR Target</div>
+    </div>
+    <div class="econ-step" style="background:rgba(90,0,180,0.08);border:1px solid rgba(90,0,180,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--purple);">11 States</div>
+      <div class="e-label">U.S. Expansion</div>
+    </div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">9 Countries</div>
+      <div class="e-label">LATAM Pipeline</div>
+    </div>
+  </div>
+  <div class="reveal reveal-delay-4" style="font-size:13px;opacity:0.2;margin-top:40px;">
+    Confidential &bull; Payphone Global &bull; March 2026<br>
+    Prepared for Val Infante, CGO &bull; Next Review: April 15, 2026 (Gate 1)
+  </div>
+</section>
+
+</div><!-- /main-content -->
+
 <script>
-// ===== PASSWORD =====
-function checkPw() {
-  const input = document.getElementById('pwInput');
-  const err = document.getElementById('pwErr');
-  if (input.value === 'unicron2025') {
-    document.getElementById('pwScreen').classList.add('hidden');
-    document.getElementById('deck').classList.add('unlocked');
-    document.getElementById('navBar').classList.remove('hidden');
-    initDeck();
+const VALID_PASS = 'unicron2025';
+const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+const gate = document.getElementById('password-gate');
+const passInput = document.getElementById('passwordInput');
+const passBtn = document.getElementById('passwordBtn');
+const gateError = document.getElementById('gateError');
+const mainContent = document.getElementById('main-content');
+const mainNav = document.getElementById('mainNav');
+const gateWhale = document.getElementById('gateWhale');
+const splashParticles = document.getElementById('splashParticles');
+
+function createSplash() {
+  const rect = gateWhale.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  splashParticles.style.left = cx + 'px';
+  splashParticles.style.top = cy + 'px';
+  const colors = ['#FF6400', '#FFA000', '#5A00B4', '#fff'];
+  for (let i = 0; i < 20; i++) {
+    const drop = document.createElement('div');
+    drop.className = 'splash-drop';
+    const angle = (Math.PI * 2 * i) / 20 + (Math.random() - 0.5) * 0.5;
+    const dist = 60 + Math.random() * 120;
+    drop.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    drop.style.setProperty('--dy', Math.sin(angle) * dist - 40 + 'px');
+    drop.style.background = colors[Math.floor(Math.random() * colors.length)];
+    drop.style.width = (3 + Math.random() * 5) + 'px';
+    drop.style.height = drop.style.width;
+    splashParticles.appendChild(drop);
+  }
+}
+
+function unlock() {
+  if (passInput.value === VALID_PASS) {
+    gateWhale.classList.add('breach');
+    createSplash();
+    setTimeout(() => {
+      gate.classList.add('hidden');
+      mainContent.style.display = 'block';
+      mainNav.style.display = 'flex';
+      document.getElementById('scrollProgressTrack').style.display = 'block';
+      document.getElementById('scrollCompanion').style.display = 'block';
+      requestAnimationFrame(() => {
+        mainContent.classList.add('visible');
+        initAll();
+      });
+    }, 900);
+    setTimeout(() => { gate.style.display = 'none'; }, 2000);
   } else {
-    input.classList.add('error');
-    err.classList.add('show');
-    setTimeout(() => input.classList.remove('error'), 500);
+    gateError.classList.add('show');
+    passInput.style.borderColor = 'var(--red)';
+    passInput.style.boxShadow = '0 0 20px rgba(239,68,68,0.2)';
+    setTimeout(() => {
+      gateError.classList.remove('show');
+      passInput.style.borderColor = '';
+      passInput.style.boxShadow = '';
+    }, 2000);
   }
 }
 
-// ===== DECK ENGINE =====
-let current = 0;
-const slides = [];
-let totalSlides = 0;
+passBtn.addEventListener('click', unlock);
+passInput.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+passInput.focus();
 
-function initDeck() {
-  document.querySelectorAll('.slide').forEach(s => slides.push(s));
-  totalSlides = slides.length;
+function initAll() {
+  initSwimmingWhales();
+  initNav();
+  initReveal();
+  initScrollProgress();
+  initScrollCompanion();
+  initDividerObservers();
+  if (!isTouch) {
+    document.body.classList.add('desktop-mode');
+    initWhaleCursor();
+    initWhaleTrail();
+    initCardTilt();
+  }
+}
 
-  // Build dots
-  const dotsEl = document.getElementById('navDots');
-  for (let i = 0; i < totalSlides; i++) {
+function initWhaleCursor() {
+  const cursor = document.getElementById('whaleCursor');
+  let cx = 0, cy = 0, tx = 0, ty = 0;
+  document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+  function updateCursor() {
+    cx += (tx - cx) * 0.15;
+    cy += (ty - cy) * 0.15;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    requestAnimationFrame(updateCursor);
+  }
+  updateCursor();
+}
+
+function initWhaleTrail() {
+  let lastX = 0, lastY = 0;
+  const MAX_PARTICLES = 30;
+  let particles = [];
+  document.addEventListener('mousemove', e => {
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > 40) {
+      spawnParticle(e.clientX, e.clientY);
+      lastX = e.clientX;
+      lastY = e.clientY;
+    }
+  });
+  function spawnParticle(x, y) {
+    if (particles.length >= MAX_PARTICLES) {
+      const old = particles.shift();
+      if (old.parentNode) old.parentNode.removeChild(old);
+    }
+    const el = document.createElement('div');
+    el.className = 'whale-particle';
+    const size = 10 + Math.random() * 10;
+    const rotation = Math.random() * 360;
+    el.innerHTML = `<img src="whale-logo.png" width="${size}" style="transform:rotate(${rotation}deg)" alt="" />`;
+    el.style.left = (x - size / 2) + 'px';
+    el.style.top = (y - size / 2) + 'px';
+    el.style.opacity = '0.6';
+    document.body.appendChild(el);
+    particles.push(el);
+    let opacity = 0.6;
+    const startTime = performance.now();
+    function fade(now) {
+      const elapsed = now - startTime;
+      opacity = 0.6 * (1 - elapsed / 1000);
+      if (opacity <= 0) {
+        if (el.parentNode) el.parentNode.removeChild(el);
+        const idx = particles.indexOf(el);
+        if (idx > -1) particles.splice(idx, 1);
+        return;
+      }
+      el.style.opacity = opacity;
+      requestAnimationFrame(fade);
+    }
+    requestAnimationFrame(fade);
+  }
+}
+
+function initSwimmingWhales() {
+  const container = document.getElementById('swimmingWhales');
+  const whaleCount = 14;
+  const whales = [];
+  for (let i = 0; i < whaleCount; i++) {
+    const w = {};
+    const size = 20 + Math.random() * 60;
+    w.el = document.createElement('div');
+    w.el.className = 'swimming-whale';
+    const opacity = 0.03 + Math.random() * 0.08;
+    w.el.innerHTML = `<img src="whale-logo.png" width="${size}" alt="" />`;
+    w.el.style.opacity = opacity;
+    container.appendChild(w.el);
+    w.x = Math.random() * window.innerWidth;
+    w.y = Math.random() * window.innerHeight;
+    w.speedX = (0.2 + Math.random() * 0.5) * (Math.random() > 0.5 ? 1 : -1);
+    w.speedY = (0.1 + Math.random() * 0.3) * (Math.random() > 0.5 ? 1 : -1);
+    w.sineAmp = 15 + Math.random() * 30;
+    w.sineFreq = 0.005 + Math.random() * 0.01;
+    w.phase = Math.random() * Math.PI * 2;
+    w.size = size;
+    whales.push(w);
+  }
+  let time = 0;
+  function animate() {
+    time++;
+    const ww = window.innerWidth;
+    const wh = window.innerHeight;
+    whales.forEach(w => {
+      w.x += w.speedX;
+      w.y += w.speedY + Math.sin(time * w.sineFreq + w.phase) * 0.5;
+      if (w.x > ww + w.size) w.x = -w.size;
+      if (w.x < -w.size) w.x = ww + w.size;
+      if (w.y > wh + w.size) w.y = -w.size;
+      if (w.y < -w.size) w.y = wh + w.size;
+      const sineOffset = Math.sin(time * w.sineFreq + w.phase) * w.sineAmp;
+      w.el.style.transform = `translate(${w.x}px, ${w.y + sineOffset}px) scaleX(${w.speedX > 0 ? 1 : -1})`;
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+}
+
+function initCardTilt() {
+  const cards = document.querySelectorAll('.glass');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    });
+  });
+}
+
+function initScrollCompanion() {
+  const companion = document.getElementById('scrollCompanion');
+  let lastScroll = 0;
+  companion.addEventListener('click', () => {
+    const sections = document.querySelectorAll('section');
+    let nextSection = null;
+    for (const s of sections) {
+      const rect = s.getBoundingClientRect();
+      if (rect.top > 80) {
+        nextSection = s;
+        break;
+      }
+    }
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.scrollY;
+    const scrollSpeed = Math.abs(currentScroll - lastScroll);
+    lastScroll = currentScroll;
+    if (scrollSpeed > 30) {
+      companion.classList.add('fast');
+      setTimeout(() => companion.classList.remove('fast'), 300);
+    }
+  }, { passive: true });
+}
+
+function initDividerObservers() {
+  const dividers = document.querySelectorAll('.section-divider');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle('in-view', entry.isIntersecting);
+    });
+  }, { threshold: 0.5 });
+  dividers.forEach(d => observer.observe(d));
+}
+
+function initScrollProgress() {
+  const bar = document.getElementById('scrollProgressBar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    bar.style.width = progress + '%';
+  }, { passive: true });
+}
+
+function initNav() {
+  const sections = document.querySelectorAll('section');
+  const dotsContainer = document.getElementById('navDots');
+  const navLabel = document.getElementById('navLabel');
+  sections.forEach((s, i) => {
     const dot = document.createElement('div');
-    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
-    dot.onclick = () => goToSlide(i);
-    dotsEl.appendChild(dot);
+    dot.className = 'nav-dot';
+    dot.addEventListener('click', () => s.scrollIntoView({ behavior: 'smooth' }));
+    dotsContainer.appendChild(dot);
+  });
+  const dots = dotsContainer.querySelectorAll('.nav-dot');
+  function updateNav() {
+    let current = 0;
+    sections.forEach((s, i) => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.5) current = i;
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    const num = String(current + 1).padStart(2, '0');
+    const total = String(sections.length).padStart(2, '0');
+    navLabel.textContent = `${num} / ${total}`;
   }
-
-  goToSlide(0);
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
 }
 
-function goToSlide(n) {
-  if (n < 0 || n >= totalSlides) return;
-
-  slides.forEach((s, i) => {
-    s.classList.remove('active', 'prev');
-    if (i < n) s.classList.add('prev');
-  });
-  slides[n].classList.add('active');
-
-  current = n;
-
-  // Update counter
-  document.getElementById('navCounter').textContent = (n + 1) + ' / ' + totalSlides;
-
-  // Update dots
-  document.querySelectorAll('.nav-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === n);
-  });
-
-  // Update progress bar
-  const pct = totalSlides > 1 ? (n / (totalSlides - 1)) * 100 : 0;
-  document.getElementById('progressBar').style.width = pct + '%';
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(el => observer.observe(el));
 }
-
-function nextSlide() { goToSlide(current + 1); }
-function prevSlide() { goToSlide(current - 1); }
-
-// Keyboard navigation
-document.addEventListener('keydown', e => {
-  if (document.getElementById('pwScreen').classList.contains('hidden')) {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
-    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
-    if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
-    if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
-  }
-});
-
-// Touch/swipe support
-let touchStartX = 0;
-document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-document.addEventListener('touchend', e => {
-  const diff = e.changedTouches[0].screenX - touchStartX;
-  if (Math.abs(diff) > 50) {
-    if (diff < 0) nextSlide();
-    else prevSlide();
-  }
-});
 </script>
 </body>
 </html>
