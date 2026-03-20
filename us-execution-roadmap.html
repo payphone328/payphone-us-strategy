@@ -232,9 +232,9 @@ td strong{color:var(--text);font-weight:600}
 <!-- ===== PASSWORD SCREEN ===== -->
 <div class="pw-screen" id="pwScreen">
   <div class="pw-box">
-    <div class="pw-logo">🐋</div>
+    <div class="pw-logo">&#x1F40B;</div>
     <h2>Payphone Global</h2>
-    <p>U.S. Execution Roadmap — Confidential</p>
+    <p>U.S. Execution Roadmap &mdash; Confidential</p>
     <input type="password" class="pw-input" id="pwInput" placeholder="Enter access code" onkeydown="if(event.key==='Enter')checkPw()">
     <button class="pw-btn" onclick="checkPw()">Access Document</button>
     <div class="pw-err" id="pwErr">Incorrect access code. Try again.</div>
@@ -247,16 +247,14 @@ td strong{color:var(--text);font-weight:600}
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <div class="nav-logo">🐋 <span>payphone</span></div>
+    <div class="nav-logo">&#x1F40B; <span>payphone</span></div>
     <div class="nav-links">
       <a href="#dashboard" class="nav-link active">Dashboard</a>
-      <a href="#gates" class="nav-link">Decision Gates</a>
+      <a href="#infrastructure" class="nav-link">Stripe Integration</a>
       <a href="#phase1" class="nav-link">Phase 1</a>
       <a href="#business" class="nav-link">Payphone Business</a>
       <a href="#phase3" class="nav-link">Phase 3</a>
       <a href="#geo" class="nav-link">Geography</a>
-      <a href="#latam" class="nav-link">LATAM</a>
-      <a href="#betting" class="nav-link">Betting</a>
       <a href="#competitors" class="nav-link">Competitors</a>
       <a href="#financial" class="nav-link">Financial</a>
       <a href="#execution" class="nav-link">Execution</a>
@@ -269,17 +267,17 @@ td strong{color:var(--text);font-weight:600}
 <section class="cover">
   <div class="cover-badge">Confidential &bull; Internal Use Only</div>
   <h1>U.S. <span class="accent">Execution</span><br>Roadmap</h1>
-  <h2>Card issuance, merchant acquiring, LATAM expansion, and sports betting — the complete operational playbook for 2026-2027.</h2>
+  <h2>Internal Team Execution Roadmap &mdash; Card issuance, merchant acquiring, and geographic expansion on Stripe infrastructure. 2026-2027.</h2>
   <div class="cover-stats">
     <div class="cover-stat"><div class="val">$900B+</div><div class="label">Hispanic Buying Power</div></div>
     <div class="cover-stat"><div class="val">64.7M</div><div class="label">U.S. Hispanic Population</div></div>
     <div class="cover-stat"><div class="val">80.3%</div><div class="label">Foreign-Born Unbanked</div></div>
-    <div class="cover-stat"><div class="val">$54B</div><div class="label">LATAM Betting Market</div></div>
+    <div class="cover-stat"><div class="val">$1.19B</div><div class="label">Year 3 Volume Target</div></div>
   </div>
   <div class="cover-meta">
     <div><strong>Prepared for</strong> Val Infante, CGO</div>
     <div><strong>Date</strong> March 20, 2026</div>
-    <div><strong>Next Review</strong> April 15, 2026 (Gate 1)</div>
+    <div><strong>Next Milestone</strong> Stripe Sandbox Live &mdash; June 30, 2026</div>
   </div>
   <div class="cover-conf">Payphone Global &bull; 2026</div>
 </section>
@@ -292,10 +290,10 @@ td strong{color:var(--text);font-weight:600}
 
   <div class="dash-grid">
     <div class="dash-card"><div class="val orange">Q3 2026</div><div class="label">Phase 1 Target Launch</div></div>
-    <div class="dash-card"><div class="val green">Pre-Approved</div><div class="label">Stripe Status</div></div>
+    <div class="dash-card"><div class="val green">CONFIRMED</div><div class="label">Stripe Status</div></div>
     <div class="dash-card"><div class="val blue">11 States</div><div class="label">Geographic Target</div></div>
     <div class="dash-card"><div class="val yellow">10K</div><div class="label">Merchant Goal (18mo)</div></div>
-    <div class="dash-card"><div class="val purple">9 Countries</div><div class="label">LATAM Pipeline</div></div>
+    <div class="dash-card"><div class="val purple">52K</div><div class="label">Year 1 Users Target</div></div>
   </div>
 
   <!-- Status Matrix -->
@@ -304,113 +302,93 @@ td strong{color:var(--text);font-weight:600}
       <h3>U.S. Launch Status</h3>
       <div class="tbl-wrap">
         <table>
-          <tr><td><strong>Stripe EDD</strong></td><td class="sy">In Progress (3-6 months)</td></tr>
+          <tr><td><strong>Stripe EDD</strong></td><td class="sy">In Progress (target: May 2026)</td></tr>
           <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Pre-approved</td></tr>
-          <tr><td><strong>Episode Six</strong></td><td class="sy">Awaiting Sponsor Bank</td></tr>
-          <tr><td><strong>Highnote</strong></td><td class="sy">Awaiting Confirmation</td></tr>
+          <tr><td><strong>Stripe Sandbox</strong></td><td class="sy">Pending EDD Completion</td></tr>
           <tr><td><strong>KYC/CIP</strong></td><td class="sy">Under Evaluation</td></tr>
+          <tr><td><strong>Beta Launch (500 users)</strong></td><td class="sy">Target: August 2026</td></tr>
           <tr><td><strong>Payphone Business</strong></td><td class="sg">Product Designed</td></tr>
         </table>
       </div>
     </div>
     <div class="card card-violet">
-      <h3>LATAM Expansion Status</h3>
+      <h3>Product Roadmap Status</h3>
       <div class="tbl-wrap">
         <table>
-          <tr><td><strong>Panama (PayCaddy)</strong></td><td class="sg">Active — Q2 2026</td></tr>
-          <tr><td><strong>Mexico (Card)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
-          <tr><td><strong>Colombia (Card + Betting)</strong></td><td class="sy">In Progress — Q3 2026</td></tr>
-          <tr><td><strong>Worldpay (Colombia)</strong></td><td class="sg">Live since May 2025</td></tr>
-          <tr><td><strong>Worldpay (Mexico)</strong></td><td class="sy">Pending — Q4 2026</td></tr>
-          <tr><td><strong>PagueloFacil (Panama)</strong></td><td class="sy">Exploratory</td></tr>
+          <tr><td><strong>Phase 1: Consumer Cards</strong></td><td class="sy">Building &mdash; Q3 2026 Launch</td></tr>
+          <tr><td><strong>Phase 2: Payphone Business</strong></td><td class="sy">Designed &mdash; Q4 2026</td></tr>
+          <tr><td><strong>Phase 3: Cross-Border</strong></td><td style="color:var(--text3)">Planned &mdash; 2027</td></tr>
+          <tr><td><strong>Phase 3: Credit Building</strong></td><td style="color:var(--text3)">Planned &mdash; 2027</td></tr>
+          <tr><td><strong>Merchant Target</strong></td><td class="sg">10K in 18 months</td></tr>
+          <tr><td><strong>Geographic Target</strong></td><td class="sg">11 states by Q4 2027</td></tr>
         </table>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== DECISION GATE FRAMEWORK ===== -->
-<section class="section" id="gates">
+<!-- ===== STRIPE INTEGRATION MILESTONES ===== -->
+<section class="section" id="infrastructure">
   <div class="section-num">Section 02</div>
-  <h2>Decision Gate<br>Framework</h2>
-  <p class="section-sub">Three hard deadlines that prevent indefinite drift. Miss a gate, force a decision.</p>
+  <h2>Stripe Integration<br>Milestones</h2>
+  <p class="section-sub">Stripe is our confirmed infrastructure partner. Four milestones from EDD completion to full launch. No backup needed &mdash; we are all-in.</p>
 
-  <div class="alert alert-danger">
-    <h4>The Problem</h4>
-    <p>Stripe EDD timeline is "3-6 months" with no hard deadline. Episode Six and Highnote are in limbo. Without decision gates, we drift into Q4 with no card program live.</p>
+  <div class="alert alert-success">
+    <h4>Decision Confirmed</h4>
+    <p><strong>Stripe is our sole infrastructure provider.</strong> Episode Six and Highnote evaluation is closed. Stripe gives us card issuance, merchant acquiring, Treasury, and Tap to Pay on a single platform with zero upfront costs, the fastest time to market, and seamless ecosystem integration. All efforts now focus on Stripe execution.</p>
   </div>
 
-  <!-- Provider Comparison -->
-  <div class="card card-accent">
-    <h3>Current Provider Landscape</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Criteria</th><th>Stripe</th><th>Episode Six</th><th>Highnote</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Card Issuance</strong></td><td class="sg">Yes</td><td class="sg">Yes</td><td class="sg">Yes</td></tr>
-          <tr><td><strong>Merchant Acquiring</strong></td><td class="sg">Yes</td><td class="sr">No</td><td class="sg">Yes</td></tr>
-          <tr><td><strong>No SSN/ITIN</strong></td><td class="sg">Yes (Tap to Pay)</td><td class="sy">TBD</td><td class="sy">TBD</td></tr>
-          <tr><td><strong>EDD/Compliance</strong></td><td>In progress</td><td>Awaiting sponsor bank</td><td>Awaiting confirmation</td></tr>
-          <tr><td><strong>Timeline to Live</strong></td><td>3-6 months</td><td>6-8 wk eval + build</td><td>Unknown</td></tr>
-          <tr><td><strong>Scale</strong></td><td>Public ($70B+)</td><td>Private (FIS)</td><td>Private ($750M+)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="alert alert-rec">
-    <h4>Recommendation</h4>
-    <p><strong>Promote Highnote to #2 over Episode Six.</strong> Highnote offers issuance + acquiring on a single API ($750M+ valuation, Forbes Fintech 50 two consecutive years). Episode Six is issuance-only — that means a separate acquiring vendor for Phase 2. More vendors, more integration, more time.</p>
-  </div>
-
-  <!-- Three Gates -->
+  <!-- Stripe Integration Milestones -->
   <div class="gate-grid">
     <div class="gate">
       <span class="gate-num">01</span>
-      <h3>Shortlist Lock</h3>
-      <div class="gate-date">April 15, 2026</div>
+      <h3>EDD Completion</h3>
+      <div class="gate-date">Target: May 15, 2026</div>
       <ul>
-        <li>Stripe EDD questionnaire complete</li>
-        <li>Episode Six sponsor bank: yes or no</li>
-        <li>Highnote partner intro: confirmed or not</li>
-        <li>If no response by deadline → drop and go all-in Stripe + backup</li>
+        <li>Complete Stripe EDD questionnaire (Pedro)</li>
+        <li>Submit all required compliance documentation</li>
+        <li>Respond to any Stripe follow-up requests within 48 hours</li>
+        <li>Receive EDD clearance confirmation from Stripe</li>
       </ul>
     </div>
     <div class="gate">
       <span class="gate-num">02</span>
-      <h3>Provider Commitment</h3>
-      <div class="gate-date">June 30, 2026</div>
+      <h3>Sandbox &amp; Testing</h3>
+      <div class="gate-date">Target: June 30, 2026</div>
       <ul>
-        <li>Stripe EDD cleared or clear Q3 timeline</li>
-        <li>Integration docs in hand</li>
-        <li>Tap to Pay waiver secured</li>
-        <li>If RED on 2+ signals → pivot to Highnote</li>
+        <li>Stripe Issuing sandbox access activated</li>
+        <li>Stripe Connect integration for merchant acquiring tested</li>
+        <li>Stripe Terminal SDK integrated for Tap to Pay</li>
+        <li>End-to-end card issuance flow validated in sandbox</li>
+        <li>KYC/CIP flow tested with 50+ test cases</li>
       </ul>
     </div>
     <div class="gate">
       <span class="gate-num">03</span>
-      <h3>Launch Go/No-Go</h3>
-      <div class="gate-date">September 15, 2026</div>
+      <h3>Beta &amp; Full Launch</h3>
+      <div class="gate-date">Beta: Aug 2026 | Launch: Sep 2026</div>
       <ul>
-        <li>Card program live in sandbox</li>
-        <li>KYC/CIP tested with 100+ users</li>
-        <li>Spanish support operational</li>
-        <li>First 500 beta users identified</li>
+        <li>500 beta users onboarded (Miami focus)</li>
+        <li>Beta feedback collected and critical bugs fixed</li>
+        <li>Spanish-language support operational</li>
+        <li>Full launch go/no-go decision by Sep 15</li>
       </ul>
     </div>
   </div>
 
-  <!-- Signal Matrix -->
-  <div class="card">
-    <h3>Gate 2 — Stripe Signal Matrix</h3>
+  <!-- Stripe Capabilities Summary -->
+  <div class="card card-accent">
+    <h3>Stripe Platform Capabilities &mdash; What We're Building On</h3>
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th>Signal</th><th>Green (Proceed)</th><th>Yellow (Escalate)</th><th>Red (Pivot)</th></tr></thead>
+        <thead><tr><th>Capability</th><th>Stripe Product</th><th>Payphone Use Case</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td><strong>EDD Status</strong></td><td class="sg">Cleared or clear Q3 timeline</td><td class="sy">"In review" — no date</td><td class="sr">Rejected or 60+ days silence</td></tr>
-          <tr><td><strong>Bank Relationship</strong></td><td class="sg">Integration docs in hand</td><td class="sy">Docs promised, delayed</td><td class="sr">Bank unresponsive</td></tr>
-          <tr><td><strong>Tap to Pay Waiver</strong></td><td class="sg">Secured</td><td class="sy">Under review</td><td class="sr">Denied</td></tr>
-          <tr><td><strong>Technical Sandbox</strong></td><td class="sg">Active, tested</td><td class="sy">Access granted, untested</td><td class="sr">No access</td></tr>
+          <tr><td><strong>Card Issuance</strong></td><td>Stripe Issuing</td><td>Consumer debit cards (virtual + physical)</td><td class="sy">Pending EDD</td></tr>
+          <tr><td><strong>Merchant Acquiring</strong></td><td>Stripe Connect</td><td>Payphone Business &mdash; merchant onboarding &amp; payouts</td><td class="sg">Ready to integrate</td></tr>
+          <tr><td><strong>Tap to Pay</strong></td><td>Stripe Terminal SDK</td><td>NFC payments on merchant phones (zero hardware)</td><td class="sg">Waiver pre-approved</td></tr>
+          <tr><td><strong>Payment Links</strong></td><td>Stripe Payment Links</td><td>Link to Pay for remote payments</td><td class="sg">Ready to integrate</td></tr>
+          <tr><td><strong>Banking</strong></td><td>Stripe Treasury</td><td>FDIC-insured accounts, routing numbers</td><td class="sy">Phase 2</td></tr>
+          <tr><td><strong>Instant Payouts</strong></td><td>Stripe Instant Payouts</td><td>Instant merchant payouts to Payphone wallet</td><td class="sg">Ready to integrate</td></tr>
         </tbody>
       </table>
     </div>
@@ -418,23 +396,23 @@ td strong{color:var(--text);font-weight:600}
 
   <!-- Ownership Model -->
   <div class="card card-violet" style="margin-top:24px">
-    <h3>Ownership Model — De-risking the Pedro Bottleneck</h3>
+    <h3>Ownership Model &mdash; U.S. Execution Assignments</h3>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Workstream</th><th>Primary Owner</th><th>Backup</th></tr></thead>
         <tbody>
-          <tr><td><strong>Stripe EDD + bank</strong></td><td>Pedro</td><td>Val (escalation)</td></tr>
-          <tr><td><strong>Episode Six / Highnote eval</strong></td><td>Pedro</td><td>New hire or contractor</td></tr>
-          <tr><td><strong>PayCaddy LATAM issuance</strong></td><td class="sr">NEEDS OWNER</td><td>Pedro (advisory)</td></tr>
-          <tr><td><strong>Worldpay sports betting</strong></td><td class="sr">NEEDS OWNER</td><td>Pedro (advisory)</td></tr>
-          <tr><td><strong>PagueloFacil Panama</strong></td><td>Pedro</td><td>—</td></tr>
-          <tr><td><strong>Product/tech build</strong></td><td class="sr">CTO / PRODUCT LEAD</td><td>Val (requirements)</td></tr>
+          <tr><td><strong>Stripe EDD + bank relationship</strong></td><td>Pedro</td><td>Val (escalation)</td></tr>
+          <tr><td><strong>Stripe integration + sandbox</strong></td><td>CTO / Engineering Lead</td><td>Pedro (Stripe liaison)</td></tr>
+          <tr><td><strong>Product/UX build (Phase 1)</strong></td><td class="sr">CTO / PRODUCT LEAD</td><td>Val (requirements)</td></tr>
+          <tr><td><strong>KYC/CIP compliance</strong></td><td>Pedro + Legal</td><td>Val (oversight)</td></tr>
+          <tr><td><strong>Marketing &amp; GTM</strong></td><td>Val</td><td>Marketing team</td></tr>
+          <tr><td><strong>Merchant acquiring (Phase 2)</strong></td><td class="sr">TBD (post-Phase 1)</td><td>Val (strategy)</td></tr>
         </tbody>
       </table>
     </div>
     <div class="alert alert-danger" style="margin-top:12px">
       <h4>Critical Gap</h4>
-      <p>LATAM items need a <strong>dedicated partnerships lead</strong>. Pedro cannot run U.S. provider evaluation AND LATAM multi-country rollout simultaneously. <strong>Hire a LATAM BD person by end of April.</strong></p>
+      <p>CTO/Product Lead and Merchant Acquiring lead are <strong>not yet assigned</strong>. Phase 1 UX build must start in April. Pedro is focused on Stripe EDD &mdash; engineering needs a dedicated lead for SDK integration. <strong>Confirm Product Lead by end of March.</strong></p>
     </div>
   </div>
 </section>
@@ -443,7 +421,7 @@ td strong{color:var(--text);font-weight:600}
 <section class="section" id="phase1">
   <div class="section-num">Section 03</div>
   <h2>Phase 1: Consumer<br>Card Issuance</h2>
-  <p class="section-sub">Payphone-branded debit card for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee. Phase 1 is consumer onboarding + card issuance only.</p>
+  <p class="section-sub">Payphone-branded debit card via Stripe Issuing for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee. Phase 1 is consumer onboarding + card issuance only.</p>
 
   <!-- Market Stats -->
   <div class="dash-grid">
@@ -476,12 +454,12 @@ td strong{color:var(--text);font-weight:600}
     </div>
     <div class="feat">
       <div class="feat-icon">2</div>
-      <h4>Card Issuance</h4>
+      <h4>Card Issuance (Stripe)</h4>
       <ul>
-        <li>Virtual card issued instantly</li>
+        <li>Virtual card issued instantly via Stripe Issuing</li>
         <li>Physical card in 5-7 business days</li>
         <li>Payphone-branded (Naranja #FF6400)</li>
-        <li>Mastercard or Visa (per provider)</li>
+        <li>Visa or Mastercard (Stripe network)</li>
         <li>NFC-enabled contactless</li>
       </ul>
     </div>
@@ -489,7 +467,7 @@ td strong{color:var(--text);font-weight:600}
       <div class="feat-icon">3</div>
       <h4>Account Features</h4>
       <ul>
-        <li>FDIC-insured (via sponsor bank)</li>
+        <li>FDIC-insured (via Stripe Treasury sponsor bank)</li>
         <li>Direct deposit (routing + account #)</li>
         <li>Balance check + transaction history</li>
         <li>Real-time push notifications</li>
@@ -529,9 +507,26 @@ td strong{color:var(--text);font-weight:600}
     </div>
   </div>
 
+  <!-- Tech Architecture -->
+  <div class="card">
+    <h3>Phase 1 Tech Architecture &mdash; Stripe Stack</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Stripe Product</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Card Issuance</strong></td><td>Stripe Issuing</td><td>Virtual ($0.10/card) + Physical ($3.50/card). Instant virtual issuance.</td></tr>
+          <tr><td><strong>Account Holding</strong></td><td>Stripe Treasury</td><td>FDIC-insured via Stripe partner banks. Routing + account numbers.</td></tr>
+          <tr><td><strong>KYC/CIP</strong></td><td>Stripe Identity + 3rd party</td><td>Document verification, liveness check, no-SSN flow via alt. ID.</td></tr>
+          <tr><td><strong>Payments</strong></td><td>Stripe Payment Intents</td><td>QR code generation, payment processing for P2P and merchant flows.</td></tr>
+          <tr><td><strong>Webhooks</strong></td><td>Stripe Events</td><td>Real-time notifications for transactions, card status, funding events.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Revenue Model -->
   <div class="card">
-    <h3>Revenue Model — Decision Needed</h3>
+    <h3>Revenue Model &mdash; Decision Needed</h3>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Model</th><th>Pros</th><th>Cons</th><th>Used By</th></tr></thead>
@@ -539,7 +534,7 @@ td strong{color:var(--text);font-weight:600}
           <tr style="background:rgba(255,100,0,.03)"><td><strong style="color:var(--naranja)">Zero-fee *</strong></td><td>Max adoption, competitive</td><td>Requires interchange to sustain</td><td>Comun, Fortu, PODERcard</td></tr>
           <tr><td><strong>Subscription ($5-6/mo)</strong></td><td>Predictable revenue</td><td>Barrier for price-sensitive</td><td>Majority ($5.99/mo)</td></tr>
           <tr><td><strong>Annual ($100-150/yr)</strong></td><td>One-time decision</td><td>High upfront cost</td><td>Maza ($150/yr)</td></tr>
-          <tr><td><strong>Freemium</strong></td><td>Free basic + paid extras</td><td>Complexity early on</td><td>—</td></tr>
+          <tr><td><strong>Freemium</strong></td><td>Free basic + paid extras</td><td>Complexity early on</td><td>&mdash;</td></tr>
         </tbody>
       </table>
     </div>
@@ -551,18 +546,18 @@ td strong{color:var(--text);font-weight:600}
 
   <!-- Phase 1 KPIs -->
   <div class="card">
-    <h3>Success Metrics — Phase 1</h3>
+    <h3>Success Metrics &mdash; Phase 1</h3>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>KPI</th><th>3 Months Post-Launch</th><th>6 Months</th></tr></thead>
         <tbody>
           <tr><td><strong>Cards issued</strong></td><td>10,000</td><td>50,000</td></tr>
           <tr><td><strong>Monthly active users</strong></td><td>5,000</td><td>30,000</td></tr>
-          <tr><td><strong>Onboarding completion</strong></td><td>> 70%</td><td>> 80%</td></tr>
+          <tr><td><strong>Onboarding completion</strong></td><td>&gt; 70%</td><td>&gt; 80%</td></tr>
           <tr><td><strong>Avg monthly spend/card</strong></td><td>$500</td><td>$750</td></tr>
           <tr><td><strong>Direct deposit adoption</strong></td><td>20%</td><td>40%</td></tr>
-          <tr><td><strong>NPS</strong></td><td>> 60</td><td>> 70</td></tr>
-          <tr><td><strong>CPA</strong></td><td>< $25</td><td>< $20</td></tr>
+          <tr><td><strong>NPS</strong></td><td>&gt; 60</td><td>&gt; 70</td></tr>
+          <tr><td><strong>CPA</strong></td><td>&lt; $25</td><td>&lt; $20</td></tr>
         </tbody>
       </table>
     </div>
@@ -570,9 +565,9 @@ td strong{color:var(--text);font-weight:600}
 
   <!-- GTM -->
   <div class="msg-box">
-    <blockquote>"Tu banco. Tu idioma. Sin Social Security."</blockquote>
+    <blockquote>&ldquo;Tu banco. Tu idioma. Sin Social Security.&rdquo;</blockquote>
     <p>Your bank. Your language. No Social Security.</p>
-    <p style="margin-top:12px;font-size:12px">"Ya nos conoces en Ecuador/Colombia. Ahora estamos aqui."</p>
+    <p style="margin-top:12px;font-size:12px">&ldquo;Ya nos conoces en Ecuador/Colombia. Ahora estamos aqui.&rdquo;</p>
   </div>
 </section>
 
@@ -599,7 +594,7 @@ td strong{color:var(--text);font-weight:600}
     </div>
     <div class="card card-violet">
       <h3>Tap to Pay (NFC)</h3>
-      <p><strong>How:</strong> Customer taps card/phone on merchant's phone — zero hardware needed</p>
+      <p><strong>How:</strong> Customer taps card/phone on merchant's phone &mdash; zero hardware needed</p>
       <p style="margin-top:8px"><strong>Best for:</strong> Home services, mobile vendors, any in-person</p>
       <p style="margin-top:8px"><strong>Tech:</strong> Stripe Terminal SDK</p>
     </div>
@@ -614,7 +609,7 @@ td strong{color:var(--text);font-weight:600}
   <!-- Key Differentiators -->
   <div class="alert alert-success" style="margin-top:24px">
     <h4>Why Payphone Business Wins</h4>
-    <p><strong>Spanish-first UX</strong> — no competitor offers this. <strong>Instant payout</strong> to Payphone wallet (not next-day like PayPal Zettle). <strong>Zero hardware</strong> (Square charges $49-$299). <strong>Remittance integration</strong> — earn from a merchant and send money home in one app. <strong>Integrated P2P + merchant ecosystem</strong> — consumer and business in a single app.</p>
+    <p><strong>Spanish-first UX</strong> &mdash; no competitor offers this. <strong>Instant payout</strong> to Payphone wallet (not next-day like PayPal Zettle). <strong>Zero hardware</strong> (Square charges $49-$299). <strong>Remittance integration</strong> &mdash; earn from a merchant and send money home in one app. <strong>Integrated P2P + merchant ecosystem</strong> &mdash; consumer and business in a single app.</p>
   </div>
 
   <!-- Competitive Comparison -->
@@ -666,40 +661,40 @@ td strong{color:var(--text);font-weight:600}
 <!-- ===== PHASE 3: CROSS-BORDER & GROWTH ===== -->
 <section class="section" id="phase3">
   <div class="section-num">Section 05</div>
-  <h2>Phase 3: Cross-Border<br>& Growth</h2>
+  <h2>Phase 3: Cross-Border<br>&amp; Growth</h2>
   <p class="section-sub">Remittances, credit building, ITIN assistance, and ecosystem expansion. The flywheel that no competitor can replicate.</p>
 
   <div class="phase-grid">
     <div class="phase">
       <div class="phase-num">Now</div>
-      <h3>Provider Evaluation</h3>
+      <h3>Stripe Integration</h3>
       <div class="phase-sub">Current Phase</div>
       <ul>
-        <li>Stripe docs submitted</li>
-        <li>Episode Six intro pending</li>
-        <li>Highnote confirm pending</li>
-        <li>KYC/CIP program finalized</li>
-        <li>Stripe waiver secured</li>
+        <li>Stripe EDD questionnaire in progress</li>
+        <li>Stripe Tap to Pay waiver secured</li>
+        <li>KYC/CIP program design underway</li>
+        <li>Phase 1 product requirements finalized</li>
+        <li>Engineering team Stripe SDK onboarding</li>
       </ul>
     </div>
     <div class="phase" style="border-top:3px solid var(--naranja)">
-      <div class="phase-num">Phase 1 — Q3 2026</div>
+      <div class="phase-num">Phase 1 &mdash; Q3 2026</div>
       <h3>Card Issuance</h3>
-      <div class="phase-sub">Consumer Onboarding</div>
+      <div class="phase-sub">Consumer Onboarding via Stripe Issuing</div>
       <ul>
-        <li>Select primary rail provider</li>
-        <li>Launch consumer card program</li>
+        <li>Launch consumer card program on Stripe</li>
         <li>No SSN/ITIN required</li>
         <li>U.S. residents only</li>
         <li>Consumer onboarding only</li>
+        <li>500 beta users, then full launch</li>
       </ul>
     </div>
     <div class="phase" style="border-top:3px solid var(--amarillo)">
-      <div class="phase-num">Phase 2 — Q4 2026+</div>
+      <div class="phase-num">Phase 2 &mdash; Q4 2026+</div>
       <h3>Get Paid</h3>
-      <div class="phase-sub">Payphone Business</div>
+      <div class="phase-sub">Payphone Business via Stripe Connect</div>
       <ul>
-        <li>Tap to Pay (cobranza)</li>
+        <li>Tap to Pay (cobranza) via Stripe Terminal</li>
         <li>QR Code + Link payments</li>
         <li>Merchant onboarding</li>
         <li>Instant payouts</li>
@@ -712,7 +707,7 @@ td strong{color:var(--text);font-weight:600}
   <div class="grid-2" style="margin-top:24px">
     <div class="card card-accent">
       <h3>Cross-Border via TransNetwork</h3>
-      <p>Remittance integration allowing users to send money from U.S. Payphone wallet to LATAM. Earn from a merchant → send money home → in one app.</p>
+      <p>Remittance integration allowing users to send money from U.S. Payphone wallet to LATAM. Earn from a merchant &rarr; send money home &rarr; in one app.</p>
       <ul class="checklist" style="margin-top:12px">
         <li>U.S. to Ecuador corridor (Payphone home market advantage)</li>
         <li>U.S. to Colombia, Mexico corridors</li>
@@ -721,7 +716,7 @@ td strong{color:var(--text);font-weight:600}
       </ul>
     </div>
     <div class="card card-violet">
-      <h3>Credit Building & Financial Health</h3>
+      <h3>Credit Building &amp; Financial Health</h3>
       <p>Phase 3 premium features that create long-term stickiness and justify premium tier pricing.</p>
       <ul class="checklist" style="margin-top:12px">
         <li>ITIN filing assistance (compete with Maza)</li>
@@ -740,7 +735,7 @@ td strong{color:var(--text);font-weight:600}
   <p class="section-sub">11 priority states covering 70%+ of the U.S. Hispanic population. State-by-state merchant density and remittance corridor targeting.</p>
 
   <!-- Tier 1 -->
-  <h3 style="margin-bottom:16px;font-size:16px"><span style="background:var(--green);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 1</span> Launch First — Q2 2026</h3>
+  <h3 style="margin-bottom:16px;font-size:16px"><span style="background:var(--green);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 1</span> Launch First &mdash; Q2 2026</h3>
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Remittance Corridor</th></tr></thead>
@@ -753,12 +748,12 @@ td strong{color:var(--text);font-weight:600}
   </div>
 
   <!-- Tier 2 -->
-  <h3 style="margin:32px 0 16px;font-size:16px"><span style="background:var(--amarillo);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 2</span> Expand — Q3-Q4 2026</h3>
+  <h3 style="margin:32px 0 16px;font-size:16px"><span style="background:var(--amarillo);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 2</span> Expand &mdash; Q3-Q4 2026</h3>
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Opportunity</th></tr></thead>
       <tbody>
-        <tr><td><strong>New York</strong></td><td>4M</td><td>20%</td><td>120K+</td><td>Queens, Bronx, Brooklyn</td><td>Ecuadorian diaspora — Payphone brand leverage</td></tr>
+        <tr><td><strong>New York</strong></td><td>4M</td><td>20%</td><td>120K+</td><td>Queens, Bronx, Brooklyn</td><td>Ecuadorian diaspora &mdash; Payphone brand leverage</td></tr>
         <tr><td><strong>Georgia</strong></td><td>1.2M</td><td>11%</td><td>36K+</td><td>Atlanta metro</td><td>Fast-growing Sun Belt destination</td></tr>
         <tr><td><strong>North Carolina</strong></td><td>1.1M</td><td>10%</td><td>33K+</td><td>Charlotte, Raleigh</td><td>+47K international migration 2024-25</td></tr>
         <tr><td><strong>Arizona</strong></td><td>2.3M</td><td>31%</td><td>69K+</td><td>Phoenix metro</td><td>Mexico border corridor</td></tr>
@@ -769,13 +764,13 @@ td strong{color:var(--text);font-weight:600}
   </div>
 
   <!-- Tier 3 -->
-  <h3 style="margin:32px 0 16px;font-size:16px"><span style="background:var(--violeta);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 3</span> Scale — 2027+</h3>
+  <h3 style="margin:32px 0 16px;font-size:16px"><span style="background:var(--violeta);color:#fff;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 3</span> Scale &mdash; 2027+</h3>
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>State</th><th>Why</th><th>Key Signal</th></tr></thead>
       <tbody>
         <tr><td><strong>South Carolina</strong></td><td>1.5% population growth (highest in U.S.), 350K Hispanic</td><td>Fastest-growing destination for domestic migration</td></tr>
-        <tr><td><strong>ND/SD</strong></td><td>>50% relative Hispanic growth (small base)</td><td>Meatpacking and agriculture corridors</td></tr>
+        <tr><td><strong>ND/SD</strong></td><td>&gt;50% relative Hispanic growth (small base)</td><td>Meatpacking and agriculture corridors</td></tr>
         <tr><td><strong>Nevada, Colorado, Washington, Massachusetts, Virginia</strong></td><td>Large established Hispanic communities</td><td>Density enough for merchant acquisition</td></tr>
       </tbody>
     </table>
@@ -788,7 +783,7 @@ td strong{color:var(--text);font-weight:600}
     <div class="grid-3">
       <div class="card" style="background:rgba(255,255,255,.03)">
         <h4>Domestic Flows</h4>
-        <p>CA/NY/NJ → FL/TX/NC/SC/AZ</p>
+        <p>CA/NY/NJ &rarr; FL/TX/NC/SC/AZ</p>
         <p style="margin-top:6px;font-size:11px;color:var(--text3)">Sun Belt migration accelerating. Florida and Texas gaining 100K+ Hispanics/year net.</p>
       </div>
       <div class="card" style="background:rgba(255,255,255,.03)">
@@ -805,90 +800,9 @@ td strong{color:var(--text);font-weight:600}
   </div>
 </section>
 
-<!-- ===== LATAM EXPANSION ===== -->
-<section class="section" id="latam">
-  <div class="section-num">Section 07</div>
-  <h2>LATAM Market<br>Prioritization</h2>
-  <p class="section-sub">Card issuance via PayCaddy + local banks + Mastercard across 9 markets in 3 tiers.</p>
-
-  <!-- Tier 1 -->
-  <h3 style="margin-bottom:16px"><span style="background:rgba(255,100,0,.12);color:var(--naranja);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 1</span> Q2-Q3 2026</h3>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Country</th><th>Why</th><th>Regulatory Path</th><th>Risk</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Panama</strong></td><td>PayCaddy home base. Dollarized (USD). Banking hub.</td><td>SBP-regulated. EDE license clear.</td><td class="sg">Low</td></tr>
-        <tr><td><strong>Mexico</strong></td><td>Largest addressable market. Full foreign ownership OK. Ley Fintech.</td><td>CNBV-licensed ITF. No foreign equity restrictions.</td><td class="sy">Low-Mod</td></tr>
-        <tr><td><strong>Colombia</strong></td><td>3rd largest LATAM fintech. SEDPE license. Worldpay live.</td><td>SFC-supervised SEDPE via local bank.</td><td class="sy">Moderate</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Tier 2 -->
-  <h3 style="margin:32px 0 16px"><span style="background:rgba(255,160,0,.12);color:var(--amarillo);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 2</span> Q4 2026 - Q1 2027</h3>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Country</th><th>Why</th><th>Regulatory Path</th><th>Risk</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Peru</strong></td><td>Lemon Cash issued 150K+ Visa cards via SBS partner. 44% annual growth.</td><td>SBS-authorized partner. Proven precedent.</td><td class="sy">Moderate</td></tr>
-        <tr><td><strong>Chile</strong></td><td>Highest debit card penetration in LATAM (82%). Fintech Act Jan 2023.</td><td>CMF license. Local entity needed.</td><td class="sy">Moderate</td></tr>
-        <tr><td><strong>Ecuador</strong></td><td>Payphone home market. Dollarized. First fintech reg Sept 2024.</td><td>Superintendencia de Bancos. $200K capital.</td><td class="sr">Mod-High</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Tier 3 -->
-  <h3 style="margin:32px 0 16px"><span style="background:rgba(255,255,255,.06);color:var(--text3);padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:1px">TIER 3</span> 2027+</h3>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>Country</th><th>Why</th><th>Risk</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Dominican Republic</strong></td><td>No fintech law. Tourism-driven card demand.</td><td class="sr">High</td></tr>
-        <tr><td><strong>Costa Rica</strong></td><td>Fintech Bill passed committee Apr 2025, not yet law. SINPE Movil: 3M/5.2M pop.</td><td class="sr">High</td></tr>
-        <tr><td><strong>Guatemala</strong></td><td>No fintech regulation. Largest Central American economy. 38% financial inclusion.</td><td class="sr">Very High</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Launch Sequence -->
-  <h3 style="margin:40px 0 16px">Recommended Launch Sequence</h3>
-  <div class="timeline">
-    <div class="tl-item"><div class="tl-q">Q2 2026</div><p><strong>Panama</strong> — Card issuance live via PayCaddy</p></div>
-    <div class="tl-item"><div class="tl-q">Q3 2026</div><p><strong>Mexico</strong> (card issuance) + <strong>Colombia</strong> (card issuance + Worldpay betting)</p></div>
-    <div class="tl-item"><div class="tl-q">Q4 2026</div><p><strong>Mexico</strong> — Worldpay betting (timed for World Cup buildup)</p></div>
-    <div class="tl-item"><div class="tl-q">Q1 2027</div><p><strong>Peru + Chile</strong> (card issuance) | <strong>Ecuador</strong> (pending regulatory clarity)</p></div>
-    <div class="tl-item"><div class="tl-q">Q2 2027</div><p><strong>Panama</strong> — Worldpay / PagueloFacil betting</p></div>
-    <div class="tl-item"><div class="tl-q">H2 2027+</div><p><strong>DR, Costa Rica</strong> (if regulatory frameworks mature) | <strong>Guatemala</strong> (2028+)</p></div>
-  </div>
-</section>
-
-<!-- ===== SPORTS BETTING ===== -->
-<section class="section" id="betting">
-  <div class="section-num">Section 08</div>
-  <h2>Sports Betting<br>Processing</h2>
-  <p class="section-sub">Worldpay-powered processing across LATAM. The $54B market that subsidizes card program growth.</p>
-
-  <div class="alert alert-rec">
-    <h4>2026 World Cup Impact</h4>
-    <p>5M tourists expected across LATAM. <strong>$54B projected LATAM sports betting market.</strong> Mexico hosts key matches — contactless payments and mobile wallets will surge. <strong>This is the single biggest near-term catalyst for Worldpay activation in Mexico.</strong></p>
-  </div>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>#</th><th>Country</th><th>Status</th><th>Key Facts</th><th>Revenue Potential</th></tr></thead>
-      <tbody>
-        <tr><td><strong style="color:var(--naranja)">#1</strong></td><td><strong>Colombia</strong></td><td>Mature, since 2016</td><td>Coljuegos license. New 16% tax (Decree 0240). COP-only. Worldpay live.</td><td class="sg">High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#2</strong></td><td><strong>Mexico</strong></td><td>Regulated, reform underway</td><td>DGJS permit. MXN-only. SEGOB reform 2026. <strong>World Cup catalyst.</strong></td><td class="sg">Very High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#3</strong></td><td><strong>Panama</strong></td><td>Upgrade from exploratory</td><td>JCJ license: $40K + $20K/yr. USD. iGaming +53% in 2025. $4.9B by 2032.</td><td class="sy">Mod-High</td></tr>
-        <tr><td><strong style="color:var(--naranja)">#4</strong></td><td><strong>Dominican Rep.</strong></td><td>Newly regulated</td><td>Resolution 136-2024. $346K licensing fee.</td><td class="sy">Moderate</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
 <!-- ===== COMPETITIVE INTELLIGENCE ===== -->
 <section class="section" id="competitors">
-  <div class="section-num">Section 09</div>
+  <div class="section-num">Section 07</div>
   <h2>Competitive<br>Intelligence</h2>
   <p class="section-sub">Who we're up against and why we win.</p>
 
@@ -924,7 +838,7 @@ td strong{color:var(--text);font-weight:600}
           <tr><td><strong>Majority</strong></td><td>Visa Debit</td><td class="sg">Yes</td><td>Free</td><td class="sr">No</td><td class="sr">No</td><td>$83.5M+</td></tr>
           <tr><td><strong>Maza</strong></td><td>Visa Debit</td><td class="sg">Yes + ITIN</td><td class="sr">No</td><td class="sg">Yes</td><td class="sr">No</td><td>$8M</td></tr>
           <tr><td><strong>Fortu</strong></td><td>MC Debit</td><td class="sg">Yes</td><td>Via Wise</td><td class="sr">No</td><td class="sr">No</td><td>$5M</td></tr>
-          <tr style="background:rgba(255,100,0,.04)"><td><strong style="color:var(--naranja)">Payphone</strong></td><td><strong>MC/Visa</strong></td><td class="sg"><strong>Yes</strong></td><td class="sg"><strong>Built-in</strong></td><td><strong>Phase 3</strong></td><td class="sg"><strong>Payphone Business</strong></td><td>—</td></tr>
+          <tr style="background:rgba(255,100,0,.04)"><td><strong style="color:var(--naranja)">Payphone</strong></td><td><strong>MC/Visa</strong></td><td class="sg"><strong>Yes</strong></td><td class="sg"><strong>Built-in</strong></td><td><strong>Phase 3</strong></td><td class="sg"><strong>Payphone Business</strong></td><td>&mdash;</td></tr>
         </tbody>
       </table>
     </div>
@@ -935,14 +849,14 @@ td strong{color:var(--text);font-weight:600}
   <div class="adv-grid">
     <div class="adv"><div class="adv-num">01</div><h4>Cross-Border Network</h4><p>No U.S. competitor has an existing LATAM fintech user base. Payphone users in Ecuador, Colombia who have family in the U.S. = built-in distribution channel.</p></div>
     <div class="adv"><div class="adv-num">02</div><h4>Cobranza / Tap to Pay</h4><p>Zero competitors offer a Spanish-first SoftPOS for Latino micro-merchants in the U.S. Visa Tap to Phone grew 200% YoY. Genuine blue ocean.</p></div>
-    <div class="adv"><div class="adv-num">03</div><h4>Sports Betting Revenue</h4><p>No U.S. immigrant neobank has a betting processing vertical. Completely separate revenue line that subsidizes card program growth.</p></div>
+    <div class="adv"><div class="adv-num">03</div><h4>Three Revenue Streams</h4><p>Consumer interchange (Phase 1) + merchant acquiring (Phase 2) + cross-border remittance fees (Phase 3). Plus LATAM betting revenue as a separate business line.</p></div>
     <div class="adv"><div class="adv-num">04</div><h4>Ecuador Regulatory Moat</h4><p>First fintech regulation enacted Sept 2024. Payphone's home-market position = first-mover advantage while new entrants navigate nascent rules.</p></div>
   </div>
 </section>
 
 <!-- ===== FINANCIAL PROJECTIONS ===== -->
 <section class="section" id="financial">
-  <div class="section-num">Section 10</div>
+  <div class="section-num">Section 08</div>
   <h2>Financial<br>Projections</h2>
   <p class="section-sub">Revenue model, unit economics, and path to profitability across all business lines.</p>
 
@@ -989,15 +903,15 @@ td strong{color:var(--text);font-weight:600}
 
   <div class="alert alert-success" style="margin-top:24px">
     <h4>Revenue Diversification</h4>
-    <p>Sports betting processing revenue via Worldpay is <strong>additive</strong> — a completely separate business line that subsidizes consumer growth. At scale, betting processing across 4 LATAM markets could add <strong>$5-10M+ ARR</strong> by 2027.</p>
+    <p>U.S. revenue comes from two core streams: <strong>consumer interchange</strong> (Phase 1) and <strong>merchant acquiring</strong> (Phase 2). Combined ARR of $22M+ by Year 2. Cross-border remittance fees in Phase 3 add a third revenue stream. LATAM expansion and sports betting revenue are tracked separately &mdash; see LATAM Roadmap.</p>
   </div>
 </section>
 
 <!-- ===== 90-DAY EXECUTION PLAN ===== -->
 <section class="section" id="execution">
-  <div class="section-num">Section 11</div>
+  <div class="section-num">Section 09</div>
   <h2>90-Day<br>Action Plan</h2>
-  <p class="section-sub">March 20 — June 18, 2026. Every action item, every owner, every deadline.</p>
+  <p class="section-sub">March 20 &mdash; June 18, 2026. Every action item, every owner, every deadline. Stripe is confirmed &mdash; execute.</p>
 
   <div class="grid-2">
     <!-- March -->
@@ -1005,53 +919,49 @@ td strong{color:var(--text);font-weight:600}
       <h3>March</h3>
       <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Weeks 1-2 remaining</p>
       <ul class="checklist">
-        <li><strong>Pedro:</strong> Complete Stripe EDD questionnaire</li>
-        <li><strong>Pedro:</strong> Final follow-up to Episode Six + Highnote (deadline: April 15)</li>
-        <li><strong>Val:</strong> Begin search for LATAM partnerships lead</li>
-        <li><strong>Pedro/Val:</strong> Confirm PayCaddy Panama status</li>
-        <li><strong>Val:</strong> Align with CTO on Phase 1 tech build timeline</li>
+        <li><strong>Pedro:</strong> Complete Stripe EDD questionnaire &mdash; submit all remaining docs</li>
+        <li><strong>Pedro:</strong> Schedule weekly Stripe account manager check-in (every Tuesday)</li>
+        <li><strong>Val:</strong> Align with CTO on Phase 1 tech build timeline &amp; Stripe SDK onboarding</li>
+        <li><strong>Val:</strong> Define Phase 1 launch city strategy (Miami recommended)</li>
       </ul>
     </div>
 
     <!-- April -->
     <div class="card" style="border-top:3px solid var(--naranja)">
       <h3>April</h3>
-      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">GATE 1: April 15</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Stripe EDD follow-ups + product design</p>
       <ul class="checklist">
-        <li><strong>GATE 1 (Apr 15):</strong> Lock provider shortlist. Drop non-responsive.</li>
-        <li><strong>LATAM lead:</strong> Onboard + brief on PayCaddy, Worldpay, PagueloFacil</li>
+        <li><strong>Pedro:</strong> Respond to all Stripe EDD follow-up requests within 48 hours</li>
         <li><strong>Product:</strong> Phase 1 onboarding UX design (Spanish-first)</li>
         <li><strong>Product:</strong> Evaluate KYC/CIP vendors for no-SSN flow</li>
-        <li><strong>LATAM lead:</strong> Initiate Mexico card issuance discussions</li>
         <li><strong>Val:</strong> Finalize revenue model (zero-fee recommended)</li>
+        <li><strong>Marketing:</strong> Begin Miami community partner outreach</li>
       </ul>
     </div>
 
     <!-- May -->
     <div class="card" style="border-top:3px solid var(--violeta)">
       <h3>May</h3>
-      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Build + Expand</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">EDD clearance target + sandbox activation</p>
       <ul class="checklist">
+        <li><strong>Pedro:</strong> Stripe EDD clearance confirmed (target: May 15)</li>
+        <li><strong>Engineering:</strong> Stripe Issuing + Connect sandbox integration begins</li>
         <li><strong>Product:</strong> Phase 1 MVP onboarding flow in staging</li>
-        <li><strong>Pedro:</strong> Stripe integration docs or Highnote kickoff</li>
-        <li><strong>LATAM lead:</strong> Advance Colombia issuance + Worldpay betting</li>
-        <li><strong>LATAM lead:</strong> Confirm PayCaddy bank coverage (Panama, Mexico, Colombia)</li>
         <li><strong>Marketing:</strong> Pre-launch community outreach in Miami</li>
-        <li><strong>Val:</strong> Decide Panama betting upgrade (recommended: yes)</li>
+        <li><strong>Engineering:</strong> Begin Stripe Terminal SDK integration (Tap to Pay)</li>
       </ul>
     </div>
 
     <!-- June -->
     <div class="card" style="border-top:3px solid var(--amarillo)">
       <h3>June</h3>
-      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">GATE 2: June 30</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:16px">Sandbox live + beta preparation</p>
       <ul class="checklist">
-        <li><strong>GATE 2 (Jun 30):</strong> Primary provider commitment. Stripe or pivot.</li>
+        <li><strong>Engineering:</strong> Stripe sandbox live &mdash; end-to-end card issuance tested</li>
+        <li><strong>Engineering:</strong> Stripe Terminal SDK integrated for Tap to Pay testing</li>
         <li><strong>Product:</strong> Phase 1 MVP feature-complete in staging</li>
         <li><strong>Compliance:</strong> Full KYC/CIP review with legal counsel</li>
         <li><strong>Marketing:</strong> Launch waiting list / early access signup</li>
-        <li><strong>LATAM:</strong> Panama card program live (or confirmed date)</li>
-        <li><strong>LATAM:</strong> Mexico partnership terms agreed</li>
       </ul>
     </div>
   </div>
@@ -1059,21 +969,17 @@ td strong{color:var(--text);font-weight:600}
 
 <!-- ===== OPEN DECISIONS ===== -->
 <section class="section" id="decisions">
-  <div class="section-num">Section 12</div>
+  <div class="section-num">Section 10</div>
   <h2>Open Decisions<br>Needed</h2>
-  <p class="section-sub">Seven calls that need to be made to keep the roadmap on track.</p>
+  <p class="section-sub">Three U.S. decisions that need to be made to keep the roadmap on track. See LATAM Roadmap for LATAM-specific decisions.</p>
 
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
       <tbody>
-        <tr><td><strong style="color:var(--naranja)">1</strong></td><td><strong>Highnote to #2?</strong></td><td>Highnote (issuance+acquiring) vs. E6 (issuance only)</td><td class="sg"><strong>Highnote as #2</strong></td><td>April 15</td></tr>
-        <tr><td><strong style="color:var(--naranja)">2</strong></td><td><strong>Revenue model</strong></td><td>Zero-fee vs. Subscription vs. Annual</td><td class="sg"><strong>Zero-fee</strong> (interchange)</td><td>Before launch</td></tr>
-        <tr><td><strong style="color:var(--naranja)">3</strong></td><td><strong>Card network</strong></td><td>Visa vs. Mastercard</td><td>Depends on provider</td><td>At commitment</td></tr>
-        <tr><td><strong style="color:var(--naranja)">4</strong></td><td><strong>LATAM BD hire</strong></td><td>Internal vs. External vs. Contractor</td><td class="sg"><strong>External hire</strong></td><td>End of April</td></tr>
-        <tr><td><strong style="color:var(--naranja)">5</strong></td><td><strong>Ecuador priority</strong></td><td>Tier 1 (home market) vs. Tier 2 (reg risk)</td><td class="sg"><strong>Tier 2</strong> — regs too new</td><td>Now</td></tr>
-        <tr><td><strong style="color:var(--naranja)">6</strong></td><td><strong>Panama betting</strong></td><td>Keep exploratory vs. Activate</td><td class="sg"><strong>Activate</strong> — $40K, USD, +53%</td><td>Now</td></tr>
-        <tr><td><strong style="color:var(--naranja)">7</strong></td><td><strong>Phase 1 launch city</strong></td><td>Miami first vs. Multi-city</td><td class="sg"><strong>Miami first</strong></td><td>June</td></tr>
+        <tr><td><strong style="color:var(--naranja)">1</strong></td><td><strong>Revenue model</strong></td><td>Zero-fee vs. Subscription vs. Annual</td><td class="sg"><strong>Zero-fee</strong> (interchange)</td><td>Before launch</td></tr>
+        <tr><td><strong style="color:var(--naranja)">2</strong></td><td><strong>Card network</strong></td><td>Visa vs. Mastercard</td><td>Depends on Stripe Issuing config</td><td>At sandbox</td></tr>
+        <tr><td><strong style="color:var(--naranja)">3</strong></td><td><strong>Phase 1 launch city</strong></td><td>Miami first vs. Multi-city</td><td class="sg"><strong>Miami first</strong></td><td>June</td></tr>
       </tbody>
     </table>
   </div>
@@ -1082,7 +988,8 @@ td strong{color:var(--text);font-weight:600}
 <!-- ===== FOOTER ===== -->
 <footer class="footer">
   <p><strong>Payphone Global</strong> &bull; U.S. Execution Roadmap &bull; March 20, 2026</p>
-  <p style="margin-top:8px">Prepared for Val Infante, CGO &bull; Next review: <strong>April 15, 2026 (Gate 1)</strong></p>
+  <p style="margin-top:8px">Prepared for Val Infante, CGO &bull; Infrastructure: <strong>Stripe (Confirmed)</strong> &bull; Next milestone: <strong>Sandbox Live &mdash; June 30, 2026</strong></p>
+  <p style="margin-top:8px;font-size:11px;color:var(--text3)">For LATAM expansion &amp; sports betting, see: <strong>latam-execution-roadmap.html</strong></p>
   <p style="margin-top:12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:.4">Confidential &bull; Internal Use Only</p>
 </footer>
 
@@ -1092,7 +999,7 @@ td strong{color:var(--text);font-weight:600}
 function checkPw(){
   const input=document.getElementById('pwInput');
   const err=document.getElementById('pwErr');
-  if(input.value==='unicron2025'){
+  if(input.value==='unicorn2026'){
     document.getElementById('pwScreen').classList.add('hidden');
     document.getElementById('mainContent').classList.add('unlocked');
   }else{
