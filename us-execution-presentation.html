@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payphone — U.S. Execution Roadmap</title>
+<title>Payphone — U.S. & LATAM Execution Roadmap</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
@@ -743,7 +743,7 @@ section {
   <div class="gate-content">
     <img class="gate-whale-svg" id="gateWhale" src="whale-logo.png" alt="Payphone" draggable="false" />
     <div class="gate-logo">payphone</div>
-    <div class="gate-subtitle">U.S. Execution Roadmap &bull; Confidential</div>
+    <div class="gate-subtitle">U.S. & LATAM Execution Roadmap &bull; Confidential</div>
     <div class="gate-input-wrap">
       <input type="password" id="passwordInput" placeholder="Enter access code" autocomplete="off" />
       <button class="gate-btn" id="passwordBtn" aria-label="Submit">
@@ -762,7 +762,7 @@ section {
     payphone
   </div>
   <div class="nav-dots" id="navDots"></div>
-  <div class="nav-label" id="navLabel">01 / 14</div>
+  <div class="nav-label" id="navLabel">01 / 18</div>
 </nav>
 
 <!-- ===== SCROLL COMPANION WHALE ===== -->
@@ -781,7 +781,9 @@ section {
   <img class="reveal reveal-delay-1" src="whale-logo.png" alt="Payphone" style="width: clamp(150px, 25vw, 300px); height: auto; margin-bottom: 24px;" />
   <div class="mega reveal reveal-delay-2">payphone</div>
   <div class="subtitle reveal reveal-delay-3" style="font-size: clamp(18px, 2.2vw, 24px); margin-top: 20px;">
-    U.S. Execution Roadmap<br><span style="font-size:0.75em;opacity:0.6;">Card issuance, merchant acquiring, LATAM expansion, sports betting</span>
+    U.S. &amp; LATAM Execution Roadmap<br>
+    <span style="font-size:0.75em;opacity:0.6;">Part 1: United States &mdash; Stripe Infrastructure</span><br>
+    <span style="font-size:0.75em;opacity:0.6;">Part 2: LATAM &mdash; PayCaddy &amp; Worldpay</span>
   </div>
   <div class="reveal reveal-delay-4" style="margin-top: 40px; display: flex; gap: 40px; font-size: 13px; color: rgba(255,255,255,0.25); flex-wrap: wrap;">
     <span>Val Infante, CGO</span>
@@ -797,21 +799,57 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S1: EXECUTIVE DASHBOARD -->
-<section id="s1" data-label="Dashboard">
+<!-- ============================================================ -->
+<!-- =================== PART 1: UNITED STATES ================== -->
+<!-- ============================================================ -->
+
+<!-- S1: PART 1 TITLE -->
+<section id="s1" data-label="Part 1: US" style="text-align:center;align-items:center;">
+  <div class="glow-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(255,100,0,0.2),transparent 70%);top:10%;left:20%;"></div>
+  <div class="reveal" style="margin-bottom:8px;">
+    <span style="display:inline-block;padding:6px 20px;border:1px solid rgba(255,100,0,0.2);border-radius:20px;font-size:11px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;font-weight:700;">Part 1</span>
+  </div>
+  <div class="mega reveal reveal-delay-1" style="font-size:clamp(80px,16vw,200px);background:linear-gradient(135deg,var(--orange),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 60px rgba(255,100,0,0.3));">United States</div>
+  <div class="subtitle reveal reveal-delay-2" style="text-align:center;max-width:700px;font-style:italic;font-size:clamp(20px,2.5vw,28px);">&ldquo;Trabaja. Cobra. Env&iacute;a.&rdquo;</div>
+  <div class="reveal reveal-delay-3" style="text-align:center;max-width:600px;font-size:14px;opacity:0.4;margin-top:8px;">Work. Get paid. Send home. &mdash; The complete financial loop for Latino immigrants, powered by Stripe.</div>
+  <div class="econ-flow reveal reveal-delay-4" style="justify-content:center;margin-top:48px;">
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">Q3 2026</div>
+      <div class="e-label">Launch</div>
+    </div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">11 States</div>
+      <div class="e-label">Coverage</div>
+    </div>
+    <div class="econ-step" style="background:rgba(90,0,180,0.08);border:1px solid rgba(90,0,180,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--purple);">10K</div>
+      <div class="e-label">Merchants</div>
+    </div>
+    <div class="econ-step" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--green);">$22M+</div>
+      <div class="e-label">ARR</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S2: US DASHBOARD -->
+<section id="s2" data-label="US Dashboard">
   <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,100,0,0.15),transparent 70%);top:0;right:0;"></div>
-  <div class="section-num reveal">01 &mdash; Executive Dashboard</div>
+  <div class="section-num reveal">02 &mdash; U.S. Executive Dashboard</div>
   <div class="mega reveal reveal-delay-1">$900B+</div>
-  <div class="title reveal reveal-delay-2" style="margin-top: 12px;">Hispanic buying power opportunity. 11 states, 9 LATAM countries, and the largest sports betting market in history.</div>
+  <div class="title reveal reveal-delay-2" style="margin-top: 12px;">Hispanic buying power opportunity. Stripe confirmed. 11 states. 10K merchants. 52K Year 1 users.</div>
   <div class="card-grid reveal reveal-delay-3">
     <div class="glass">
       <div class="card-num">Q3 2026</div>
-      <div class="card-label">Phase 1 Target Launch — consumer card issuance in the U.S.</div>
+      <div class="card-label">Phase 1 Target Launch &mdash; consumer card issuance in the U.S.</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
     <div class="glass">
-      <div class="card-num">Pre-Approved</div>
-      <div class="card-label">Stripe Tap to Pay waiver status — ready to activate</div>
+      <div class="card-num" style="background:linear-gradient(135deg,var(--green),#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Confirmed</div>
+      <div class="card-label">Stripe as sole infrastructure provider &mdash; EDD in progress</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
     <div class="glass">
@@ -825,95 +863,82 @@ section {
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
     <div class="glass">
-      <div class="card-num">9 Countries</div>
-      <div class="card-label">LATAM expansion pipeline with card issuance and betting</div>
+      <div class="card-num">52K</div>
+      <div class="card-label">Year 1 consumer user target &mdash; cards issued in first 12 months</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
   </div>
 
-  <div class="two-col reveal reveal-delay-4" style="margin-top: 48px;">
-    <div class="glass">
-      <div style="font-size: 12px; font-weight: 600; color: var(--orange); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">U.S. Launch Status</div>
-      <table class="fin-table" style="margin-top: 0;">
-        <tr><td style="opacity: 0.5;">Stripe EDD</td><td class="hl">In Progress (3-6 months)</td></tr>
-        <tr><td style="opacity: 0.5;">Tap to Pay Waiver</td><td class="pos">Pre-approved</td></tr>
-        <tr><td style="opacity: 0.5;">Episode Six</td><td class="hl">Awaiting Sponsor Bank</td></tr>
-        <tr><td style="opacity: 0.5;">Highnote</td><td class="hl">Awaiting Confirmation</td></tr>
-        <tr><td style="opacity: 0.5;">Payphone Business</td><td class="pos">Product Designed</td></tr>
-      </table>
-    </div>
-    <div class="glass">
-      <div style="font-size: 12px; font-weight: 600; color: var(--purple); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">LATAM Expansion Status</div>
-      <table class="fin-table" style="margin-top: 0;">
-        <tr><td style="opacity: 0.5;">Panama (PayCaddy)</td><td class="pos">Active — Q2 2026</td></tr>
-        <tr><td style="opacity: 0.5;">Mexico (Card)</td><td class="hl">In Progress — Q3 2026</td></tr>
-        <tr><td style="opacity: 0.5;">Colombia (Card + Betting)</td><td class="hl">In Progress — Q3 2026</td></tr>
-        <tr><td style="opacity: 0.5;">Worldpay (Colombia)</td><td class="pos">Live since May 2025</td></tr>
-        <tr><td style="opacity: 0.5;">Worldpay (Mexico)</td><td class="hl">Pending — Q4 2026</td></tr>
-      </table>
-    </div>
+  <div class="glass reveal reveal-delay-4" style="margin-top:48px;max-width:1000px;">
+    <div style="font-size: 12px; font-weight: 600; color: var(--orange); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase;">U.S. Launch Status &mdash; Stripe Infrastructure</div>
+    <table class="fin-table" style="margin-top: 0;">
+      <tr><td style="opacity: 0.5;">Stripe EDD</td><td class="hl">In Progress &mdash; Target May 15</td></tr>
+      <tr><td style="opacity: 0.5;">Tap to Pay Waiver</td><td class="pos">Pre-approved</td></tr>
+      <tr><td style="opacity: 0.5;">Stripe Issuing</td><td class="pos">Confirmed</td></tr>
+      <tr><td style="opacity: 0.5;">Stripe Connect</td><td class="pos">Confirmed</td></tr>
+      <tr><td style="opacity: 0.5;">Payphone Business</td><td class="pos">Product Designed</td></tr>
+    </table>
   </div>
 </section>
 
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S2: DECISION GATES -->
-<section id="s2" data-label="Decision Gates">
-  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.12),transparent 70%);top:0;right:0;"></div>
-  <div class="section-num reveal">02 &mdash; Decision Gate Framework</div>
-  <div class="title reveal reveal-delay-1">Three hard deadlines that prevent indefinite drift. Miss a gate, force a decision.</div>
-  <div class="subtitle reveal reveal-delay-2">Stripe EDD timeline is "3-6 months" with no hard deadline. Episode Six and Highnote are in limbo. Without decision gates, we drift into Q4 with no card program live.</div>
+<!-- S3: STRIPE INTEGRATION MILESTONES -->
+<section id="s3" data-label="Stripe Integration">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(34,197,94,0.1),transparent 70%);top:0;right:0;"></div>
+  <div class="section-num reveal">03 &mdash; Stripe Integration Milestones</div>
+  <div class="title reveal reveal-delay-1">Three milestones to launch. Single infrastructure partner. No more evaluation drift.</div>
+
+  <div class="alert alert-success reveal reveal-delay-2" style="max-width:900px;">
+    <h4>Decision Confirmed</h4>
+    <p>Stripe is our sole infrastructure provider for the U.S. market. Card issuance (Stripe Issuing), merchant acquiring (Stripe Connect + Terminal), payment links, treasury, and instant payouts &mdash; all on one platform. No Episode Six. No Highnote. One partner, one integration, fastest path to market.</p>
+  </div>
 
   <div class="card-grid reveal reveal-delay-3" style="grid-template-columns: repeat(3,1fr);">
     <div class="glass" style="border-top: 3px solid var(--orange);">
       <div class="card-num">01</div>
-      <div style="font-size:13px;font-weight:600;color:var(--orange);margin-bottom:12px;">April 15, 2026</div>
-      <div class="card-label"><strong style="color:#fff;">Shortlist Lock</strong><br>Stripe EDD questionnaire complete. Episode Six sponsor bank: yes or no. Highnote partner intro: confirmed. If no response &rarr; drop and go all-in Stripe.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--orange);margin-bottom:12px;">May 15, 2026</div>
+      <div class="card-label"><strong style="color:#fff;">EDD Completion</strong><br>Stripe Enhanced Due Diligence questionnaire cleared. Pedro owns. Weekly check-ins with Stripe rep. All documentation submitted by end of April.</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
     <div class="glass" style="border-top: 3px solid var(--purple);">
       <div class="card-num" style="background:linear-gradient(135deg,var(--purple),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">02</div>
       <div style="font-size:13px;font-weight:600;color:var(--purple);margin-bottom:12px;">June 30, 2026</div>
-      <div class="card-label"><strong style="color:#fff;">Provider Commitment</strong><br>Stripe EDD cleared or clear Q3 timeline. Integration docs in hand. Tap to Pay waiver secured. If RED on 2+ signals &rarr; pivot to Highnote.</div>
+      <div class="card-label"><strong style="color:#fff;">Sandbox &amp; Testing</strong><br>Stripe Issuing + Connect sandbox live. Terminal SDK integrated. KYC flow tested with 50+ test users. Payment Links operational. MVP in staging.</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
     <div class="glass" style="border-top: 3px solid var(--amber);">
       <div class="card-num" style="background:linear-gradient(135deg,var(--amber),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">03</div>
-      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px;">September 15, 2026</div>
-      <div class="card-label"><strong style="color:#fff;">Launch Go/No-Go</strong><br>Card program live in sandbox. KYC/CIP tested with 100+ users. Spanish support operational. First 500 beta users identified.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px;">Aug / Sep 2026</div>
+      <div class="card-label"><strong style="color:#fff;">Beta &amp; Launch</strong><br>500-user closed beta in Miami (August). Full public launch September 2026. Spanish support operational. First merchants onboarded.</div>
       <img class="whale-watermark" src="whale-logo.png" alt="" />
     </div>
   </div>
 
   <div class="glass reveal reveal-delay-4" style="margin-top:32px;max-width:1000px;">
-    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Provider Comparison</div>
+    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Stripe Capabilities</div>
     <table class="fin-table" style="margin-top:0;">
-      <thead><tr><th></th><th>Stripe</th><th>Episode Six</th><th>Highnote</th></tr></thead>
+      <thead><tr><th>Capability</th><th>Product</th><th>Use Case</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td style="font-weight:600;">Card Issuance</td><td class="pos">Yes</td><td class="pos">Yes</td><td class="pos">Yes</td></tr>
-        <tr><td style="font-weight:600;">Merchant Acquiring</td><td class="pos">Yes</td><td class="neg">No</td><td class="pos">Yes</td></tr>
-        <tr><td style="font-weight:600;">No SSN/ITIN</td><td class="pos">Yes (Tap to Pay)</td><td class="hl">TBD</td><td class="hl">TBD</td></tr>
-        <tr><td style="font-weight:600;">Timeline to Live</td><td>3-6 months</td><td>6-8 wk eval + build</td><td>Unknown</td></tr>
-        <tr><td style="font-weight:600;">Scale</td><td>Public ($70B+)</td><td>Private (FIS)</td><td>Private ($750M+)</td></tr>
+        <tr><td style="font-weight:600;">Card Issuance</td><td>Stripe Issuing</td><td style="opacity:0.5;">Virtual + physical debit cards for consumers</td><td class="pos">Confirmed</td></tr>
+        <tr><td style="font-weight:600;">Merchant Payments</td><td>Stripe Connect</td><td style="opacity:0.5;">Platform payments, merchant onboarding, split payouts</td><td class="pos">Confirmed</td></tr>
+        <tr><td style="font-weight:600;">Tap to Pay</td><td>Terminal SDK</td><td style="opacity:0.5;">NFC contactless on merchant phones &mdash; zero hardware</td><td class="pos">Pre-approved</td></tr>
+        <tr><td style="font-weight:600;">Link to Pay</td><td>Payment Links</td><td style="opacity:0.5;">WhatsApp/SMS payment links for services</td><td class="pos">Confirmed</td></tr>
+        <tr><td style="font-weight:600;">Bank Accounts</td><td>Stripe Treasury</td><td style="opacity:0.5;">FDIC-insured accounts, routing numbers, direct deposit</td><td class="hl">Phase 2</td></tr>
+        <tr><td style="font-weight:600;">Same-Day Payouts</td><td>Instant Payouts</td><td style="opacity:0.5;">Merchant earnings available immediately</td><td class="pos">Confirmed</td></tr>
       </tbody>
     </table>
-  </div>
-
-  <div class="moat-card reveal reveal-delay-5" style="margin-top:24px;">
-    <div class="moat-num" style="color:var(--orange);">RECOMMENDATION</div>
-    <div class="moat-title">Promote Highnote to #2 over Episode Six</div>
-    <div class="moat-desc">Highnote offers issuance + acquiring on a single API ($750M+ valuation, Forbes Fintech 50 two consecutive years). Episode Six is issuance-only &mdash; more vendors, more integration, more time.</div>
   </div>
 </section>
 
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S3: PHASE 1 — CONSUMER CARDS -->
-<section id="s3" data-label="Consumer Cards">
+<!-- S4: CONSUMER CARDS (was s3) -->
+<section id="s4" data-label="Consumer Cards">
   <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,160,0,0.1),transparent 70%);bottom:0;left:0;"></div>
-  <div class="section-num reveal">03 &mdash; Phase 1: Consumer Card Issuance</div>
+  <div class="section-num reveal">04 &mdash; Phase 1: Consumer Card Issuance</div>
   <div class="title reveal reveal-delay-1">Payphone-branded debit card for U.S. residents without SSN/ITIN. Spanish-first. Zero-fee. Phase 1 is consumer onboarding + card issuance only.</div>
 
   <div class="card-grid reveal reveal-delay-2" style="grid-template-columns: repeat(5,1fr);">
@@ -946,19 +971,38 @@ section {
   </div>
 
   <div class="solution-wrap reveal reveal-delay-4" style="margin-top:32px;">
-    <div style="font-size:28px;font-weight:700;font-style:italic;position:relative;z-index:1;">&ldquo;Tu banco. Tu idioma. Sin Social Security.&rdquo;</div>
-    <div style="font-size:14px;opacity:0.5;margin-top:8px;position:relative;z-index:1;">Your bank. Your language. No Social Security.</div>
-    <div style="font-size:13px;opacity:0.4;margin-top:12px;position:relative;z-index:1;">&ldquo;Ya nos conoces en Ecuador/Colombia. Ahora estamos aqu&iacute;.&rdquo;</div>
+    <div style="font-size:clamp(24px,3vw,36px);font-weight:700;font-style:italic;position:relative;z-index:1;">&ldquo;Tu banco. Tu idioma. Sin Social Security.&rdquo;</div>
+    <div style="font-size:14px;opacity:0.5;margin-top:8px;position:relative;z-index:1;">Your bank. Your language. No Social Security needed.</div>
+    <div style="font-size:15px;opacity:0.5;margin-top:16px;position:relative;z-index:1;font-style:italic;">&ldquo;Ya nos conoces en Ecuador. Ahora estamos aqu&iacute;.&rdquo;</div>
+    <div style="font-size:12px;opacity:0.3;margin-top:4px;position:relative;z-index:1;">You already know us in Ecuador. Now we&rsquo;re here.</div>
+  </div>
+
+  <div class="card-grid reveal reveal-delay-5" style="grid-template-columns:repeat(3,1fr);margin-top:24px;">
+    <div class="glass" style="text-align:center;padding:20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Niche Positioning</div>
+      <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.8);">No verificamos tu estatus migratorio</div>
+      <div style="font-size:11px;opacity:0.35;margin-top:4px;">We don&rsquo;t verify immigration status</div>
+    </div>
+    <div class="glass" style="text-align:center;padding:20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Trust Signal</div>
+      <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.8);">100+ tipos de identificaci&oacute;n aceptados</div>
+      <div style="font-size:11px;opacity:0.35;margin-top:4px;">100+ ID types from your home country</div>
+    </div>
+    <div class="glass" style="text-align:center;padding:20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--orange);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Differentiator</div>
+      <div style="font-size:15px;font-weight:600;color:rgba(255,255,255,0.8);">&iquest;Llegaste a EE.UU.? Ya tienes banco.</div>
+      <div style="font-size:11px;opacity:0.35;margin-top:4px;">Arrived in the US? You already have a bank.</div>
+    </div>
   </div>
 </section>
 
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S4: PHASE 1 TARGETS -->
-<section id="s4" data-label="Targets">
+<!-- S5: TARGETS (was s4) -->
+<section id="s5" data-label="Targets">
   <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:10%;left:-10%;"></div>
-  <div class="section-num reveal">04 &mdash; Phase 1 Targets &amp; Revenue</div>
+  <div class="section-num reveal">05 &mdash; Phase 1 Targets &amp; Revenue</div>
   <div class="title reveal reveal-delay-1">Success metrics and revenue model for the consumer card program.</div>
 
   <div class="two-col reveal reveal-delay-2" style="margin-top:40px;">
@@ -1001,12 +1045,14 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S5: PAYPHONE BUSINESS -->
-<section id="s5" data-label="Payphone Business">
+<!-- S6: PAYPHONE BUSINESS (was s5) -->
+<section id="s6" data-label="Payphone Business">
   <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.12),transparent 70%);top:0;right:0;"></div>
-  <div class="section-num reveal">05 &mdash; Phase 2: Payphone Business</div>
+  <div class="section-num reveal">06 &mdash; Phase 2: Payphone Business</div>
   <div class="mega reveal reveal-delay-1">1.1M+</div>
   <div class="title reveal reveal-delay-2" style="margin-top:12px;">Hispanic-owned SMBs in the U.S. &mdash; zero hardware, three payment methods, phone becomes a payment terminal.</div>
+  <div class="reveal reveal-delay-2" style="margin-top:16px;font-size:clamp(18px,2vw,24px);font-style:italic;opacity:0.6;">&ldquo;Tu negocio en tu bolsillo. Sin banco. Sin hardware. Sin l&iacute;mites.&rdquo;</div>
+  <div class="reveal reveal-delay-2" style="font-size:12px;opacity:0.3;margin-top:4px;">Your business in your pocket. No bank. No hardware. No limits.</div>
 
   <div class="card-grid reveal reveal-delay-3">
     <div class="glass" style="border-top: 3px solid var(--orange);">
@@ -1029,6 +1075,12 @@ section {
   <div class="stress-box reveal reveal-delay-4">
     <div class="s-title" style="color:var(--orange);">Why Payphone Business Wins</div>
     <div class="s-body"><strong style="color:rgba(255,255,255,0.8);">Spanish-first UX</strong> &mdash; no competitor offers this. <strong style="color:rgba(255,255,255,0.8);">Instant payout</strong> to Payphone wallet (not next-day). <strong style="color:rgba(255,255,255,0.8);">Zero hardware</strong> (Square: $49-$299). <strong style="color:rgba(255,255,255,0.8);">iOS + Android NFC</strong> (Cash App: iOS only). <strong style="color:rgba(255,255,255,0.8);">Remittance integration</strong> &mdash; earn and send home in one app.</div>
+  </div>
+
+  <div class="moat-card reveal reveal-delay-4" style="margin-top:16px;">
+    <div class="moat-num" style="color:var(--orange);">THE LOOP NO ONE ELSE HAS</div>
+    <div class="moat-title" style="font-style:italic;">&ldquo;Cobra con tu tel&eacute;fono. Env&iacute;a a tu familia.&rdquo;</div>
+    <div class="moat-desc">Get paid with your phone. Send to your family. &mdash; MyBambu and Comun offer banking. Square offers payments. Only Payphone connects earning, banking, AND remittances in one app. The merchant who gets paid at 2pm sends money to Ecuador by 3pm.</div>
   </div>
 
   <div class="econ-flow reveal reveal-delay-5">
@@ -1062,14 +1114,97 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S6: GEOGRAPHIC STRATEGY -->
-<section id="s6" data-label="Geography">
+<!-- S7: PRODUCT EXPANSION -->
+<section id="s7" data-label="Product Expansion">
+  <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:-10%;left:10%;"></div>
+  <div class="section-num reveal">07 &mdash; Phase 3: Product Expansion</div>
+  <div class="title reveal reveal-delay-1">What Cash App built for 58M users, we&rsquo;re building for the community they forgot. Eight products. All Spanish-first. All cross-border.</div>
+
+  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns:repeat(4,1fr);">
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Tandas</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Ahorro en comunidad</div>
+      <div class="card-label">Rotating savings circles &mdash; digitized. 6-12 members, monthly contributions, automated payouts. The cultural tradition Cash App tried with &ldquo;Pools&rdquo; but without the trust.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Pools (1.7M users)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--purple);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Payphone Score</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Tu historial es tu cr&eacute;dito</div>
+      <div class="card-label">Alternative credit scoring from remittance history, bill payments, and wallet activity. 70% of our target users have FICO below 580 &mdash; we build credit from what they already do.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Score (38% more approvals)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Paga Despu&eacute;s (BNPL)</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Compra ahora, paga despu&eacute;s</div>
+      <div class="card-label">Buy now, pay later for remittance-linked purchases. Split payments into 4 installments. Enable family in LATAM to receive goods, not just cash.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Afterpay ($2B lending run rate)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--green);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Cobra Antes (Early Pay)</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Tu sueldo, 2 d&iacute;as antes</div>
+      <div class="card-label">Get paid up to 2 days early with direct deposit. Free overdraft protection up to $200 for active users. Target: Hispanic workforce with weekly/biweekly pay cycles.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Direct Deposit (58M users)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="card-grid reveal reveal-delay-3" style="grid-template-columns:repeat(4,1fr);">
+    <div class="glass" style="border-top:3px solid var(--purple);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Payphone Familia</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Cuentas familiares sin fronteras</div>
+      <div class="card-label">Parent in the US, child in Ecuador. Shared visibility, controlled spending, real-time notifications across borders. No competitor spans both sides.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Families (US-only, ages 13-17)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Boosts</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Descuentos instant&aacute;neos</div>
+      <div class="card-label">Instant cashback at Hispanic-serving merchants &mdash; bodegas, taquer&iacute;as, tiendas. Activate a Boost before you pay. 5-15% back, driving spend to Payphone Card.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Boosts (free, no cap)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--green);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Tax + ITIN Filing</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Declara gratis. Obt&eacute;n tu ITIN.</div>
+      <div class="card-label">Free federal + state tax filing in Spanish. ITIN application assistance built in. Convert undocumented users into ITIN holders &rarr; deeper financial access.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Taxes (100% free)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">Ahorra (Savings)</div>
+      <div style="font-style:italic;font-size:12px;opacity:0.5;margin-bottom:10px;">Tu dinero trabaja para ti</div>
+      <div class="card-label">High-yield savings on wallet balance via Stripe Treasury. FDIC-insured. Earn up to 4% APY. Auto-save rules: round-up purchases, percentage of direct deposit.</div>
+      <div style="font-size:10px;opacity:0.3;font-style:italic;margin-top:10px;">Inspired by: Cash App Green (3.75% APY)</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <div class="moat-card reveal reveal-delay-4">
+    <div class="moat-num" style="color:var(--orange);">COMPETITIVE ADVANTAGE</div>
+    <div class="moat-title">Cash App has 58M users and 24% Hispanic adoption &mdash; but treats them as a byproduct, not the mission.</div>
+    <div class="moat-desc">Every product above is Cash App-inspired but purpose-built for immigrants. Spanish-first. Cross-border native. ITIN-compatible. Cash App requires SSN. Cash App has zero remittances. Cash App has zero merchant acquiring for small businesses. We take their playbook and build it for the 50M they ignore.</div>
+  </div>
+
+  <div class="stress-box reveal reveal-delay-5">
+    <div class="s-title" style="color:var(--orange);">Phase 3 Timeline</div>
+    <div class="s-body">Products ship in priority order after Phase 1 (cards) and Phase 2 (merchant acquiring) are live. <strong style="color:rgba(255,255,255,0.8);">Early Pay + Savings = Q1 2027</strong> (Stripe Treasury). <strong style="color:rgba(255,255,255,0.8);">Tandas + Boosts = Q2 2027</strong> (community features). <strong style="color:rgba(255,255,255,0.8);">BNPL + Payphone Score = Q3 2027</strong> (lending). <strong style="color:rgba(255,255,255,0.8);">Tax Filing + Familia = Q4 2027</strong> (ecosystem completion).</div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S8: GEOGRAPHY -->
+<section id="s8" data-label="Geography">
   <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,160,0,0.08),transparent 70%);bottom:0;right:0;"></div>
-  <div class="section-num reveal">06 &mdash; Geographic Execution</div>
+  <div class="section-num reveal">08 &mdash; Geographic Execution</div>
   <div class="title reveal reveal-delay-1">11 priority states covering 70%+ of the U.S. Hispanic population. Follow the migration flows.</div>
 
   <div class="glass reveal reveal-delay-2" style="margin-top:32px;max-width:1000px;">
-    <div style="font-size:12px;font-weight:700;color:var(--green);letter-spacing:2px;margin-bottom:12px;">TIER 1 &mdash; LAUNCH FIRST (Q2 2026)</div>
+    <div style="font-size:12px;font-weight:700;color:var(--green);letter-spacing:2px;margin-bottom:12px;">TIER 1 &mdash; LAUNCH FIRST (Q3 2026)</div>
     <table class="fin-table" style="margin-top:0;">
       <thead><tr><th>State</th><th>Hispanic Pop.</th><th>% of State</th><th>Hispanic SMBs</th><th>Key Metros</th><th>Corridor</th></tr></thead>
       <tbody>
@@ -1081,7 +1216,7 @@ section {
   </div>
 
   <div class="glass reveal reveal-delay-3" style="margin-top:20px;max-width:1000px;">
-    <div style="font-size:12px;font-weight:700;color:var(--amber);letter-spacing:2px;margin-bottom:12px;">TIER 2 &mdash; EXPAND (Q3-Q4 2026)</div>
+    <div style="font-size:12px;font-weight:700;color:var(--amber);letter-spacing:2px;margin-bottom:12px;">TIER 2 &mdash; EXPAND (Q4 2026 - Q1 2027)</div>
     <table class="fin-table" style="margin-top:0;">
       <tbody>
         <tr><td style="font-weight:600;">New York</td><td>4M (20%)</td><td>120K+ SMBs</td><td>Ecuadorian diaspora &mdash; Payphone brand leverage</td></tr>
@@ -1116,10 +1251,226 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S7: LATAM EXPANSION -->
-<section id="s7" data-label="LATAM">
+<!-- S9: COMPETITION (was s9) -->
+<section id="s9" data-label="Competition">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(239,68,68,0.08),transparent 70%);top:10%;right:10%;"></div>
+  <div class="section-num reveal">09 &mdash; Competitive Intelligence</div>
+  <div class="title reveal reveal-delay-1">Who we&rsquo;re up against and why we win. Everyone else stops short.</div>
+
+  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns:repeat(4,1fr);">
+    <div class="glass" style="border-top:3px solid var(--red);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Comun</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--red);margin-bottom:10px;">THREAT: HIGH</div>
+      <div class="card-label">$26M funded. 50x revenue growth. Zero-fee, Spanish-first, 100+ ID types. Same target market.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Gap:</strong> No merchant pay, no LATAM ecosystem, no remittance loop.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--purple);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">myBambu</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(90,0,180,0.12);color:var(--purple);margin-bottom:10px;">THREAT: MODERATE</div>
+      <div class="card-label">500+ ID types. &ldquo;Banking without Boundaries.&rdquo; Remittances to 17 countries. BNPL credit. 120K+ cash locations.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Gap:</strong> No merchant acquiring, no NFC Tap to Pay, no LATAM fintech ecosystem.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid #eab308;">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Majority</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(234,179,8,0.12);color:#eab308;margin-bottom:10px;">THREAT: MOD-HIGH</div>
+      <div class="card-label">$83.5M+ funded. $5.99/mo subscription. Physical meet-up centers. Broad immigrant focus.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Gap:</strong> Subscription model limits adoption. Broad = less Latino focus.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Maza</div>
+      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(255,160,0,0.12);color:var(--amber);margin-bottom:10px;">THREAT: MODERATE</div>
+      <div class="card-label">a16z backed. $8M. ITIN filing built-in. $150/yr limits scale.</div>
+      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Gap:</strong> No remittances, no merchant pay, high pricing.</div>
+      <img class="whale-watermark" src="whale-logo.png" alt="" />
+    </div>
+  </div>
+
+  <!-- Messaging Positioning -->
+  <div class="glass reveal reveal-delay-3" style="margin-top:24px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Messaging War &mdash; How They Position vs. How We Win</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>Competitor</th><th>Their Slogan</th><th>Payphone Beats With</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Comun</td><td style="opacity:0.5;font-style:italic;">&ldquo;Banking for immigrants&rdquo;</td><td class="pos">&ldquo;Trabaja. Cobra. Env&iacute;a.&rdquo; &mdash; we close the full loop</td></tr>
+        <tr><td style="font-weight:600;">myBambu</td><td style="opacity:0.5;font-style:italic;">&ldquo;Banking without Boundaries&rdquo;</td><td class="pos">&ldquo;Tu negocio en tu bolsillo&rdquo; &mdash; we add merchant earning</td></tr>
+        <tr><td style="font-weight:600;">Majority</td><td style="opacity:0.5;font-style:italic;">&ldquo;Your life abroad, simplified&rdquo;</td><td class="pos">&ldquo;Ya nos conoces&rdquo; &mdash; existing LATAM trust, zero fees</td></tr>
+        <tr><td style="font-weight:600;">Maza</td><td style="opacity:0.5;font-style:italic;">&ldquo;Build credit, build life&rdquo;</td><td class="pos">&ldquo;Cobra con tu tel&eacute;fono&rdquo; &mdash; earn first, credit later</td></tr>
+        <tr><td style="font-weight:600;">Square/Venmo</td><td style="opacity:0.5;font-style:italic;">&ldquo;Accept payments anywhere&rdquo;</td><td class="pos">&ldquo;Sin hardware. Sin l&iacute;mites.&rdquo; &mdash; Spanish-first, $0 hardware</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:32px;">
+    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 01</div><div class="moat-title">Cross-Border Network</div><div class="moat-desc">Existing LATAM user base. Payphone users in Ecuador, Colombia who have family in the U.S. = built-in distribution channel. No U.S. competitor has this.</div></div>
+    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 02</div><div class="moat-title">Cobranza / Tap to Pay</div><div class="moat-desc">Zero competitors offer a Spanish-first SoftPOS for Latino micro-merchants in the U.S. Visa Tap to Phone grew 200% YoY. Genuine blue ocean.</div></div>
+    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 03</div><div class="moat-title">Sports Betting Revenue</div><div class="moat-desc">No U.S. immigrant neobank has a betting processing vertical. Completely separate revenue line that subsidizes card program growth.</div></div>
+    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 04</div><div class="moat-title">Ecuador Regulatory Moat</div><div class="moat-desc">First fintech regulation enacted Sept 2024. Payphone&rsquo;s home-market position = first-mover advantage while new entrants navigate nascent rules.</div></div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S10: US FINANCIALS (was s10) -->
+<section id="s10" data-label="US Financials">
+  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(34,197,94,0.08),transparent 70%);bottom:10%;right:10%;"></div>
+  <div class="section-num reveal">10 &mdash; U.S. Financial Projections</div>
+  <div class="title reveal reveal-delay-1">$22M+ combined ARR by Year 2 &mdash; consumer interchange + merchant acquiring.</div>
+
+  <div class="glass reveal reveal-delay-2" style="margin-top:32px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Consumer Card Revenue (Phase 1)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>Metric</th><th>Month 3</th><th>Month 6</th><th>Month 12</th><th>Month 18</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Cards Issued</td><td>10K</td><td>50K</td><td>150K</td><td class="hl">300K</td></tr>
+        <tr><td style="font-weight:600;">MAU</td><td>5K</td><td>30K</td><td>100K</td><td class="hl">200K</td></tr>
+        <tr><td style="font-weight:600;">Avg Spend/Mo</td><td>$500</td><td>$750</td><td>$900</td><td>$1,000</td></tr>
+        <tr><td style="font-weight:600;">Monthly GMV</td><td>$2.5M</td><td>$22.5M</td><td>$90M</td><td>$200M</td></tr>
+        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$450K</td><td>$4.05M</td><td class="pos">$16.2M</td><td class="pos">$36M</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="glass reveal reveal-delay-3" style="margin-top:20px;max-width:1000px;">
+    <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Merchant Acquiring Revenue (Phase 2)</div>
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>Metric</th><th>Phase 1 (Q3'26)</th><th>Phase 2 (Q4'26)</th><th>Phase 3 (Q2'27)</th><th>Phase 4 (Q4'27)</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Active Merchants</td><td>50</td><td>500</td><td>2,500</td><td class="hl">10,000</td></tr>
+        <tr><td style="font-weight:600;">Rev/Merchant/Mo</td><td>$50</td><td>$50</td><td>$50</td><td>$50</td></tr>
+        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$30K</td><td>$300K</td><td class="pos">$1.5M</td><td class="pos">$6M</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="econ-flow reveal reveal-delay-4" style="justify-content:center;">
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$16.2M</div>
+      <div class="e-label">Consumer ARR (Mo 12)</div>
+    </div>
+    <div class="econ-arrow">&plus;</div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">$6M</div>
+      <div class="e-label">Merchant ARR (Year 2)</div>
+    </div>
+    <div class="econ-arrow">=</div>
+    <div class="econ-step" style="background:linear-gradient(135deg,rgba(255,100,0,0.15),rgba(90,0,180,0.08));border:1px solid rgba(255,100,0,0.3);border-radius:14px;">
+      <div class="e-val" style="color:var(--green);">$22M+</div>
+      <div class="e-label">Combined U.S. ARR</div>
+    </div>
+  </div>
+
+  <div class="stress-box reveal reveal-delay-5">
+    <div class="s-title">Revenue Diversification</div>
+    <div class="s-body">U.S. revenue is <strong style="color:rgba(255,255,255,0.8);">two-pronged</strong>: consumer interchange from card spend + merchant processing fees from Payphone Business. Both revenue lines compound as the user base grows &mdash; consumers spend at Payphone Business merchants, creating a closed-loop flywheel effect.</div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S11: US 90-DAY PLAN -->
+<section id="s11" data-label="US Execution">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:0;left:0;"></div>
+  <div class="section-num reveal">11 &mdash; U.S. 90-Day Action Plan</div>
+  <div class="title reveal reveal-delay-1">March 20 &mdash; June 30, 2026. Every action, every owner, every deadline. U.S. only.</div>
+
+  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns:repeat(4,1fr);margin-top:40px;">
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">March</div>
+      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">Weeks 1-2 remaining</div>
+      <div class="card-label"><strong style="color:var(--orange);">Pedro:</strong> Stripe EDD submission<br><strong style="color:var(--orange);">Pedro:</strong> Weekly Stripe check-in<br><strong style="color:var(--orange);">Val:</strong> CTO alignment on timeline<br><strong style="color:var(--orange);">Val:</strong> Confirm Product Lead by EOM</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--orange);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">April</div>
+      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">EDD follow-ups + design</div>
+      <div class="card-label"><strong style="color:var(--orange);">Pedro:</strong> EDD follow-up docs<br><strong style="color:var(--orange);">Product:</strong> Phase 1 UX design<br><strong style="color:var(--orange);">Product:</strong> Evaluate KYC vendors<br><strong style="color:var(--orange);">Val:</strong> Finalize revenue model</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--purple);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">May</div>
+      <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:12px;">EDD CLEARANCE: May 15</div>
+      <div class="card-label"><strong style="color:var(--orange);">Pedro:</strong> EDD clearance May 15<br><strong style="color:var(--orange);">Engineering:</strong> Sandbox begins<br><strong style="color:var(--orange);">Product:</strong> MVP in staging<br><strong style="color:var(--orange);">Marketing:</strong> Miami pre-launch</div>
+    </div>
+    <div class="glass" style="border-top:3px solid var(--amber);">
+      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">June</div>
+      <div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:12px;">SANDBOX LIVE: June 30</div>
+      <div class="card-label"><strong style="color:var(--orange);">Engineering:</strong> Sandbox live<br><strong style="color:var(--orange);">Engineering:</strong> Terminal SDK integrated<br><strong style="color:var(--orange);">Product:</strong> Feature-complete<br><strong style="color:var(--orange);">Compliance:</strong> Full KYC review<br><strong style="color:var(--orange);">Marketing:</strong> Waitlist launch</div>
+    </div>
+  </div>
+
+  <div class="moat-card reveal reveal-delay-3" style="margin-top:24px;border-color:rgba(255,100,0,0.2);background:linear-gradient(135deg,rgba(255,100,0,0.08),rgba(255,160,0,0.04));">
+    <div class="moat-num" style="color:var(--orange);">ACTION REQUIRED</div>
+    <div class="moat-title">Confirm Product Lead by end of March</div>
+    <div class="moat-desc">The U.S. product buildout requires a dedicated product owner. Without one confirmed by end of March, UX design in April and MVP staging in May will slip. This is the single highest-priority staffing decision for the U.S. launch.</div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S12: US DECISIONS -->
+<section id="s12" data-label="US Decisions">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);bottom:0;left:10%;"></div>
+  <div class="section-num reveal">12 &mdash; U.S. Open Decisions</div>
+  <div class="title reveal reveal-delay-1">Three calls that need to be made to keep the U.S. roadmap on track.</div>
+
+  <div class="glass reveal reveal-delay-2" style="margin-top:40px;max-width:1000px;">
+    <table class="fin-table" style="margin-top:0;">
+      <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
+      <tbody>
+        <tr><td class="hl" style="font-weight:700;">1</td><td style="font-weight:600;">Revenue model</td><td style="opacity:0.5;">Zero-fee vs. Subscription vs. Annual</td><td class="pos"><strong>Zero-fee</strong></td><td>Before launch</td></tr>
+        <tr><td class="hl" style="font-weight:700;">2</td><td style="font-weight:600;">Card network</td><td style="opacity:0.5;">Visa vs. Mastercard</td><td style="opacity:0.5;">Depends on Stripe sandbox</td><td>At sandbox</td></tr>
+        <tr><td class="hl" style="font-weight:700;">3</td><td style="font-weight:600;">Launch city</td><td style="opacity:0.5;">Miami first vs. Multi-city</td><td class="pos"><strong>Miami first</strong></td><td>June 2026</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- ============================================================ -->
+<!-- ==================== PART 2: LATAM ========================= -->
+<!-- ============================================================ -->
+
+<!-- S13: PART 2 TITLE -->
+<section id="s13" data-label="Part 2: LATAM" style="text-align:center;align-items:center;">
+  <div class="glow-orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(90,0,180,0.2),transparent 70%);top:10%;left:20%;"></div>
+  <div class="reveal" style="margin-bottom:8px;">
+    <span style="display:inline-block;padding:6px 20px;border:1px solid rgba(90,0,180,0.2);border-radius:20px;font-size:11px;letter-spacing:3px;color:var(--purple);text-transform:uppercase;font-weight:700;">Part 2</span>
+  </div>
+  <div class="mega reveal reveal-delay-1" style="font-size:clamp(80px,16vw,200px);background:linear-gradient(135deg,var(--purple),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 60px rgba(90,0,180,0.3));">LATAM</div>
+  <div class="subtitle reveal reveal-delay-2" style="text-align:center;max-width:700px;">PayCaddy Card Issuance + Worldpay Sports Betting</div>
+  <div class="econ-flow reveal reveal-delay-3" style="justify-content:center;margin-top:48px;">
+    <div class="econ-step" style="background:rgba(90,0,180,0.08);border:1px solid rgba(90,0,180,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--purple);">9 Countries</div>
+      <div class="e-label">Pipeline</div>
+    </div>
+    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--amber);">3 Tiers</div>
+      <div class="e-label">Prioritization</div>
+    </div>
+    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--orange);">$54B</div>
+      <div class="e-label">Betting Market</div>
+    </div>
+    <div class="econ-step" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:14px;">
+      <div class="e-val" style="color:var(--green);">6</div>
+      <div class="e-label">Corridors</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
+
+<!-- S14: LATAM MARKETS (was s7) -->
+<section id="s14" data-label="LATAM Markets">
   <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);top:10%;right:10%;"></div>
-  <div class="section-num reveal">07 &mdash; LATAM Market Expansion</div>
+  <div class="section-num reveal">14 &mdash; LATAM Market Expansion</div>
   <div class="title reveal reveal-delay-1">Card issuance via PayCaddy + local banks + Mastercard across 9 markets in 3 tiers.</div>
 
   <div class="two-col reveal reveal-delay-2" style="margin-top:40px;">
@@ -1151,10 +1502,10 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S8: SPORTS BETTING -->
-<section id="s8" data-label="Sports Betting">
+<!-- S15: SPORTS BETTING (was s8) -->
+<section id="s15" data-label="Sports Betting">
   <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(255,100,0,0.12),transparent 70%);top:-20%;left:20%;"></div>
-  <div class="section-num reveal">08 &mdash; Sports Betting Processing</div>
+  <div class="section-num reveal">15 &mdash; Sports Betting Processing</div>
   <div class="mega reveal reveal-delay-1">$54B</div>
   <div class="title reveal reveal-delay-2" style="margin-top:12px;">projected LATAM sports betting market. Worldpay-powered processing that subsidizes card program growth.</div>
 
@@ -1185,93 +1536,51 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S9: COMPETITIVE INTELLIGENCE -->
-<section id="s9" data-label="Competition">
-  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(239,68,68,0.08),transparent 70%);top:10%;right:10%;"></div>
-  <div class="section-num reveal">09 &mdash; Competitive Intelligence</div>
-  <div class="title reveal reveal-delay-1">Who we&rsquo;re up against and why we win. Everyone else stops short.</div>
+<!-- S16: LATAM 90-DAY & DECISIONS -->
+<section id="s16" data-label="LATAM Plan">
+  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);top:0;left:0;"></div>
+  <div class="section-num reveal">16 &mdash; LATAM 90-Day Plan &amp; Decisions</div>
+  <div class="title reveal reveal-delay-1">March &mdash; June 2026. LATAM action items and the three decisions that shape our expansion.</div>
 
-  <div class="card-grid reveal reveal-delay-2">
-    <div class="glass" style="border-top:3px solid var(--red);">
-      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Comun</div>
-      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(239,68,68,0.12);color:var(--red);margin-bottom:10px;">THREAT: HIGH</div>
-      <div class="card-label">$26M funded. 50x revenue growth. Zero-fee, Spanish-first, 100+ ID types. Same exact target market.</div>
-      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Beat on cross-border + cobranza. No merchant play.</div>
-      <img class="whale-watermark" src="whale-logo.png" alt="" />
+  <div class="two-col reveal reveal-delay-2" style="margin-top:40px;">
+    <!-- LEFT: 90-Day Actions -->
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">LATAM 90-Day Actions</div>
+      <div class="glass" style="margin-bottom:16px;border-top:3px solid var(--purple);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">March</div>
+        <div class="card-label"><strong style="color:var(--purple);">Val:</strong> Begin LATAM BD search<br><strong style="color:var(--purple);">Pedro/Val:</strong> Confirm PayCaddy Panama status</div>
+      </div>
+      <div class="glass" style="margin-bottom:16px;border-top:3px solid var(--purple);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">April</div>
+        <div class="card-label"><strong style="color:var(--purple);">LATAM Lead:</strong> Onboard new BD hire<br><strong style="color:var(--purple);">LATAM Lead:</strong> Mexico discussions begin<br><strong style="color:var(--purple);">Val:</strong> Finalize LATAM BD hire</div>
+      </div>
+      <div class="glass" style="margin-bottom:16px;border-top:3px solid var(--purple);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">May</div>
+        <div class="card-label"><strong style="color:var(--purple);">LATAM Lead:</strong> Colombia + Worldpay<br><strong style="color:var(--purple);">LATAM Lead:</strong> PayCaddy coverage review<br><strong style="color:var(--purple);">Val:</strong> Panama betting activation</div>
+      </div>
+      <div class="glass" style="border-top:3px solid var(--purple);">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">June</div>
+        <div class="card-label"><strong style="color:var(--purple);">Panama:</strong> Live<br><strong style="color:var(--purple);">Mexico:</strong> Terms agreed<br><strong style="color:var(--purple);">Colombia:</strong> Worldpay betting integration</div>
+      </div>
     </div>
-    <div class="glass" style="border-top:3px solid #eab308;">
-      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Majority</div>
-      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(234,179,8,0.12);color:#eab308;margin-bottom:10px;">THREAT: MOD-HIGH</div>
-      <div class="card-label">$83.5M+ funded. $5.99/mo subscription. Physical meet-up centers. Broad immigrant focus.</div>
-      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Zero-fee undercuts. Broad = less Latino focus.</div>
-      <img class="whale-watermark" src="whale-logo.png" alt="" />
-    </div>
-    <div class="glass" style="border-top:3px solid var(--amber);">
-      <div style="font-weight:700;font-size:18px;margin-bottom:4px;">Maza</div>
-      <div style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(255,160,0,0.12);color:var(--amber);margin-bottom:10px;">THREAT: MODERATE</div>
-      <div class="card-label">a16z backed. $8M. ITIN filing. $150/yr limits adoption.</div>
-      <div style="font-size:11px;color:var(--orange);margin-top:10px;"><strong>Mitigation:</strong> Add ITIN in Phase 3. Pricing limits scale.</div>
-      <img class="whale-watermark" src="whale-logo.png" alt="" />
-    </div>
-  </div>
-
-  <div style="margin-top:32px;">
-    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 01</div><div class="moat-title">Cross-Border Network</div><div class="moat-desc">Existing LATAM user base. Payphone users in Ecuador, Colombia who have family in the U.S. = built-in distribution channel. No U.S. competitor has this.</div></div>
-    <div class="moat-card reveal reveal-delay-3"><div class="moat-num">MOAT 02</div><div class="moat-title">Cobranza / Tap to Pay</div><div class="moat-desc">Zero competitors offer a Spanish-first SoftPOS for Latino micro-merchants in the U.S. Visa Tap to Phone grew 200% YoY. Genuine blue ocean.</div></div>
-    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 03</div><div class="moat-title">Sports Betting Revenue</div><div class="moat-desc">No U.S. immigrant neobank has a betting processing vertical. Completely separate revenue line that subsidizes card program growth.</div></div>
-    <div class="moat-card reveal reveal-delay-4"><div class="moat-num">MOAT 04</div><div class="moat-title">Ecuador Regulatory Moat</div><div class="moat-desc">First fintech regulation enacted Sept 2024. Payphone&rsquo;s home-market position = first-mover advantage while new entrants navigate nascent rules.</div></div>
-  </div>
-</section>
-
-<!-- DIVIDER -->
-<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
-
-<!-- S10: FINANCIAL PROJECTIONS -->
-<section id="s10" data-label="Financials">
-  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(34,197,94,0.08),transparent 70%);bottom:10%;right:10%;"></div>
-  <div class="section-num reveal">10 &mdash; Financial Projections</div>
-  <div class="title reveal reveal-delay-1">$22M+ combined ARR by Year 2 &mdash; consumer interchange + merchant acquiring. Excluding betting.</div>
-
-  <div class="glass reveal reveal-delay-2" style="margin-top:32px;max-width:1000px;">
-    <div style="font-size:12px;font-weight:600;color:var(--orange);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Consumer Card Revenue (Phase 1)</div>
-    <table class="fin-table" style="margin-top:0;">
-      <thead><tr><th>Metric</th><th>Month 3</th><th>Month 6</th><th>Month 12</th><th>Month 18</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:600;">Cards Issued</td><td>10K</td><td>50K</td><td>150K</td><td class="hl">300K</td></tr>
-        <tr><td style="font-weight:600;">MAU</td><td>5K</td><td>30K</td><td>100K</td><td class="hl">200K</td></tr>
-        <tr><td style="font-weight:600;">Avg Spend/Mo</td><td>$500</td><td>$750</td><td>$900</td><td>$1,000</td></tr>
-        <tr><td style="font-weight:600;">Monthly GMV</td><td>$2.5M</td><td>$22.5M</td><td>$90M</td><td>$200M</td></tr>
-        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$450K</td><td>$4.05M</td><td class="pos">$16.2M</td><td class="pos">$36M</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="glass reveal reveal-delay-3" style="margin-top:20px;max-width:1000px;">
-    <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">Merchant Acquiring Revenue (Phase 2)</div>
-    <table class="fin-table" style="margin-top:0;">
-      <thead><tr><th>Metric</th><th>Phase 1 (Q2'26)</th><th>Phase 2 (Q4'26)</th><th>Phase 3 (Q2'27)</th><th>Phase 4 (Q4'27)</th></tr></thead>
-      <tbody>
-        <tr><td style="font-weight:600;">Active Merchants</td><td>50</td><td>500</td><td>2,500</td><td class="hl">10,000</td></tr>
-        <tr><td style="font-weight:600;">Rev/Merchant/Mo</td><td>$50</td><td>$50</td><td>$50</td><td>$50</td></tr>
-        <tr><td style="font-weight:600;">Annual Run Rate</td><td>$30K</td><td>$300K</td><td class="pos">$1.5M</td><td class="pos">$6M</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="econ-flow reveal reveal-delay-4" style="justify-content:center;">
-    <div class="econ-step" style="background:rgba(255,100,0,0.08);border:1px solid rgba(255,100,0,0.2);border-radius:14px;">
-      <div class="e-val" style="color:var(--orange);">$16.2M</div>
-      <div class="e-label">Consumer ARR (Mo 12)</div>
-    </div>
-    <div class="econ-arrow">&plus;</div>
-    <div class="econ-step" style="background:rgba(255,160,0,0.08);border:1px solid rgba(255,160,0,0.2);border-radius:14px;">
-      <div class="e-val" style="color:var(--amber);">$6M</div>
-      <div class="e-label">Merchant ARR (Year 2)</div>
-    </div>
-    <div class="econ-arrow">=</div>
-    <div class="econ-step" style="background:linear-gradient(135deg,rgba(255,100,0,0.15),rgba(90,0,180,0.08));border:1px solid rgba(255,100,0,0.3);border-radius:14px;">
-      <div class="e-val" style="color:var(--green);">$22M+</div>
-      <div class="e-label">Combined ARR</div>
+    <!-- RIGHT: Decisions + Critical Gap -->
+    <div>
+      <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;">LATAM Decisions</div>
+      <div class="glass" style="margin-bottom:24px;">
+        <table class="fin-table" style="margin-top:0;">
+          <thead><tr><th>#</th><th>Decision</th><th>Recommended</th><th>Deadline</th></tr></thead>
+          <tbody>
+            <tr><td class="hl" style="font-weight:700;">1</td><td style="font-weight:600;">LATAM BD hire</td><td class="pos"><strong>External hire</strong></td><td>End of April</td></tr>
+            <tr><td class="hl" style="font-weight:700;">2</td><td style="font-weight:600;">Ecuador priority</td><td class="pos"><strong>Tier 2</strong></td><td>Now</td></tr>
+            <tr><td class="hl" style="font-weight:700;">3</td><td style="font-weight:600;">Panama betting</td><td class="pos"><strong>Activate</strong></td><td>Now</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="moat-card" style="border-color:rgba(239,68,68,0.2);background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(255,100,0,0.04));">
+        <div class="moat-num" style="color:var(--red);">CRITICAL GAP</div>
+        <div class="moat-title">LATAM items need a dedicated partnerships lead</div>
+        <div class="moat-desc">Pedro cannot run U.S. Stripe integration AND LATAM multi-country rollout simultaneously. <strong style="color:rgba(255,255,255,0.8);">Hire a LATAM BD person by end of April.</strong> Without this hire, Panama timing holds but Mexico and Colombia slip to Q4.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1279,72 +1588,8 @@ section {
 <!-- DIVIDER -->
 <div class="section-divider"><img src="whale-logo.png" alt="" /></div>
 
-<!-- S11: 90-DAY PLAN -->
-<section id="s11" data-label="Execution">
-  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(255,100,0,0.1),transparent 70%);top:0;left:0;"></div>
-  <div class="section-num reveal">11 &mdash; 90-Day Action Plan</div>
-  <div class="title reveal reveal-delay-1">March 20 &mdash; June 18, 2026. Every action, every owner, every deadline.</div>
-
-  <div class="card-grid reveal reveal-delay-2" style="grid-template-columns:repeat(4,1fr);margin-top:40px;">
-    <div class="glass" style="border-top:3px solid var(--orange);">
-      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">March</div>
-      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">Weeks 1-2 remaining</div>
-      <div class="card-label"><strong style="color:var(--orange);">Pedro:</strong> Complete Stripe EDD<br><strong style="color:var(--orange);">Pedro:</strong> Follow-up E6 + Highnote<br><strong style="color:var(--orange);">Val:</strong> Begin LATAM BD search<br><strong style="color:var(--orange);">Both:</strong> Confirm PayCaddy Panama<br><strong style="color:var(--orange);">Val:</strong> Align CTO on timeline</div>
-    </div>
-    <div class="glass" style="border-top:3px solid var(--orange);">
-      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">April</div>
-      <div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:12px;">GATE 1: April 15</div>
-      <div class="card-label"><strong style="color:var(--orange);">GATE 1:</strong> Lock provider shortlist<br><strong style="color:var(--orange);">LATAM:</strong> Onboard new BD lead<br><strong style="color:var(--orange);">Product:</strong> Phase 1 UX design<br><strong style="color:var(--orange);">Product:</strong> Evaluate KYC vendors<br><strong style="color:var(--orange);">Val:</strong> Finalize revenue model</div>
-    </div>
-    <div class="glass" style="border-top:3px solid var(--purple);">
-      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">May</div>
-      <div style="font-size:10px;opacity:0.3;margin-bottom:12px;">Build + Expand</div>
-      <div class="card-label"><strong style="color:var(--orange);">Product:</strong> MVP in staging<br><strong style="color:var(--orange);">Pedro:</strong> Stripe docs / Highnote<br><strong style="color:var(--orange);">LATAM:</strong> Colombia + Worldpay<br><strong style="color:var(--orange);">Marketing:</strong> Miami pre-launch<br><strong style="color:var(--orange);">Val:</strong> Panama betting decision</div>
-    </div>
-    <div class="glass" style="border-top:3px solid var(--amber);">
-      <div style="font-weight:700;font-size:16px;margin-bottom:4px;">June</div>
-      <div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:12px;">GATE 2: June 30</div>
-      <div class="card-label"><strong style="color:var(--orange);">GATE 2:</strong> Provider commitment<br><strong style="color:var(--orange);">Product:</strong> MVP feature-complete<br><strong style="color:var(--orange);">Compliance:</strong> Full KYC review<br><strong style="color:var(--orange);">Marketing:</strong> Waiting list launch<br><strong style="color:var(--orange);">LATAM:</strong> Panama live / Mexico terms</div>
-    </div>
-  </div>
-
-  <div class="moat-card reveal reveal-delay-3" style="margin-top:24px;border-color:rgba(239,68,68,0.2);background:linear-gradient(135deg,rgba(239,68,68,0.08),rgba(255,100,0,0.04));">
-    <div class="moat-num" style="color:var(--red);">CRITICAL GAP</div>
-    <div class="moat-title">LATAM items need a dedicated partnerships lead</div>
-    <div class="moat-desc">Pedro cannot run U.S. provider evaluation AND LATAM multi-country rollout simultaneously. <strong style="color:rgba(255,255,255,0.8);">Hire a LATAM BD person by end of April.</strong></div>
-  </div>
-</section>
-
-<!-- DIVIDER -->
-<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
-
-<!-- S12: OPEN DECISIONS -->
-<section id="s12" data-label="Decisions">
-  <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,rgba(90,0,180,0.1),transparent 70%);bottom:0;left:10%;"></div>
-  <div class="section-num reveal">12 &mdash; Open Decisions</div>
-  <div class="title reveal reveal-delay-1">Seven calls that need to be made to keep the roadmap on track.</div>
-
-  <div class="glass reveal reveal-delay-2" style="margin-top:40px;max-width:1000px;">
-    <table class="fin-table" style="margin-top:0;">
-      <thead><tr><th>#</th><th>Decision</th><th>Options</th><th>Recommended</th><th>Deadline</th></tr></thead>
-      <tbody>
-        <tr><td class="hl" style="font-weight:700;">1</td><td style="font-weight:600;">Highnote to #2?</td><td style="opacity:0.5;">Highnote (issuance+acquiring) vs. E6 (issuance only)</td><td class="pos"><strong>Highnote</strong></td><td>April 15</td></tr>
-        <tr><td class="hl" style="font-weight:700;">2</td><td style="font-weight:600;">Revenue model</td><td style="opacity:0.5;">Zero-fee vs. Subscription vs. Annual</td><td class="pos"><strong>Zero-fee</strong></td><td>Before launch</td></tr>
-        <tr><td class="hl" style="font-weight:700;">3</td><td style="font-weight:600;">Card network</td><td style="opacity:0.5;">Visa vs. Mastercard</td><td style="opacity:0.5;">Depends on provider</td><td>At commitment</td></tr>
-        <tr><td class="hl" style="font-weight:700;">4</td><td style="font-weight:600;">LATAM BD hire</td><td style="opacity:0.5;">Internal vs. External vs. Contractor</td><td class="pos"><strong>External hire</strong></td><td>End of April</td></tr>
-        <tr><td class="hl" style="font-weight:700;">5</td><td style="font-weight:600;">Ecuador priority</td><td style="opacity:0.5;">Tier 1 (home market) vs. Tier 2 (reg risk)</td><td class="pos"><strong>Tier 2</strong></td><td>Now</td></tr>
-        <tr><td class="hl" style="font-weight:700;">6</td><td style="font-weight:600;">Panama betting</td><td style="opacity:0.5;">Keep exploratory vs. Activate</td><td class="pos"><strong>Activate</strong></td><td>Now</td></tr>
-        <tr><td class="hl" style="font-weight:700;">7</td><td style="font-weight:600;">Phase 1 launch city</td><td style="opacity:0.5;">Miami first vs. Multi-city</td><td class="pos"><strong>Miami first</strong></td><td>June</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- DIVIDER -->
-<div class="section-divider"><img src="whale-logo.png" alt="" /></div>
-
-<!-- S13: CLOSE -->
-<section id="s13" data-label="Close" style="min-height:60vh;text-align:center;align-items:center;">
+<!-- S17: CLOSE -->
+<section id="s17" data-label="Close" style="min-height:60vh;text-align:center;align-items:center;">
   <div class="glow-orb" style="width:500px;height:500px;background:radial-gradient(circle,var(--orange-glow),transparent 70%);top:0;left:30%;"></div>
   <img class="reveal" src="whale-logo.png" alt="Payphone" style="width:80px;height:auto;margin-bottom:16px;" />
   <div class="mega reveal reveal-delay-1" style="font-size:clamp(40px,6vw,64px);">payphone</div>
@@ -1365,14 +1610,14 @@ section {
   </div>
   <div class="reveal reveal-delay-4" style="font-size:13px;opacity:0.2;margin-top:40px;">
     Confidential &bull; Payphone Global &bull; March 2026<br>
-    Prepared for Val Infante, CGO &bull; Next Review: April 15, 2026 (Gate 1)
+    Prepared for Val Infante, CGO &bull; Infrastructure: Stripe (Confirmed) &bull; Next milestone: Sandbox Live &mdash; June 30, 2026
   </div>
 </section>
 
 </div><!-- /main-content -->
 
 <script>
-const VALID_PASS = 'unicron2025';
+const VALID_PASS = 'unicorn2026';
 const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 const gate = document.getElementById('password-gate');
 const passInput = document.getElementById('passwordInput');
