@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Card — Solución de Visibilidad y Control de URLs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #FF6400;
+            --accent-dark: #e55a00;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1e1b4b;
+            --text: #374151;
+            --text-light: #6b7280;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Password Screen */
+        .password-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #0f0a2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        .password-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .password-box {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+        }
+        .password-box h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .password-box p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .password-box input {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+        .password-box input:focus {
+            border-color: var(--accent);
+        }
+        .password-box button {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .password-box button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255,100,0,0.4);
+        }
+        .password-error {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.75rem;
+            display: none;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+        .shake { animation: shake 0.3s ease-in-out; }
+
+        /* Content Wrapper */
+        .content-wrapper {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .content-wrapper.unlocked {
+            opacity: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0;
+            width: 270px;
+            height: 100vh;
+            background: #0f0a2e;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        .sidebar-logo {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .sidebar-logo .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        .sidebar-logo h3 {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .sidebar-logo p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+        }
+        .nav-section {
+            padding: 1rem 0;
+        }
+        .nav-section-title {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 0 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 1.5rem;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--accent);
+        }
+        .nav-link .icon { font-size: 1rem; }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 1rem;
+        }
+        .back-link:hover { color: white; }
+
+        /* Mobile Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem; left: 1.5rem;
+            width: 48px; height: 48px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(255,100,0,0.4);
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 50%, #2d1f6e 100%);
+            padding: 3.5rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,100,0,0.15), transparent 70%);
+            top: -150px; right: -100px;
+            border-radius: 50%;
+        }
+        .header::after {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(239,68,68,0.1), transparent 70%);
+            bottom: -100px; left: 10%;
+            border-radius: 50%;
+        }
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .header-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .header-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-orange { background: rgba(255,100,0,0.15); color: var(--accent); }
+        .badge-red { background: rgba(239,68,68,0.15); color: #f87171; }
+        .badge-green { background: rgba(16,185,129,0.15); color: #34d399; }
+        .badge-blue { background: rgba(99,102,241,0.15); color: #818cf8; }
+        .header h1 {
+            color: white;
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            line-height: 1.1;
+        }
+        .header h1 span { color: var(--accent); }
+        .header > .header-content > p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            max-width: 700px;
+            line-height: 1.7;
+        }
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .header-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-num {
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .stat-num.green { color: #34d399; }
+        .stat-num.orange { color: var(--accent); }
+        .stat-num.red { color: #f87171; }
+        .stat-label {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.72rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Sections */
+        section {
+            padding: 3rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-header {
+            margin-bottom: 2rem;
+        }
+        .section-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        .badge-orange-bg { background: rgba(255,100,0,0.1); color: var(--accent); }
+        .badge-green-bg { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .badge-red-bg { background: rgba(239,68,68,0.1); color: var(--danger); }
+        .badge-blue-bg { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .badge-purple-bg { background: rgba(124,58,237,0.1); color: #7c3aed; }
+        .badge-yellow-bg { background: rgba(245,158,11,0.1); color: var(--warning); }
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            color: var(--text-light);
+            font-size: 0.92rem;
+            max-width: 700px;
+        }
+
+        /* Tables */
+        .model-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        .model-table th {
+            background: #0f0a2e;
+            color: white;
+            padding: 0.85rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+        .model-table td {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .model-table tr:last-child td { border-bottom: none; }
+        .model-table tr:hover td { background: rgba(99,102,241,0.03); }
+        .model-table .row-highlight td {
+            background: rgba(16,185,129,0.06);
+            font-weight: 600;
+        }
+        .model-table .row-total td {
+            background: #0f0a2e;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .model-table .row-danger td {
+            background: rgba(239,68,68,0.06);
+        }
+        .model-table .text-right { text-align: right; }
+        .model-table .text-center { text-align: center; }
+        .model-table .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+        }
+        .positive { color: var(--secondary); font-weight: 600; }
+        .negative { color: var(--danger); font-weight: 600; }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .card p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Grid layouts */
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+        /* KPI Cards */
+        .kpi-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid var(--border);
+        }
+        .kpi-card.green { border-top-color: var(--secondary); }
+        .kpi-card.orange { border-top-color: var(--accent); }
+        .kpi-card.red { border-top-color: var(--danger); }
+        .kpi-card.blue { border-top-color: var(--primary); }
+        .kpi-card .kpi-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .kpi-card .kpi-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+        .kpi-card .kpi-sub {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Strategy Box */
+        .strategy-box {
+            background: linear-gradient(135deg, #0f0a2e 0%, #1a1145 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        .strategy-box::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(255,100,0,0.08), transparent 70%);
+            top: -100px; right: -50px;
+            border-radius: 50%;
+        }
+        .strategy-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+        .strategy-item {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        .strategy-item h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .strategy-item p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        .section-alt {
+            background: rgba(99,102,241,0.02);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.25rem;
+        }
+        .tag-green { background: rgba(16,185,129,0.1); color: var(--secondary); }
+        .tag-red { background: rgba(220,38,38,0.1); color: var(--danger); }
+        .tag-yellow { background: rgba(245,158,11,0.1); color: var(--warning); }
+        .tag-blue { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .tag-orange { background: rgba(255,100,0,0.1); color: var(--accent); }
+
+        /* Note box */
+        .note-box {
+            border-left: 4px solid;
+            border-radius: 0 12px 12px 0;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--text);
+        }
+        .note-box.warning {
+            background: rgba(245,158,11,0.08);
+            border-left-color: var(--warning);
+        }
+        .note-box.danger {
+            background: rgba(239,68,68,0.08);
+            border-left-color: var(--danger);
+        }
+        .note-box.success {
+            background: rgba(16,185,129,0.08);
+            border-left-color: var(--secondary);
+        }
+        .note-box.info {
+            background: rgba(99,102,241,0.08);
+            border-left-color: var(--primary);
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #1e1b4b;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .code-block pre {
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.8;
+            white-space: pre;
+        }
+        .code-block .comment { color: #64748b; }
+        .code-block .keyword { color: #c084fc; }
+        .code-block .string { color: #34d399; }
+        .code-block .number { color: #fbbf24; }
+        .code-block .method { color: #60a5fa; }
+        .code-block .header-label {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        /* Architecture diagram */
+        .arch-diagram {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin: 1.5rem 0;
+        }
+        .arch-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+        .arch-node {
+            background: #f1f5f9;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            text-align: center;
+            min-width: 140px;
+        }
+        .arch-node.primary {
+            background: rgba(255,100,0,0.08);
+            border-color: var(--accent);
+        }
+        .arch-node.danger {
+            background: rgba(239,68,68,0.08);
+            border-color: var(--danger);
+        }
+        .arch-node.success {
+            background: rgba(16,185,129,0.08);
+            border-color: var(--secondary);
+        }
+        .arch-node.new {
+            background: rgba(99,102,241,0.08);
+            border-color: var(--primary);
+            border-style: dashed;
+        }
+        .arch-node h4 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .arch-node p {
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+        .arch-arrow {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0 2rem 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.35rem;
+            top: 1.25rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+        }
+        .timeline-item.active::before { background: var(--accent); box-shadow: 0 0 0 3px rgba(255,100,0,0.2); }
+        .timeline-item.done::before { background: var(--secondary); box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+        .timeline-item h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .timeline-item .timeline-date {
+            font-size: 0.72rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .timeline-item p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f0a2e;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.78rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: flex; }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-left: 0; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr); }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.75rem; }
+            .header-stats { flex-direction: column; gap: 1rem; }
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .model-table { font-size: 0.75rem; }
+            .model-table th, .model-table td { padding: 0.5rem 0.6rem; }
+            section { padding: 2rem 1rem; }
+            .arch-flow { flex-direction: column; }
+            .arch-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Password Screen -->
+<div class="password-screen" id="passwordScreen">
+    <div class="password-box" id="passwordBox">
+        <h2>API Card — URL Tracking</h2>
+        <p>Documento confidencial de arquitectura</p>
+        <input type="password" id="passwordInput" placeholder="Ingresa la contraseña..." autofocus>
+        <button onclick="checkPassword()">Acceder</button>
+        <div class="password-error" id="passwordError">Contraseña incorrecta. Intenta de nuevo.</div>
+    </div>
+</div>
+
+<div class="content-wrapper" id="contentWrapper">
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-icon">&#128275;</div>
+        <h3>API Card Security</h3>
+        <p>Visibilidad y Control de URLs</p>
+    </div>
+
+    <div class="nav-section">
+        <div class="nav-section-title">Contexto</div>
+        <a href="#problema" class="nav-link"><span class="icon">&#9888;&#65039;</span> El Problema</a>
+        <a href="#casos" class="nav-link"><span class="icon">&#128203;</span> Casos Reales</a>
+        <a href="#root-cause" class="nav-link"><span class="icon">&#128269;</span> Causa Raiz</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Solucion Tecnica</div>
+        <a href="#arquitectura" class="nav-link"><span class="icon">&#127959;&#65039;</span> Arquitectura</a>
+        <a href="#domain-registry" class="nav-link"><span class="icon">&#128221;</span> Domain Registry</a>
+        <a href="#middleware" class="nav-link"><span class="icon">&#128737;&#65039;</span> Middleware</a>
+        <a href="#scanner" class="nav-link"><span class="icon">&#128225;</span> URL Scanner</a>
+        <a href="#dashboard" class="nav-link"><span class="icon">&#128202;</span> Dashboard</a>
+    </div>
+    <div class="nav-section">
+        <div class="nav-section-title">Implementacion</div>
+        <a href="#api-specs" class="nav-link"><span class="icon">&#128268;</span> API Endpoints</a>
+        <a href="#pci" class="nav-link"><span class="icon">&#128272;</span> PCI DSS 4.0</a>
+        <a href="#roadmap" class="nav-link"><span class="icon">&#128197;</span> Roadmap</a>
+        <a href="#riesgos" class="nav-link"><span class="icon">&#9889;</span> Matriz de Riesgos</a>
+        <a href="#decisiones" class="nav-link"><span class="icon">&#9989;</span> Decisiones</a>
+    </div>
+
+    <a href="latam-expansion.html" class="back-link">&#8592; LATAM Expansion</a>
+    <a href="latam-betting-competitors.html" class="back-link">&#8592; Betting Competitors</a>
+</nav>
+
+<!-- Mobile Toggle -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">&#9776;</button>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-badges">
+                <span class="header-badge badge-red">Urgente — Visa Compliance</span>
+                <span class="header-badge badge-orange">API Card Product</span>
+                <span class="header-badge badge-blue">Para: Juan Diego (CTO)</span>
+            </div>
+            <h1>API Card: <span>Solucion de Visibilidad<br>y Control de URLs</span></h1>
+            <p>Propuesta tecnica para resolver la falta de visibilidad en dominios que usan el API Card, prevenir multas de Visa, y habilitar el vertical de betting de forma segura y controlada.</p>
+
+            <div class="header-stats">
+                <div class="header-stat">
+                    <span class="stat-num red">2</span>
+                    <span class="stat-label">Multas Visa 2025</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num orange">0%</span>
+                    <span class="stat-label">Visibilidad URL Actual</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num green">1</span>
+                    <span class="stat-label">Caso Exitoso (Betcris)</span>
+                </div>
+                <div class="header-stat">
+                    <span class="stat-num" style="color: #818cf8;">3</span>
+                    <span class="stat-label">Integraciones Afectadas</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SECTION: EL PROBLEMA ============ -->
+    <section id="problema">
+        <div class="section-header">
+            <span class="section-badge badge-red-bg">Problema Critico</span>
+            <h2>El Problema: Cero Visibilidad en URLs del API Card</h2>
+            <p>Payphone ofrece 3 metodos de integracion de pagos. Solo el API Card opera en un modelo donde no tenemos visibilidad del frontend del comercio.</p>
+        </div>
+
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Metodo</th>
+                    <th>Como Funciona</th>
+                    <th>Visibilidad URL</th>
+                    <th>Riesgo</th>
+                    <th>Requiere PCI</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-highlight">
+                    <td><strong>Boton por Redireccion</strong></td>
+                    <td>Usuario es redirigido a pagina hosted de Payphone</td>
+                    <td><span class="tag tag-green">100%</span> Payphone controla la pagina</td>
+                    <td><span class="tag tag-green">Bajo</span></td>
+                    <td>No</td>
+                </tr>
+                <tr class="row-highlight">
+                    <td><strong>Cajita de Pagos</strong></td>
+                    <td>Widget/iframe embebido en pagina del comercio</td>
+                    <td><span class="tag tag-green">Alta</span> iframe origen verificable</td>
+                    <td><span class="tag tag-green">Bajo</span></td>
+                    <td>No</td>
+                </tr>
+                <tr class="row-danger">
+                    <td><strong>API Card</strong></td>
+                    <td>Comercio recolecta datos de tarjeta en SU form, envia server-to-server a Payphone</td>
+                    <td><span class="tag tag-red">0%</span> Solo vemos IP del servidor</td>
+                    <td><span class="tag tag-red">Critico</span></td>
+                    <td><strong>Si</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box danger">
+            <strong>El API Card es server-to-server.</strong> El comercio captura PAN, CVV y expiracion en su propio formulario y los transmite al endpoint de Payphone. Payphone solo ve la llamada API desde el servidor del comercio, NUNCA ve la URL del frontend donde el tarjetahabiente ingreso sus datos. Esto permite que un comercio registre un negocio legitimo pero despliegue el formulario en sitios no autorizados (casinos, contenido adulto, etc).
+        </div>
+    </section>
+
+    <!-- ============ SECTION: CASOS REALES ============ -->
+    <section id="casos" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-red-bg">Incidentes</span>
+            <h2>Casos Reales: Multas y Mal Uso</h2>
+            <p>Tres casos documentados que evidencian la vulnerabilidad del modelo actual.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card" style="border-top: 4px solid var(--danger);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                    <span class="tag tag-red">MULTA VISA</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Junio 2025</span>
+                </div>
+                <h3>CASO 1: Charge Money</h3>
+                <p style="margin-bottom: 0.75rem;">Comercio se registro como tienda de ecommerce "OnlinePayments". Integro API Card supuestamente para paginas de comercio electronico.</p>
+                <div class="note-box danger" style="margin-top: 0;">
+                    <strong>Hallazgo Visa:</strong> API Card estaba siendo usado en casinos online y paginas de contenido para adulto. URLs completamente diferentes a las declaradas.
+                </div>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-red">Casino Online</span>
+                    <span class="tag tag-red">Contenido Adulto</span>
+                    <span class="tag tag-yellow">Sin PCI Real</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--danger);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                    <span class="tag tag-red">MULTA VISA</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Diciembre 2025</span>
+                </div>
+                <h3>CASO 2: Abarth Solution</h3>
+                <p style="margin-bottom: 0.75rem;">Comercio con certificacion PCI valida. Se detecto uso en URLs no autorizadas despues de la multa.</p>
+                <div class="note-box danger" style="margin-top: 0;">
+                    <strong>Hallazgo Visa:</strong> 2 URLs de casino online detectadas bajo esta integracion. Tener PCI no fue suficiente — el comercio redirigía a sitios de gambling.
+                </div>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-red">Casino Online x2</span>
+                    <span class="tag tag-yellow">Tiene PCI</span>
+                    <span class="tag tag-red">Redireccion</span>
+                </div>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--secondary);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                    <span class="tag tag-green">CASO EXITOSO</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Activo</span>
+                </div>
+                <h3>CASO 3: Betcris</h3>
+                <p style="margin-bottom: 0.75rem;">Marca de betting licenciada. Integracion con PCI + 3DS. Proceso de onboarding desde la APP de Payphone.</p>
+                <div class="note-box success" style="margin-top: 0;">
+                    <strong>Modelo correcto:</strong> Operador licenciado, PCI valido, 3D Secure habilitado, onboarding verificado. Unico caso sin problemas de compliance.
+                </div>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-green">PCI + 3DS</span>
+                    <span class="tag tag-green">Betting Licenciado</span>
+                    <span class="tag tag-green">Onboarding OK</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="note-box warning" style="margin-top: 1.5rem;">
+            <strong>Patron comun en Caso 1 y Caso 2:</strong> El comercio registra un negocio legitimo, obtiene acceso al API Card, y luego despliega el formulario de captura de tarjeta en URLs completamente diferentes a las declaradas. Payphone no tiene mecanismo para detectar esto porque el API es server-to-server — solo vemos la IP del backend, nunca la URL del frontend.
+        </div>
+    </section>
+
+    <!-- ============ SECTION: ROOT CAUSE ============ -->
+    <section id="root-cause">
+        <div class="section-header">
+            <span class="section-badge badge-purple-bg">Analisis</span>
+            <h2>Causa Raiz: Por Que No Vemos las URLs</h2>
+            <p>Diagrama del flujo actual vs. los otros metodos de integracion.</p>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Flujo Actual — Boton/Cajita (Seguro)</h3>
+        <div class="arch-diagram">
+            <div class="arch-flow">
+                <div class="arch-node success">
+                    <h4>Tarjetahabiente</h4>
+                    <p>Ingresa datos en form<br>controlado por Payphone</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node success">
+                    <h4>Payphone Frontend</h4>
+                    <p>Hosted page o iframe<br>URL visible y controlada</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node success">
+                    <h4>Payphone API</h4>
+                    <p>Procesa pago<br>Sabe origen exacto</p>
+                </div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Flujo Actual — API Card (Vulnerable)</h3>
+        <div class="arch-diagram">
+            <div class="arch-flow">
+                <div class="arch-node danger">
+                    <h4>Tarjetahabiente</h4>
+                    <p>Ingresa datos en form<br>del COMERCIO</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node danger">
+                    <h4>URL Desconocida</h4>
+                    <p>casino.xyz / adult-site.com<br>PAYPHONE NO VE ESTO</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node">
+                    <h4>Servidor Comercio</h4>
+                    <p>Recibe datos de tarjeta<br>Solo vemos su IP</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node primary">
+                    <h4>Payphone API</h4>
+                    <p>Procesa pago<br>NO sabe URL origen</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid-2" style="margin-top: 2rem;">
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Lo que Payphone VE hoy</h3>
+                <ul style="font-size: 0.85rem; color: var(--text-light); padding-left: 1.25rem;">
+                    <li>IP del servidor que hace la llamada API</li>
+                    <li>Token de autenticacion del comercio</li>
+                    <li>Datos de la transaccion (monto, moneda, referencia)</li>
+                    <li>User-Agent del servidor (no del browser del cliente)</li>
+                </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--secondary);">
+                <h3>Lo que Payphone NECESITA ver</h3>
+                <ul style="font-size: 0.85rem; color: var(--text-light); padding-left: 1.25rem;">
+                    <li>URL exacta donde se muestra el formulario de pago</li>
+                    <li>Si esa URL coincide con los dominios registrados</li>
+                    <li>Si hay redirecciones desde URLs autorizadas a no autorizadas</li>
+                    <li>Cambios en el contenido de las URLs registradas</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION: ARQUITECTURA ============ -->
+    <section id="arquitectura" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-orange-bg">Solucion Propuesta</span>
+            <h2>Arquitectura: 4 Capas de Control</h2>
+            <p>Sistema multicapa que combina validacion en tiempo real, monitoreo continuo y auditoria automatizada.</p>
+        </div>
+
+        <div class="grid-4">
+            <div class="kpi-card orange">
+                <div class="kpi-value">L1</div>
+                <div class="kpi-label">Domain Registry</div>
+                <div class="kpi-sub">Registro obligatorio de dominios antes de activar API Card</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-value">L2</div>
+                <div class="kpi-label">JS Beacon</div>
+                <div class="kpi-sub">Script ligero en frontend que reporta URL real a Payphone</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">L3</div>
+                <div class="kpi-label">API Middleware</div>
+                <div class="kpi-sub">Validacion en cada request contra dominios registrados</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-value">L4</div>
+                <div class="kpi-label">URL Scanner</div>
+                <div class="kpi-sub">Crawler automatizado que verifica URLs periodicamente</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Flujo Propuesto — API Card con 4 Capas</h3>
+        <div class="arch-diagram">
+            <div class="arch-flow">
+                <div class="arch-node success">
+                    <h4>Tarjetahabiente</h4>
+                    <p>Ingresa datos en form<br>del comercio</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node new">
+                    <h4>L2: JS Beacon</h4>
+                    <p>Captura URL real<br>envia a Payphone</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node">
+                    <h4>Servidor Comercio</h4>
+                    <p>Envia datos + beaconId<br>al API</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node new">
+                    <h4>L3: Middleware</h4>
+                    <p>Valida beaconId vs<br>Domain Registry</p>
+                </div>
+                <span class="arch-arrow">&#8594;</span>
+                <div class="arch-node primary">
+                    <h4>Payphone API</h4>
+                    <p>Procesa o rechaza<br>con visibilidad total</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <div class="arch-node new" style="display: inline-block; margin-top: 0.5rem;">
+                    <h4>L4: URL Scanner</h4>
+                    <p>Verificacion asincrona periodica de dominios registrados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION: DOMAIN REGISTRY ============ -->
+    <section id="domain-registry">
+        <div class="section-header">
+            <span class="section-badge badge-orange-bg">Capa 1</span>
+            <h2>Domain Registry: Registro Obligatorio de Dominios</h2>
+            <p>Ningun API Card se activa sin registro previo de dominios autorizados. El comercio declara TODAS las URLs donde se mostrara el formulario de pago.</p>
+        </div>
+
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Campo</th>
+                    <th>Tipo</th>
+                    <th>Requerido</th>
+                    <th>Descripcion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">merchantId</code></td>
+                    <td class="mono">string</td>
+                    <td><span class="tag tag-red">Si</span></td>
+                    <td>ID del comercio en Payphone</td>
+                </tr>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">domains</code></td>
+                    <td class="mono">string[]</td>
+                    <td><span class="tag tag-red">Si</span></td>
+                    <td>Lista de dominios autorizados (ej: ["tienda.com", "checkout.tienda.com"])</td>
+                </tr>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">businessCategory</code></td>
+                    <td class="mono">string</td>
+                    <td><span class="tag tag-red">Si</span></td>
+                    <td>MCC code o categoria (retail, betting, services, etc.)</td>
+                </tr>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">pciCertificateUrl</code></td>
+                    <td class="mono">string</td>
+                    <td><span class="tag tag-red">Si</span></td>
+                    <td>URL del certificado PCI DSS vigente</td>
+                </tr>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">bettingLicenseId</code></td>
+                    <td class="mono">string</td>
+                    <td><span class="tag tag-yellow">Condicional</span></td>
+                    <td>Obligatorio si businessCategory = "betting"</td>
+                </tr>
+                <tr>
+                    <td><code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">webhookUrl</code></td>
+                    <td class="mono">string</td>
+                    <td><span class="tag tag-yellow">Opcional</span></td>
+                    <td>URL para recibir alertas de compliance</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+            <span class="header-label">POST /api/v2/card/domains — Registrar Dominios</span>
+            <pre><span class="comment">// Request</span>
+{
+  <span class="string">"merchantId"</span>: <span class="string">"MCH-2025-00142"</span>,
+  <span class="string">"domains"</span>: [
+    <span class="string">"checkout.betcris.com"</span>,
+    <span class="string">"pagos.betcris.com"</span>
+  ],
+  <span class="string">"businessCategory"</span>: <span class="string">"betting"</span>,
+  <span class="string">"pciCertificateUrl"</span>: <span class="string">"https://certs.pcisecuritystandards.org/..."</span>,
+  <span class="string">"bettingLicenseId"</span>: <span class="string">"EC-BET-2025-0034"</span>
+}
+
+<span class="comment">// Response 201</span>
+{
+  <span class="string">"registryId"</span>: <span class="string">"REG-20260327-001"</span>,
+  <span class="string">"status"</span>: <span class="string">"pending_verification"</span>,
+  <span class="string">"domains"</span>: [
+    { <span class="string">"domain"</span>: <span class="string">"checkout.betcris.com"</span>, <span class="string">"verified"</span>: <span class="keyword">false</span> },
+    { <span class="string">"domain"</span>: <span class="string">"pagos.betcris.com"</span>, <span class="string">"verified"</span>: <span class="keyword">false</span> }
+  ],
+  <span class="string">"verificationMethod"</span>: <span class="string">"dns_txt_record"</span>,
+  <span class="string">"verificationToken"</span>: <span class="string">"payphone-verify=a1b2c3d4e5f6"</span>,
+  <span class="string">"expiresAt"</span>: <span class="string">"2026-04-03T00:00:00Z"</span>
+}</pre>
+        </div>
+
+        <div class="grid-2" style="margin-top: 1.5rem;">
+            <div class="card" style="border-left: 4px solid var(--accent);">
+                <h3>Verificacion de Dominio (DNS TXT)</h3>
+                <p>Similar a Google Search Console. El comercio agrega un registro TXT a su DNS:</p>
+                <div class="code-block" style="margin: 0.75rem 0;">
+                    <pre><span class="comment">// DNS TXT Record</span>
+betcris.com  TXT  <span class="string">"payphone-verify=a1b2c3d4e5f6"</span></pre>
+                </div>
+                <p>Payphone verifica automaticamente. Si el TXT no existe o se remueve, el dominio se desactiva.</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--primary);">
+                <h3>Reglas del Registry</h3>
+                <ul style="font-size: 0.85rem; color: var(--text-light); padding-left: 1.25rem; line-height: 2;">
+                    <li>Maximo <strong>10 dominios</strong> por comercio (ampliable con aprobacion)</li>
+                    <li>Subdominios wildcard NO permitidos (*.tienda.com)</li>
+                    <li>Cada dominio requiere verificacion DNS independiente</li>
+                    <li>Re-verificacion automatica cada <strong>30 dias</strong></li>
+                    <li>Agregar nuevos dominios requiere aprobacion manual si categoria = betting</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION: MIDDLEWARE ============ -->
+    <section id="middleware" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-blue-bg">Capas 2 y 3</span>
+            <h2>JS Beacon + API Middleware</h2>
+            <p>Doble validacion: el beacon captura la URL real del frontend, y el middleware la valida contra el Domain Registry antes de procesar.</p>
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Capa 2: JavaScript Beacon</h3>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Script obligatorio que el comercio debe incluir en la pagina donde se muestra el formulario de pago. Captura la URL real del browser y genera un <code style="font-family: 'JetBrains Mono', monospace; background: #f1f5f9; padding: 0.15rem 0.4rem; border-radius: 4px;">beaconSessionId</code>.</p>
+
+                <div class="code-block">
+                    <span class="header-label">payphone-beacon.js — Script del comercio</span>
+                    <pre><span class="comment">// El comercio incluye esto en su pagina de checkout</span>
+&lt;script
+  <span class="keyword">src</span>=<span class="string">"https://cdn.payphone.app/beacon/v1/beacon.js"</span>
+  <span class="keyword">data-merchant</span>=<span class="string">"MCH-2025-00142"</span>
+  <span class="keyword">data-store</span>=<span class="string">"STORE-001"</span>
+&gt;&lt;/script&gt;
+
+<span class="comment">// El beacon automaticamente:</span>
+<span class="comment">// 1. Captura window.location.href</span>
+<span class="comment">// 2. Captura document.referrer</span>
+<span class="comment">// 3. Genera fingerprint del DOM</span>
+<span class="comment">// 4. Detecta si esta en iframe</span>
+<span class="comment">// 5. Envia POST a Payphone</span>
+<span class="comment">// 6. Retorna beaconSessionId</span>
+
+<span class="comment">// El comercio obtiene el ID:</span>
+<span class="keyword">const</span> beaconId = <span class="keyword">await</span> PayphoneBeacon.<span class="method">getSessionId</span>();
+<span class="comment">// Debe incluirlo en el request al API Card</span></pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 1rem;">Capa 3: API Middleware</h3>
+                <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">Intercepta cada llamada al API Card y ejecuta 4 validaciones antes de permitir el procesamiento.</p>
+
+                <div class="code-block">
+                    <span class="header-label">Logica del Middleware (pseudocodigo)</span>
+                    <pre><span class="keyword">function</span> <span class="method">validateCardRequest</span>(req) {
+  <span class="comment">// 1. Extraer beaconSessionId del request</span>
+  <span class="keyword">const</span> beacon = <span class="method">getBeaconSession</span>(req.beaconSessionId);
+
+  <span class="comment">// 2. Verificar que beacon existe y no expiro</span>
+  <span class="keyword">if</span> (!beacon || beacon.expired)
+    <span class="keyword">return</span> { <span class="string">"error"</span>: <span class="number">901</span>, <span class="string">"msg"</span>: <span class="string">"Beacon invalido"</span> };
+
+  <span class="comment">// 3. Extraer dominio del URL capturado</span>
+  <span class="keyword">const</span> domain = <span class="method">extractDomain</span>(beacon.capturedUrl);
+
+  <span class="comment">// 4. Verificar contra Domain Registry</span>
+  <span class="keyword">const</span> registry = <span class="method">getDomainRegistry</span>(req.merchantId);
+  <span class="keyword">if</span> (!registry.domains.<span class="method">includes</span>(domain))
+    <span class="keyword">return</span> { <span class="string">"error"</span>: <span class="number">902</span>, <span class="string">"msg"</span>: <span class="string">"Dominio no autorizado"</span> };
+
+  <span class="comment">// 5. Verificar que no hay iframe embebido</span>
+  <span class="keyword">if</span> (beacon.isInIframe)
+    <span class="keyword">return</span> { <span class="string">"error"</span>: <span class="number">903</span>, <span class="string">"msg"</span>: <span class="string">"Iframe no permitido"</span> };
+
+  <span class="comment">// 6. Log para auditoria</span>
+  <span class="method">logTransaction</span>(req.merchantId, domain, beacon);
+
+  <span class="keyword">return</span> { <span class="string">"status"</span>: <span class="string">"approved"</span> };
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="note-box info" style="margin-top: 1.5rem;">
+            <strong>Que pasa si el comercio no incluye el beacon?</strong> El API Card rechaza la transaccion con error <code style="font-family: 'JetBrains Mono', monospace;">901 - Beacon session required</code>. Esto es un cambio breaking para comercios existentes, por lo que se implementa con periodo de migracion (ver Roadmap).
+        </div>
+
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Que Captura el Beacon</h3>
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Dato</th>
+                    <th>Metodo de Captura</th>
+                    <th>Proposito</th>
+                    <th>Evasion Difficulty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>URL completa</strong></td>
+                    <td class="mono">window.location.href</td>
+                    <td>URL real donde se muestra el form</td>
+                    <td><span class="tag tag-green">Dificil de falsificar</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Referrer</strong></td>
+                    <td class="mono">document.referrer</td>
+                    <td>Detectar redirecciones</td>
+                    <td><span class="tag tag-yellow">Media</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Es iframe</strong></td>
+                    <td class="mono">window !== window.top</td>
+                    <td>Detectar embedding no autorizado</td>
+                    <td><span class="tag tag-green">Dificil</span></td>
+                </tr>
+                <tr>
+                    <td><strong>DOM fingerprint</strong></td>
+                    <td class="mono">Hash de elementos del DOM</td>
+                    <td>Detectar paginas clonadas</td>
+                    <td><span class="tag tag-green">Dificil</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TLS certificate</strong></td>
+                    <td class="mono">Verificacion server-side</td>
+                    <td>Confirmar identidad del dominio</td>
+                    <td><span class="tag tag-green">Muy dificil</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Timestamp + nonce</strong></td>
+                    <td class="mono">Generado por beacon</td>
+                    <td>Prevenir replay attacks</td>
+                    <td><span class="tag tag-green">Imposible</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box warning">
+            <strong>Limitacion conocida:</strong> Un comercio tecnico sofisticado podria correr el beacon en un server headless (Puppeteer) y falsificar la URL. Para mitigar esto, la Capa 4 (URL Scanner) verifica independientemente que el dominio registrado realmente tiene un formulario de pago Payphone.
+        </div>
+    </section>
+
+    <!-- ============ SECTION: URL SCANNER ============ -->
+    <section id="scanner">
+        <div class="section-header">
+            <span class="section-badge badge-red-bg">Capa 4</span>
+            <h2>URL Scanner: Verificacion Asincrona Continua</h2>
+            <p>Servicio de crawling automatizado que visita los dominios registrados periodicamente para verificar que efectivamente muestran un formulario de pago legitimo de Payphone.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card" style="border-top: 4px solid var(--accent);">
+                <h3>Scan de Contenido</h3>
+                <p style="margin-bottom: 0.5rem;">Visita cada URL registrada y analiza:</p>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; line-height: 1.8;">
+                    <li>Presencia del beacon script de Payphone</li>
+                    <li>Tipo de negocio real (ecommerce, casino, adulto)</li>
+                    <li>Coincidencia con MCC declarado</li>
+                    <li>Presencia de campos de tarjeta</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--primary);">
+                <h3>Scan de Redirecciones</h3>
+                <p style="margin-bottom: 0.5rem;">Detecta si el dominio registrado redirige a otros sitios:</p>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; line-height: 1.8;">
+                    <li>HTTP 301/302 redirects</li>
+                    <li>JavaScript redirects (window.location)</li>
+                    <li>Meta refresh redirects</li>
+                    <li>iframe loading de otros dominios</li>
+                </ul>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--danger);">
+                <h3>Deteccion de Categorias</h3>
+                <p style="margin-bottom: 0.5rem;">Clasifica automaticamente el contenido del sitio:</p>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; line-height: 1.8;">
+                    <li>Gambling / Casino keywords</li>
+                    <li>Adult content indicators</li>
+                    <li>Pharma / weapons keywords</li>
+                    <li>Comparacion vs MCC registrado</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="code-block" style="margin-top: 1.5rem;">
+            <span class="header-label">Logica del Scanner — Reglas de Alerta</span>
+            <pre><span class="comment">// Frecuencia de scans</span>
+<span class="keyword">const</span> SCAN_FREQUENCY = {
+  <span class="string">"betting"</span>:    <span class="string">"cada 24 horas"</span>,     <span class="comment">// alto riesgo</span>
+  <span class="string">"ecommerce"</span>:  <span class="string">"cada 72 horas"</span>,     <span class="comment">// riesgo medio</span>
+  <span class="string">"services"</span>:   <span class="string">"cada 7 dias"</span>,       <span class="comment">// riesgo bajo</span>
+  <span class="string">"new_merchant"</span>: <span class="string">"cada 12 horas"</span>    <span class="comment">// primeros 30 dias</span>
+};
+
+<span class="comment">// Acciones automaticas</span>
+<span class="keyword">const</span> ACTIONS = {
+  <span class="string">"redirect_detected"</span>:      <span class="string">"ALERT + SUSPEND API KEY"</span>,
+  <span class="string">"gambling_on_ecommerce"</span>:  <span class="string">"ALERT + SUSPEND API KEY"</span>,
+  <span class="string">"adult_content"</span>:          <span class="string">"ALERT + SUSPEND API KEY"</span>,
+  <span class="string">"beacon_not_found"</span>:       <span class="string">"WARNING (7 dias para corregir)"</span>,
+  <span class="string">"dns_txt_removed"</span>:        <span class="string">"SUSPEND domain"</span>,
+  <span class="string">"pci_certificate_expired"</span>: <span class="string">"SUSPEND API KEY"</span>,
+  <span class="string">"domain_content_changed"</span>: <span class="string">"RE-SCAN inmediato"</span>
+};</pre>
+        </div>
+
+        <div class="note-box success" style="margin-top: 1.5rem;">
+            <strong>Caso Charge Money con este sistema:</strong> El scanner habria detectado que las URLs registradas como "OnlinePayments ecommerce" contenian keywords de casino y contenido adulto. Accion automatica: suspension inmediata del API Key + alerta al equipo de compliance. Multa de Visa evitada.
+        </div>
+        <div class="note-box success">
+            <strong>Caso Abarth Solution con este sistema:</strong> El scanner habria detectado las 2 URLs de casino que no estaban en el Domain Registry del comercio. Ademas, el beacon habria reportado URLs no registradas en tiempo real. Doble capa de proteccion.
+        </div>
+    </section>
+
+    <!-- ============ SECTION: DASHBOARD ============ -->
+    <section id="dashboard" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-green-bg">Visibilidad</span>
+            <h2>Dashboard de Monitoreo en Tiempo Real</h2>
+            <p>Panel para el equipo de compliance y operaciones donde pueden ver todos los dominios activos, alertas, y estado de cada comercio.</p>
+        </div>
+
+        <div class="grid-4">
+            <div class="kpi-card green">
+                <div class="kpi-value">12</div>
+                <div class="kpi-label">Dominios Activos</div>
+                <div class="kpi-sub">Verificados y operando</div>
+            </div>
+            <div class="kpi-card orange">
+                <div class="kpi-value">3</div>
+                <div class="kpi-label">Pendientes Verificacion</div>
+                <div class="kpi-sub">DNS TXT no confirmado</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-value">1</div>
+                <div class="kpi-label">Suspendidos</div>
+                <div class="kpi-sub">Dominio no autorizado detectado</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-value">847</div>
+                <div class="kpi-label">Scans Completados</div>
+                <div class="kpi-sub">Ultimo 30 dias</div>
+            </div>
+        </div>
+
+        <table class="model-table" style="margin-top: 1.5rem;">
+            <thead>
+                <tr>
+                    <th>Comercio</th>
+                    <th>Dominios Registrados</th>
+                    <th>Categoria</th>
+                    <th>Beacon</th>
+                    <th>Ultimo Scan</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row-highlight">
+                    <td><strong>Betcris</strong></td>
+                    <td class="mono">checkout.betcris.com, pagos.betcris.com</td>
+                    <td><span class="tag tag-orange">Betting</span></td>
+                    <td><span class="tag tag-green">OK</span></td>
+                    <td class="mono">2026-03-27 08:15</td>
+                    <td><span class="tag tag-green">Activo</span></td>
+                </tr>
+                <tr class="row-danger">
+                    <td><strong>Charge Money</strong></td>
+                    <td class="mono">pay.onlinepayments.xyz</td>
+                    <td><span class="tag tag-blue">Ecommerce</span></td>
+                    <td><span class="tag tag-red">Casino detectado</span></td>
+                    <td class="mono">2025-06-01 14:22</td>
+                    <td><span class="tag tag-red">Suspendido</span></td>
+                </tr>
+                <tr class="row-danger">
+                    <td><strong>Abarth Solution</strong></td>
+                    <td class="mono">secure.abarth-pay.com</td>
+                    <td><span class="tag tag-blue">Ecommerce</span></td>
+                    <td><span class="tag tag-red">Redirect x2</span></td>
+                    <td class="mono">2025-12-15 11:47</td>
+                    <td><span class="tag tag-red">Suspendido</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box info">
+            <strong>Este dashboard se integra a Payphone Business.</strong> El equipo de compliance puede ver en tiempo real que dominios estan activos, cuales tienen alertas, y tomar accion inmediata (suspender API Key, contactar comercio, escalar a Visa).
+        </div>
+    </section>
+
+    <!-- ============ SECTION: API SPECS ============ -->
+    <section id="api-specs">
+        <div class="section-header">
+            <span class="section-badge badge-blue-bg">Especificaciones</span>
+            <h2>Nuevos API Endpoints</h2>
+            <p>Endpoints requeridos para el Domain Registry, beacon validation, y scanner operations.</p>
+        </div>
+
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Metodo</th>
+                    <th>Endpoint</th>
+                    <th>Descripcion</th>
+                    <th>Auth</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="tag tag-green">POST</span></td>
+                    <td class="mono">/api/v2/card/domains</td>
+                    <td>Registrar dominios autorizados</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-blue">GET</span></td>
+                    <td class="mono">/api/v2/card/domains/{merchantId}</td>
+                    <td>Consultar dominios registrados</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-yellow">PUT</span></td>
+                    <td class="mono">/api/v2/card/domains/{registryId}</td>
+                    <td>Actualizar dominios (requiere re-verificacion)</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-red">DELETE</span></td>
+                    <td class="mono">/api/v2/card/domains/{registryId}/{domain}</td>
+                    <td>Remover dominio autorizado</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-green">POST</span></td>
+                    <td class="mono">/api/v2/card/domains/verify</td>
+                    <td>Trigger verificacion DNS manual</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr style="background: rgba(99,102,241,0.04);">
+                    <td><span class="tag tag-green">POST</span></td>
+                    <td class="mono">/api/v2/beacon/session</td>
+                    <td>Beacon registra URL capturada (llamado por JS)</td>
+                    <td>Merchant Key</td>
+                </tr>
+                <tr style="background: rgba(99,102,241,0.04);">
+                    <td><span class="tag tag-blue">GET</span></td>
+                    <td class="mono">/api/v2/beacon/session/{beaconSessionId}</td>
+                    <td>Validar sesion de beacon (usado por middleware)</td>
+                    <td>Internal</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-blue">GET</span></td>
+                    <td class="mono">/api/v2/card/scan/{merchantId}</td>
+                    <td>Resultados del ultimo scan</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><span class="tag tag-green">POST</span></td>
+                    <td class="mono">/api/v2/card/scan/trigger</td>
+                    <td>Forzar re-scan inmediato (uso interno)</td>
+                    <td>Admin Token</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3 style="font-size: 1rem; font-weight: 700; color: var(--dark); margin: 2rem 0 1rem;">Cambio al API Card Existente</h3>
+        <div class="code-block">
+            <span class="header-label">POST /api/Sale (API Card) — Campo nuevo requerido</span>
+            <pre><span class="comment">// Request ACTUAL (sin control)</span>
+{
+  <span class="string">"phoneNumber"</span>: <span class="string">"0984000000"</span>,
+  <span class="string">"countryCode"</span>: <span class="number">593</span>,
+  <span class="string">"amount"</span>: <span class="number">5000</span>,
+  <span class="string">"clientTransactionId"</span>: <span class="string">"TXN-001"</span>,
+  <span class="string">"currency"</span>: <span class="string">"USD"</span>
+}
+
+<span class="comment">// Request NUEVO (con beacon obligatorio)</span>
+{
+  <span class="string">"phoneNumber"</span>: <span class="string">"0984000000"</span>,
+  <span class="string">"countryCode"</span>: <span class="number">593</span>,
+  <span class="string">"amount"</span>: <span class="number">5000</span>,
+  <span class="string">"clientTransactionId"</span>: <span class="string">"TXN-001"</span>,
+  <span class="string">"currency"</span>: <span class="string">"USD"</span>,
+  <span class="string">"beaconSessionId"</span>: <span class="string">"BSN-20260327-a1b2c3"</span>  <span class="comment">// NUEVO - obligatorio</span>
+}
+
+<span class="comment">// Error si falta beacon (despues de periodo de migracion)</span>
+{
+  <span class="string">"errorCode"</span>: <span class="number">901</span>,
+  <span class="string">"message"</span>: <span class="string">"beaconSessionId es requerido para API Card"</span>
+}
+
+<span class="comment">// Error si dominio no autorizado</span>
+{
+  <span class="string">"errorCode"</span>: <span class="number">902</span>,
+  <span class="string">"message"</span>: <span class="string">"Dominio no registrado en Domain Registry"</span>
+}</pre>
+        </div>
+
+        <div class="note-box warning">
+            <strong>Nuevos codigos de error para API Card:</strong><br>
+            <code style="font-family: 'JetBrains Mono', monospace;">901</code> — Beacon session requerido<br>
+            <code style="font-family: 'JetBrains Mono', monospace;">902</code> — Dominio no autorizado<br>
+            <code style="font-family: 'JetBrains Mono', monospace;">903</code> — Iframe no permitido (formulario embebido en iframe)<br>
+            <code style="font-family: 'JetBrains Mono', monospace;">904</code> — Beacon session expirado (TTL 10 min)<br>
+            <code style="font-family: 'JetBrains Mono', monospace;">905</code> — Domain Registry suspendido (compliance violation)<br>
+            <code style="font-family: 'JetBrains Mono', monospace;">906</code> — PCI certificate expirado
+        </div>
+    </section>
+
+    <!-- ============ SECTION: PCI DSS 4.0 ============ -->
+    <section id="pci" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-purple-bg">Compliance</span>
+            <h2>Alineacion con PCI DSS 4.0</h2>
+            <p>Esta solucion no solo resuelve el problema de visibilidad — tambien nos alinea con los nuevos requisitos de PCI DSS 4.0 que seran obligatorios.</p>
+        </div>
+
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Requisito PCI DSS 4.0</th>
+                    <th>Que Exige</th>
+                    <th>Como lo Resuelve Nuestra Solucion</th>
+                    <th>Capa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>6.4.3</strong></td>
+                    <td>Monitoreo de integridad de scripts en paginas de pago. Todos los scripts en la pagina deben estar autorizados y verificados.</td>
+                    <td>El JS Beacon valida que solo scripts autorizados estan en el DOM. Reporta cualquier script de terceros no reconocido.</td>
+                    <td><span class="tag tag-blue">L2 Beacon</span></td>
+                </tr>
+                <tr>
+                    <td><strong>11.6.1</strong></td>
+                    <td>Deteccion de cambios no autorizados en paginas de pago. Alertas cuando el contenido de la pagina cambia.</td>
+                    <td>El URL Scanner hace hash del DOM en cada visita. Si el contenido cambia significativamente, se dispara un re-scan inmediato.</td>
+                    <td><span class="tag tag-red">L4 Scanner</span></td>
+                </tr>
+                <tr>
+                    <td><strong>12.3.1</strong></td>
+                    <td>Inventario documentado de todos los activos que procesan datos de tarjeta.</td>
+                    <td>El Domain Registry ES el inventario. Cada URL que toca datos de tarjeta esta documentada y verificada.</td>
+                    <td><span class="tag tag-orange">L1 Registry</span></td>
+                </tr>
+                <tr>
+                    <td><strong>6.3.2</strong></td>
+                    <td>Inventario de software custom y componentes de terceros.</td>
+                    <td>El beacon reporta todos los scripts presentes en la pagina de pago, creando un inventario automatico.</td>
+                    <td><span class="tag tag-blue">L2 Beacon</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="note-box success">
+            <strong>Beneficio adicional:</strong> Implementar esta solucion nos posiciona adelante del mercado en compliance PCI DSS 4.0. La mayoria de procesadores LATAM aun no tienen estos controles. Esto se convierte en un diferenciador competitivo, especialmente para el vertical de betting donde el escrutinio regulatorio es mas alto.
+        </div>
+    </section>
+
+    <!-- ============ SECTION: ROADMAP ============ -->
+    <section id="roadmap">
+        <div class="section-header">
+            <span class="section-badge badge-orange-bg">Implementacion</span>
+            <h2>Roadmap de Implementacion</h2>
+            <p>Implementacion en 4 fases con periodo de migracion para comercios existentes.</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item active">
+                <span class="timeline-date">Fase 1 — Semanas 1-3 (Abril 2026)</span>
+                <h4>Domain Registry + Dashboard</h4>
+                <p>Construir el sistema de registro de dominios, verificacion DNS, y el dashboard de monitoreo. No requiere cambios en el API Card aun — es infraestructura backend.</p>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-orange">Backend</span>
+                    <span class="tag tag-blue">Base de datos</span>
+                    <span class="tag tag-green">Dashboard</span>
+                </div>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li>API endpoints para CRUD de dominios</li>
+                    <li>Sistema de verificacion DNS TXT</li>
+                    <li>Panel de compliance en Payphone Business</li>
+                    <li>Registro retroactivo de comercios existentes (Betcris, etc)</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date">Fase 2 — Semanas 3-5 (Abril-Mayo 2026)</span>
+                <h4>URL Scanner Service</h4>
+                <p>Desplegar el servicio de crawling automatizado. Empieza a escanear dominios registrados sin afectar el flujo de pago actual.</p>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-red">Scanner</span>
+                    <span class="tag tag-yellow">Alertas</span>
+                    <span class="tag tag-blue">Azure Functions</span>
+                </div>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li>Headless browser (Playwright) para crawling</li>
+                    <li>Clasificacion de contenido por keywords + ML</li>
+                    <li>Sistema de alertas (email + webhook + dashboard)</li>
+                    <li>Modo "observacion" — alertas sin bloqueo</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date">Fase 3 — Semanas 5-8 (Mayo-Junio 2026)</span>
+                <h4>JS Beacon + API Middleware</h4>
+                <p>Implementar el beacon JavaScript y el middleware de validacion. Periodo de migracion: beacon requerido pero en modo "warning" (no bloquea).</p>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-blue">JavaScript</span>
+                    <span class="tag tag-orange">Middleware</span>
+                    <span class="tag tag-yellow">Migracion</span>
+                </div>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li>CDN para beacon.js (Azure CDN)</li>
+                    <li>Endpoint de sesion de beacon</li>
+                    <li>Middleware en API Card (modo warning 30 dias)</li>
+                    <li>Notificacion a comercios: "integra el beacon antes del [fecha]"</li>
+                    <li>Soporte tecnico para migracion de Betcris y otros</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <span class="timeline-date">Fase 4 — Semana 9+ (Julio 2026)</span>
+                <h4>Enforcement Completo</h4>
+                <p>Beacon obligatorio. API Card rechaza transacciones sin beacon valido o con dominio no registrado. Sistema completo en produccion.</p>
+                <div style="margin-top: 0.75rem;">
+                    <span class="tag tag-red">Enforcement</span>
+                    <span class="tag tag-green">Produccion</span>
+                </div>
+                <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; margin-top: 0.5rem; line-height: 1.8;">
+                    <li>beaconSessionId obligatorio en API Card</li>
+                    <li>Suspension automatica por violaciones</li>
+                    <li>Reporting mensual a Visa de dominios verificados</li>
+                    <li>SLA de respuesta: &lt; 1 hora para suspensiones criticas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-4" style="margin-top: 2rem;">
+            <div class="kpi-card orange">
+                <div class="kpi-value">~8</div>
+                <div class="kpi-label">Semanas Total</div>
+                <div class="kpi-sub">Fase 1 a Enforcement</div>
+            </div>
+            <div class="kpi-card blue">
+                <div class="kpi-value">2</div>
+                <div class="kpi-label">Devs Backend</div>
+                <div class="kpi-sub">Registry + Middleware + Scanner</div>
+            </div>
+            <div class="kpi-card green">
+                <div class="kpi-value">1</div>
+                <div class="kpi-label">Dev Frontend</div>
+                <div class="kpi-sub">Beacon JS + Dashboard</div>
+            </div>
+            <div class="kpi-card red">
+                <div class="kpi-value">30</div>
+                <div class="kpi-label">Dias Migracion</div>
+                <div class="kpi-sub">Para comercios existentes</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION: RIESGOS ============ -->
+    <section id="riesgos" class="section-alt">
+        <div class="section-header">
+            <span class="section-badge badge-red-bg">Riesgos</span>
+            <h2>Matriz de Riesgos</h2>
+            <p>Riesgos identificados con la solucion propuesta y estrategias de mitigacion.</p>
+        </div>
+
+        <table class="model-table">
+            <thead>
+                <tr>
+                    <th>Riesgo</th>
+                    <th>Probabilidad</th>
+                    <th>Impacto</th>
+                    <th>Mitigacion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Comercio no integra beacon</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Comercio ignora la migracion y pierde acceso al API Card</span></td>
+                    <td><span class="tag tag-yellow">Media</span></td>
+                    <td><span class="tag tag-yellow">Medio</span></td>
+                    <td>30 dias de warning mode. Emails automaticos a comercio. Soporte directo para los 3 comercios actuales.</td>
+                </tr>
+                <tr>
+                    <td><strong>Beacon bypass via headless browser</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Comercio sofisticado usa Puppeteer para simular beacon desde URL falsa</span></td>
+                    <td><span class="tag tag-yellow">Media</span></td>
+                    <td><span class="tag tag-red">Alto</span></td>
+                    <td>URL Scanner (L4) verifica independientemente. Browser fingerprinting en beacon detecta headless. Re-verificacion DNS continua.</td>
+                </tr>
+                <tr>
+                    <td><strong>Scanner genera falsos positivos</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Scanner clasifica erroneamente un sitio legitimo como casino</span></td>
+                    <td><span class="tag tag-yellow">Media</span></td>
+                    <td><span class="tag tag-yellow">Medio</span></td>
+                    <td>Alertas de scanner van a revision humana antes de suspension automatica en primeros 90 dias. Whitelist de patrones conocidos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Tercera multa de Visa durante implementacion</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Otro incidente antes de que el sistema este en produccion</span></td>
+                    <td><span class="tag tag-red">Alta</span></td>
+                    <td><span class="tag tag-red">Critico</span></td>
+                    <td><strong>Accion inmediata:</strong> Suspender nuevas integraciones API Card hasta Fase 1 completada. Solo Betcris mantiene acceso.</td>
+                </tr>
+                <tr>
+                    <td><strong>Latencia adicional por middleware</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Validacion de beacon agrega latencia al procesamiento</span></td>
+                    <td><span class="tag tag-green">Baja</span></td>
+                    <td><span class="tag tag-green">Bajo</span></td>
+                    <td>Beacon session cached en Redis. Validacion &lt; 10ms. No impacta experiencia del tarjetahabiente.</td>
+                </tr>
+                <tr>
+                    <td><strong>Comercio usa proxy server para bypass DNS</strong><br><span style="font-size: 0.75rem; color: var(--text-light);">Dominio registrado apunta a un proxy que redirige</span></td>
+                    <td><span class="tag tag-green">Baja</span></td>
+                    <td><span class="tag tag-red">Alto</span></td>
+                    <td>Scanner sigue cadenas de redireccion. Beacon captura URL final del browser. Doble verificacion cruzada.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============ SECTION: DECISIONES ============ -->
+    <section id="decisiones">
+        <div class="section-header">
+            <span class="section-badge badge-orange-bg">Decisiones Requeridas</span>
+            <h2>Puntos de Decision para Val + Juan Diego</h2>
+            <p>Decisiones que necesitan aprobacion antes de iniciar desarrollo.</p>
+        </div>
+
+        <div class="grid-2">
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="tag tag-red">URGENTE</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Decision 1</span>
+                </div>
+                <h3>Suspender nuevas integraciones API Card?</h3>
+                <p style="margin-bottom: 0.75rem;">Con 2 multas en 6 meses, se recomienda suspender nuevas activaciones de API Card hasta que el Domain Registry (Fase 1) este en produccion. Solo mantener Betcris activo.</p>
+                <div class="note-box danger" style="margin-top: 0;">
+                    <strong>Riesgo de no actuar:</strong> Una tercera multa puede resultar en multas incrementales de Visa ($25K-$100K) y posible revocacion de BIN sponsorship.
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--accent);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="tag tag-orange">ESTRATEGICA</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Decision 2</span>
+                </div>
+                <h3>Beacon obligatorio o solo Domain Registry?</h3>
+                <p style="margin-bottom: 0.75rem;">El Domain Registry (L1) + Scanner (L4) resuelve el 80% del problema. El beacon (L2) + middleware (L3) agrega el 20% restante pero requiere cambio en la integracion de todos los comercios.</p>
+                <div class="note-box info" style="margin-top: 0;">
+                    <strong>Opcion A:</strong> Solo L1 + L4 (rapido, menor impacto en comercios)<br>
+                    <strong>Opcion B:</strong> L1 + L2 + L3 + L4 completo (mayor seguridad, breaking change para comercios)
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="tag tag-blue">TECNICA</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Decision 3</span>
+                </div>
+                <h3>Asignacion de equipo de desarrollo</h3>
+                <p style="margin-bottom: 0.75rem;">Se necesitan 2 devs backend + 1 dev frontend por ~8 semanas. Juan Diego debe definir quienes del equipo pueden asignarse y confirmar capacidad.</p>
+                <div class="note-box warning" style="margin-top: 0;">
+                    <strong>Dependencia:</strong> Si hay conflicto con otros proyectos (Pipedrive, Insider, expansiones), priorizar este proyecto por riesgo de compliance.
+                </div>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--secondary);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span class="tag tag-green">COMERCIAL</span>
+                    <span style="font-size: 0.72rem; color: var(--text-light);">Decision 4</span>
+                </div>
+                <h3>API Card como producto premium para betting?</h3>
+                <p style="margin-bottom: 0.75rem;">Con estos controles, el API Card se convierte en un producto de alta seguridad ideal para el vertical de betting. Podemos posicionarlo como diferenciador competitivo con pricing premium.</p>
+                <div class="note-box success" style="margin-top: 0;">
+                    <strong>Oportunidad:</strong> "API Card Secure" con Domain Registry + Scanner como feature premium para operadores de betting. Fee adicional por monitoreo continuo.
+                </div>
+            </div>
+        </div>
+
+        <div class="strategy-box" style="margin-top: 2rem;">
+            <h3>Resumen de Recomendacion</h3>
+            <div class="strategy-grid">
+                <div class="strategy-item">
+                    <h4>&#128308; Accion Inmediata</h4>
+                    <p>Suspender nuevas integraciones API Card HOY. Solo Betcris mantiene acceso. Comunicar a equipo comercial.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128992; Semana 1-3</h4>
+                    <p>Implementar Domain Registry + Dashboard (Fase 1). Registrar retroactivamente a Betcris. Requerir registro para cualquier nueva activacion.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128993; Semana 3-5</h4>
+                    <p>Lanzar URL Scanner en modo observacion. Validar que el sistema detecta correctamente los patrones de los casos Charge Money y Abarth.</p>
+                </div>
+                <div class="strategy-item">
+                    <h4>&#128994; Semana 5-9</h4>
+                    <p>Beacon + Middleware con periodo de migracion. Enforcement completo en julio 2026. Reportar a Visa las medidas implementadas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Payphone — API Card URL Tracking Solution | Documento Confidencial | Marzo 2026</p>
+        <p style="margin-top: 0.5rem;">Preparado para: Val Infante (CGO) + Juan Diego (CTO) | Payphone Security & Compliance</p>
+    </footer>
+
+</div>
+</div>
+
+<!-- Scripts -->
+<script>
+function checkPassword() {
+    const input = document.getElementById('passwordInput');
+    const error = document.getElementById('passwordError');
+    const box = document.getElementById('passwordBox');
+
+    if (input.value === 'payphone2026') {
+        document.getElementById('passwordScreen').classList.add('hidden');
+        document.getElementById('contentWrapper').classList.add('unlocked');
+        sessionStorage.setItem('payphone_apicard_authenticated', 'true');
+    } else {
+        error.style.display = 'block';
+        box.classList.add('shake');
+        setTimeout(() => box.classList.remove('shake'), 300);
+        input.value = '';
+        input.focus();
+    }
+}
+
+document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') checkPassword();
+});
+
+// Auto-login if already authenticated
+if (sessionStorage.getItem('payphone_apicard_authenticated') === 'true') {
+    document.getElementById('passwordScreen').classList.add('hidden');
+    document.getElementById('contentWrapper').classList.add('unlocked');
+}
+
+// Sidebar toggle
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('active');
+}
+
+// Smooth scroll
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Close sidebar on mobile
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+    });
+});
+
+// Active link tracking
+window.addEventListener('scroll', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.nav-link');
+    let current = '';
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
+</body>
+</html>
