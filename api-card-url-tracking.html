@@ -869,6 +869,74 @@
         <div class="note-box danger">
             <strong>El API Card es server-to-server.</strong> El comercio captura PAN, CVV y expiracion en su propio formulario y los transmite al endpoint de Payphone. Payphone solo ve la llamada API desde el servidor del comercio, NUNCA ve la URL del frontend donde el tarjetahabiente ingreso sus datos. Esto permite que un comercio registre un negocio legitimo pero despliegue el formulario en sitios no autorizados (casinos, contenido adulto, etc).
         </div>
+
+        <!-- Decision Tree: PCI vs No-PCI -->
+        <div style="margin-top: 2.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--dark); margin-bottom: 0.5rem;">Ruta de Integracion: ¿Tienes PCI?</h3>
+            <p style="font-size: 0.88rem; color: var(--text-light); margin-bottom: 1.5rem;">No todos los comercios necesitan (ni deben) usar el API Card. Payphone provee certificacion PCI DSS 4.0 y 3D Secure integrado en sus productos hosted — sin costo adicional ni certificacion propia.</p>
+
+            <div class="grid-2">
+                <div class="card" style="border-top: 4px solid var(--secondary); background: linear-gradient(135deg, rgba(16,185,129,0.03), rgba(16,185,129,0.08));">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span style="font-size: 1.5rem;">&#9989;</span>
+                        <h3 style="font-size: 1.05rem; color: var(--dark);">Comercio SIN PCI propio</h3>
+                    </div>
+                    <span class="tag tag-green" style="margin-bottom: 1rem; display: inline-block;">RECOMENDADO — Payphone provee PCI + 3DS</span>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">
+                        El comercio NO toca datos de tarjeta. Payphone maneja PCI DSS 4.0, 3D Secure, tokenizacion y Decision Manager. Cero riesgo de compliance para el comercio.
+                    </p>
+                    <div style="background: rgba(16,185,129,0.08); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <p style="font-size: 0.82rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem;">Productos disponibles:</p>
+                        <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; line-height: 2;">
+                            <li><strong>Boton de Pago (Redireccion)</strong> — Usuario va a pagina hosted de Payphone. Maxima seguridad, cero integracion de frontend.</li>
+                            <li><strong>Cajita de Pagos (Widget/iframe)</strong> — Formulario embebido en la pagina del comercio. Payphone controla el iframe con datos sensibles.</li>
+                            <li><strong>Link de Pagos</strong> — URL unica generada por API. Ideal para cobros por WhatsApp, email o redes sociales.</li>
+                        </ul>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <span class="tag tag-green">PCI incluido</span>
+                        <span class="tag tag-green">3D Secure incluido</span>
+                        <span class="tag tag-green">Tokenizacion incluida</span>
+                        <span class="tag tag-green">Sin multas Visa</span>
+                    </div>
+                </div>
+
+                <div class="card" style="border-top: 4px solid var(--warning); background: linear-gradient(135deg, rgba(245,158,11,0.03), rgba(245,158,11,0.08));">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <span style="font-size: 1.5rem;">&#128272;</span>
+                        <h3 style="font-size: 1.05rem; color: var(--dark);">Comercio CON PCI propio</h3>
+                    </div>
+                    <span class="tag tag-yellow" style="margin-bottom: 1rem; display: inline-block;">REQUIERE — Certificacion PCI DSS vigente</span>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 1rem;">
+                        El comercio captura datos de tarjeta en su propio formulario. Requiere certificacion PCI DSS vigente, Domain Registry obligatorio, y todas las capas de validacion de este documento.
+                    </p>
+                    <div style="background: rgba(245,158,11,0.08); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                        <p style="font-size: 0.82rem; font-weight: 600; color: var(--dark); margin-bottom: 0.5rem;">Requisitos obligatorios:</p>
+                        <ul style="font-size: 0.82rem; color: var(--text-light); padding-left: 1.25rem; line-height: 2;">
+                            <li><strong>Certificado PCI DSS vigente</strong> — URL del certificado verificable</li>
+                            <li><strong>3D Secure habilitado</strong> — Obligatorio para todas las transacciones</li>
+                            <li><strong>Domain Registry</strong> — Registro de todos los dominios autorizados</li>
+                            <li><strong>JS Beacon</strong> — Script obligatorio en pagina de checkout</li>
+                            <li>Licencia de betting si categoria = betting</li>
+                        </ul>
+                    </div>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                        <span class="tag tag-yellow">PCI requerido</span>
+                        <span class="tag tag-yellow">3DS requerido</span>
+                        <span class="tag tag-red">Alto escrutinio</span>
+                        <span class="tag tag-orange">Solo API Card</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-box success" style="margin-top: 1.5rem;">
+                <strong>Valor diferenciador de Payphone:</strong> La mayoria de procesadores en LATAM exigen que el comercio obtenga su propia certificacion PCI (costo: $15K-$50K/año). Payphone ofrece PCI DSS 4.0, 3D Secure y tokenizacion integrados sin costo adicional en Boton de Pago, Cajita de Pagos y Link de Pagos. Esto elimina la barrera de entrada para comercios que quieren aceptar tarjetas de forma segura sin la complejidad y costo de certificarse.
+            </div>
+
+            <div class="note-box warning" style="margin-top: 1rem;">
+                <strong>Regla de onboarding:</strong> Si un comercio solicita acceso al API Card pero no presenta certificado PCI vigente, el sistema debe <strong>automaticamente ofrecer las alternativas hosted</strong> (Boton, Cajita, Link de Pagos) en lugar de rechazar la solicitud. Esto convierte una denegacion en una oportunidad de venta y evita que el comercio intente usar API Card sin certificacion real (como el caso Charge Money).
+            </div>
+        </div>
     </section>
 
     <!-- ============ SECTION: CASOS REALES ============ -->
