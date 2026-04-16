@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payphone US — Retrospective Ejecutivo · Mar–Abr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --naranja:#FF6400;
+    --violeta:#5A00B4;
+    --amarillo:#FFA000;
+    --dark:#222222;
+    --ink:#111111;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --bg:#fafafa;
+    --card:#ffffff;
+    --success:#10b981;
+    --warn:#f59e0b;
+    --danger:#ef4444;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--dark);
+    line-height:1.6;
+  }
+  h1,h2,h3,h4,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;color:var(--ink)}
+
+  /* ——— Nav ——— */
+  nav.top{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    padding:14px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  nav.top .brand{display:flex;align-items:center;gap:12px;font-family:'Space Grotesk';font-weight:700;font-size:18px}
+  nav.top .dot{width:24px;height:24px;border-radius:8px;background:var(--naranja)}
+  nav.top .links a{margin-left:22px;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500}
+  nav.top .links a:hover{color:var(--naranja)}
+
+  /* ——— Hero ——— */
+  .hero{
+    position:relative;
+    padding:120px 32px 100px;
+    background:linear-gradient(135deg,#FFA000 0%,#FF6400 45%,#5A00B4 100%);
+    color:white;overflow:hidden;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(circle at 20% 30%,rgba(255,255,255,.12) 0,transparent 40%),
+                     radial-gradient(circle at 80% 70%,rgba(255,255,255,.08) 0,transparent 35%);
+  }
+  .hero-inner{position:relative;max-width:1200px;margin:0 auto}
+  .eyebrow{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.18);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
+  .hero h1{font-size:clamp(38px,6vw,72px);font-weight:700;line-height:1.05;margin-bottom:18px;color:white}
+  .hero p.lead{font-size:clamp(16px,2vw,20px);opacity:.95;max-width:760px;margin-bottom:40px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:28px;margin-top:28px;opacity:.95;font-size:14px}
+  .hero-meta div{display:flex;flex-direction:column}
+  .hero-meta .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+  .hero-meta .val{font-family:'Space Grotesk';font-weight:600;font-size:16px;margin-top:2px}
+
+  /* ——— Generic section ——— */
+  section.block{max-width:1200px;margin:0 auto;padding:80px 32px}
+  section.block h2{font-size:36px;font-weight:700;margin-bottom:10px}
+  section.block .kicker{color:var(--naranja);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+  section.block p.sub{color:var(--muted);font-size:17px;margin-bottom:40px;max-width:800px}
+
+  /* ——— Stats row ——— */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:40px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .stat .big{font-family:'Space Grotesk';font-size:36px;font-weight:700;color:var(--naranja);line-height:1}
+  .stat .lbl{margin-top:8px;font-size:13px;color:var(--muted);font-weight:500}
+
+  /* ——— Workstream cards ——— */
+  .ws-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-top:40px}
+  .ws{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;transition:.2s}
+  .ws:hover{border-color:var(--naranja);transform:translateY(-2px);box-shadow:0 12px 40px -12px rgba(255,100,0,.25)}
+  .ws .tag{display:inline-block;padding:4px 10px;border-radius:6px;background:#fff5ef;color:var(--naranja);font-size:11px;font-weight:700;letter-spacing:.05em;margin-bottom:12px}
+  .ws h3{font-size:18px;margin-bottom:8px}
+  .ws p{color:var(--muted);font-size:14px;margin-bottom:12px}
+  .ws ul{list-style:none;font-size:13px;color:var(--dark)}
+  .ws ul li{padding:6px 0;border-top:1px dashed var(--line);display:flex;gap:8px}
+  .ws ul li:first-child{border-top:none}
+  .ws ul li::before{content:"▸";color:var(--naranja);font-weight:700}
+
+  /* ——— Timeline ——— */
+  .timeline{position:relative;margin-top:40px;padding-left:40px}
+  .timeline::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--amarillo),var(--naranja),var(--violeta))}
+  .tl-item{position:relative;padding:18px 0 18px 24px}
+  .tl-item::before{content:"";position:absolute;left:-34px;top:24px;width:14px;height:14px;border-radius:50%;background:var(--naranja);border:3px solid white;box-shadow:0 0 0 2px var(--naranja)}
+  .tl-date{font-family:'Space Grotesk';font-weight:600;color:var(--violeta);font-size:13px;letter-spacing:.04em}
+  .tl-title{font-weight:600;margin:4px 0;font-size:16px}
+  .tl-body{color:var(--muted);font-size:14px}
+
+  /* ——— Table ——— */
+  table.contacts{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;margin-top:32px;border:1px solid var(--line)}
+  table.contacts th{text-align:left;padding:14px 18px;background:var(--ink);color:white;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  table.contacts td{padding:13px 18px;border-top:1px solid var(--line);font-size:14px;vertical-align:top}
+  table.contacts tr:hover td{background:#fafafa}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600}
+  .pill.hot{background:#fef3c7;color:#92400e}
+  .pill.live{background:#dcfce7;color:#166534}
+  .pill.new{background:#ede9fe;color:#5b21b6}
+  .pill.watch{background:#fee2e2;color:#991b1b}
+
+  /* ——— Action items ——— */
+  .actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-top:32px}
+  .act{background:white;border-left:4px solid var(--naranja);border-radius:10px;padding:18px 22px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .act .n{font-family:'Space Grotesk';font-weight:700;color:var(--naranja);font-size:12px;letter-spacing:.1em}
+  .act h4{margin:6px 0;font-size:16px}
+  .act p{font-size:13px;color:var(--muted)}
+  .act .due{display:inline-block;margin-top:10px;padding:3px 9px;border-radius:6px;background:#222;color:white;font-size:11px;font-weight:600}
+
+  /* ——— Section separator bands ——— */
+  .band-dark{background:var(--ink);color:white;margin:60px 0}
+  .band-dark h2{color:white}
+  .band-dark .kicker{color:var(--amarillo)}
+  .band-dark p.sub{color:rgba(255,255,255,.7)}
+  .band-dark .stat{background:#2a2a2a;border-color:#333;color:white}
+  .band-dark .stat .big{color:var(--amarillo)}
+  .band-dark .stat .lbl{color:rgba(255,255,255,.7)}
+
+  /* ——— Footer ——— */
+  footer{background:var(--ink);color:rgba(255,255,255,.75);padding:48px 32px;text-align:center;font-size:13px}
+  footer .fbrand{font-family:'Space Grotesk';color:white;font-weight:600;font-size:16px;margin-bottom:8px}
+  footer a{color:var(--amarillo);text-decoration:none}
+
+  /* pdf / print-friendly page breaks */
+  @media print{
+    nav.top{display:none}
+    section.block{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand"><div class="dot"></div>payphone · US retrospective</div>
+  <div class="links">
+    <a href="#timeline">Timeline</a>
+    <a href="#workstreams">Workstreams</a>
+    <a href="#metrics">Métricas</a>
+    <a href="#contacts">Contactos</a>
+    <a href="#next">Next Steps</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Chief Growth Officer · Mar → Abr 2026</span>
+    <h1>30 días hábiles.<br>9 workstreams.<br>Un mercado abierto.</h1>
+    <p class="lead">Retrospective ejecutivo del trabajo liderado por Val Infante en la penetración de Payphone al mercado US: de cero a 4 sponsor banks activos, 4 rutas de tarjetas en paralelo, y un ecosistema de 20+ contrapartes construido desde el primer día.</p>
+    <div class="hero-meta">
+      <div><span class="lbl">Periodo</span><span class="val">17 Mar – 16 Abr 2026</span></div>
+      <div><span class="lbl">Workstreams</span><span class="val">9 activos</span></div>
+      <div><span class="lbl">Contrapartes</span><span class="val">20+ externas</span></div>
+      <div><span class="lbl">Proyección Y5</span><span class="val">$1.43B TPV · $76.8M rev</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<section class="block" id="summary">
+  <div class="kicker">Executive summary</div>
+  <h2>Qué se movió</h2>
+  <p class="sub">Resultados concretos del primer mes en el mercado US, traducidos a métricas accionables y decisiones preparadas para el board.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big">4</div><div class="lbl">Sponsor banks activos en pipeline</div></div>
+    <div class="stat"><div class="big">4</div><div class="lbl">Rutas paralelas de programa de tarjetas</div></div>
+    <div class="stat"><div class="big">7</div><div class="lbl">Weekly intelligence reports publicados</div></div>
+    <div class="stat"><div class="big">31</div><div class="lbl">Oportunidades scored y priorizadas</div></div>
+    <div class="stat"><div class="big">20+</div><div class="lbl">Contrapartes externas engaged</div></div>
+    <div class="stat"><div class="big">3</div><div class="lbl">Provider Decision Gates definidos</div></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="block" id="timeline">
+  <div class="kicker">Timeline</div>
+  <h2>De strategy deep dive al primer Gate</h2>
+  <p class="sub">Los milestones críticos de los últimos 30 días, en orden cronológico.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">17 MAR 2026</div>
+      <div class="tl-title">Volume Projections · Highnote</div>
+      <div class="tl-body">Modelo de proyección de volumen para programa de tarjetas US con Highnote publicado.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">18 MAR 2026</div>
+      <div class="tl-title">Strategy Deep Dive 2026</div>
+      <div class="tl-body">Framework de Provider Decision Gates (15 Abr, 30 Jun, 15 Sep). Matriz LATAM Tier 1: Panamá / México / Colombia.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">20 MAR 2026</div>
+      <div class="tl-title">Stripe B2B + B2C analysis</div>
+      <div class="tl-body">Análisis completo de Stripe como plataforma Day-1 por velocidad. Payment methods document para US market.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">23 MAR 2026</div>
+      <div class="tl-title">Programa Tarjetas PayCaddy US/LATAM</div>
+      <div class="tl-body">Primera versión del programa de tarjetas con PayCaddy Finance (Pablo Gutiérrez). 86K users M12 / 352K M24.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">31 MAR 2026</div>
+      <div class="tl-title">Incode MNDA re-engagement</div>
+      <div class="tl-body">Jordan Patterson reconectado tras MNDA que quedó sin firmar en 2024. Martin Burbano inicia review.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2 ABR 2026</div>
+      <div class="tl-title">PayCaddy propuesta formal</div>
+      <div class="tl-body">Programa de tarjetas Spanish formalizado. Volume forecast a Y5 incluido.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">7 ABR 2026</div>
+      <div class="tl-title">US Acquirer / Sponsor Analysis</div>
+      <div class="tl-body">Ranking de 7 candidatos. Elavon #1 (9.2/10), Worldpay #2 (9.0). Outreach emails package listo.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">8 ABR 2026</div>
+      <div class="tl-title">Highnote defense · Bamboo NDA</div>
+      <div class="tl-body">Defensa de 50K usuarios Y1 con funnel math frente a TJ Grissom. Bamboo Payment NDA firmado.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">9 ABR 2026</div>
+      <div class="tl-title">Visa onsite Boca Raton · E6+CBW intro</div>
+      <div class="tl-body">Visita con equipo Visa en Boca Raton. Sydney Shay abre intro a Episode Six + CBW Bank (Brady TenEyck, Suchitra Padmanabhan).</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">10 ABR 2026</div>
+      <div class="tl-title">FinPay introduction via Visa</div>
+      <div class="tl-body">Luis Cortes (Visa) facilita intro. Call confirmada para 22–23 Abr.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">14 ABR 2026</div>
+      <div class="tl-title">Fiserv PFAC meet &amp; greet · Truist intro</div>
+      <div class="tl-body">Agenda estructurada con Fatou Diop, Christa Serra, Steve DeVlieger. Anthony Hounshell abre intro a Truist.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">15 ABR 2026</div>
+      <div class="tl-title">Mastercard LATAM · Gate 1 checkpoint</div>
+      <div class="tl-body">Reunión con Mariantonia Pineda + Andrés Fernando Cruz. Digital Incentive Letter firmada.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">16 ABR 2026</div>
+      <div class="tl-title">Transnetwork puerta abierta</div>
+      <div class="tl-body">Conversación preliminar con TN. Identificados 4 frentes pre go-live: prefondeo, KYC, tech, pricing.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKSTREAMS -->
+<section class="block" id="workstreams">
+  <div class="kicker">9 workstreams</div>
+  <h2>Qué se construyó, por frente</h2>
+  <p class="sub">Cada workstream tiene owner interno definido, counterparties externas engaged y artifacts producidos.</p>
+
+  <div class="ws-grid">
+    <div class="ws">
+      <span class="tag">A · ESTRATEGIA</span>
+      <h3>Roadmap &amp; Decision Gates</h3>
+      <p>Framework temporal para decisiones de stack con gates trimestrales.</p>
+      <ul>
+        <li>Deep Dive Strategy 2026 (18 Mar)</li>
+        <li>Gate 1 · 15 Abr · Gate 2 · 30 Jun · Gate 3 · 15 Sep</li>
+        <li>Matriz LATAM Tier 1: Panamá / México / Colombia</li>
+        <li>Licensing roadmap &amp; CTO infrastructure docs</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">B · ADQUIRENCIA</span>
+      <h3>Sponsor Banks &amp; Acquiring</h3>
+      <p>De cero a 4 bancos activos en pipeline. 7 candidatos rankeados.</p>
+      <ul>
+        <li>Fiserv / Cybersource PFAC · meet &amp; greet cerrado</li>
+        <li>Truist · intro Visa · discovery call pending</li>
+        <li>FinPay · call confirmada 22–23 Abr</li>
+        <li>Plutos Payments · call 9 Abr (Mitch Jessop)</li>
+        <li>Ranking: Elavon #1 9.2/10 · Worldpay #2 9.0</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">C · TARJETAS</span>
+      <h3>4 rutas paralelas de Issuing</h3>
+      <p>Diversificación de proveedores antes del Gate 2.</p>
+      <ul>
+        <li>Highnote · 50K Y1 defendida (TJ Grissom)</li>
+        <li>Episode Six + CBW Bank (Sydney Shay intro)</li>
+        <li>Stripe Issuing · Day-1 por velocidad</li>
+        <li>PayCaddy Finance · 86K M12 / 352K M24</li>
+        <li>Y5: 519K users · $1.43B TPV · $76.8M revenue</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">D · REMESAS</span>
+      <h3>Transnetwork + FedNow cross-border</h3>
+      <p>Puerta abierta con TN y monitoreo de infraestructura cross-border.</p>
+      <ul>
+        <li>Transnetwork intro 16 Abr</li>
+        <li>4 frentes pre go-live: prefondeo, KYC, tech, pricing</li>
+        <li>Stripe Tempo mainnet live (18 Mar) · tracking</li>
+        <li>FedNow Cross-Border Proposal (8 Abr) · tracked</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">E · KYC</span>
+      <h3>Incode + MyBambu legacy</h3>
+      <p>Re-engagement del stack de KYC heredado de MyBambu.</p>
+      <ul>
+        <li>Jordan Patterson reconectado (31 Mar)</li>
+        <li>MNDA en review por Martin Burbano</li>
+        <li>POC agreement 15 Abr</li>
+        <li>Juan Diego confirma "KYC ya con Incode"</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">F · TECH</span>
+      <h3>Producto &amp; Arquitectura US</h3>
+      <p>Infraestructura documentada y prototipo funcional.</p>
+      <ul>
+        <li>CTO Infrastructure &amp; Architecture docs</li>
+        <li>Stripe architecture deep dive</li>
+        <li>Licensing-roadmap por jurisdicción</li>
+        <li>Prototipo WhatsApp Bot con Incode flow</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">G · INTELLIGENCE</span>
+      <h3>Weekly Market Reports</h3>
+      <p>Cadencia semanal de market intelligence para el leadership.</p>
+      <ul>
+        <li>7 ediciones publicadas (23 Mar – 13 Abr)</li>
+        <li>Ed #7: FedNow, ITIN crisis, DNERO, Seis Bank sunset</li>
+        <li>31 oportunidades scored y priorizadas</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">H · NETWORKS</span>
+      <h3>Visa + Mastercard relationships</h3>
+      <p>Relación institucional activada en ambas redes.</p>
+      <ul>
+        <li>Visa: Hounshell + Cortés + equipo Boca Raton (9 Abr)</li>
+        <li>Mastercard LATAM: Pineda + Cruz (15 Abr)</li>
+        <li>Digital Incentive Letter firmada</li>
+        <li>Templates de proyección Ecuador/USA en prep</li>
+      </ul>
+    </div>
+
+    <div class="ws">
+      <span class="tag">I · M&amp;A</span>
+      <h3>Project Ring · Origin Merchant</h3>
+      <p>Advisory para fundraising / estructuración estratégica.</p>
+      <ul>
+        <li>Dipal Doshi · Horacio Facca · Tedi Gjoleka · Aaron Kadey</li>
+        <li>3 touchpoints semanales (1, 8, 15 Abr)</li>
+        <li>Financial Model v21 referenciado</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS BAND DARK -->
+<section class="band-dark">
+  <div class="block" id="metrics" style="padding-top:80px;padding-bottom:80px">
+    <div class="kicker">Proyecciones</div>
+    <h2>Unit economics del programa US a Y5</h2>
+    <p class="sub">Modelo de volumen consolidado cruzando los 4 caminos de issuing. Base de decisión para Gate 2 (30 Jun).</p>
+
+    <div class="stats">
+      <div class="stat"><div class="big">519K</div><div class="lbl">Users activos Y5</div></div>
+      <div class="stat"><div class="big">$1.43B</div><div class="lbl">TPV doméstico Y5</div></div>
+      <div class="stat"><div class="big">$76.8M</div><div class="lbl">Revenue Y5</div></div>
+      <div class="stat"><div class="big">17.6%</div><div class="lbl">Net margin Y5</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT LEDGER -->
+<section class="block" id="contacts">
+  <div class="kicker">Contact ledger</div>
+  <h2>Red construida en 30 días</h2>
+  <p class="sub">Contrapartes externas actualmente activas. Estado al 16 Abr 2026.</p>
+
+  <table class="contacts">
+    <thead>
+      <tr><th>Contraparte</th><th>Institución</th><th>Workstream</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Anthony Hounshell</td><td>Visa</td><td>Acquiring intros</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Luis Cortés</td><td>Visa</td><td>Sponsor bank intros</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Sydney Shay</td><td>Visa (Boca)</td><td>Issuing intros (E6+CBW)</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Fatou Diop</td><td>Fiserv</td><td>PFAC</td><td><span class="pill hot">hot</span></td></tr>
+      <tr><td>Christa Serra</td><td>Fiserv</td><td>PFAC</td><td><span class="pill hot">hot</span></td></tr>
+      <tr><td>Steve DeVlieger</td><td>Fiserv</td><td>PFAC</td><td><span class="pill hot">hot</span></td></tr>
+      <tr><td>Mitch Jessop</td><td>Plutos Payments</td><td>Acquiring</td><td><span class="pill new">new</span></td></tr>
+      <tr><td>TJ Grissom</td><td>Highnote</td><td>Issuing</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Brady TenEyck</td><td>CBW Bank</td><td>Issuing / sponsor</td><td><span class="pill new">new</span></td></tr>
+      <tr><td>Suchitra Padmanabhan</td><td>CBW Bank</td><td>Issuing / sponsor</td><td><span class="pill new">new</span></td></tr>
+      <tr><td>Pablo Gutiérrez</td><td>PayCaddy Finance</td><td>Issuing LATAM/US</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Jordan Patterson</td><td>Incode</td><td>KYC</td><td><span class="pill hot">hot</span></td></tr>
+      <tr><td>Mariantonia Pineda</td><td>Mastercard LATAM</td><td>Network</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Andrés Fernando Cruz</td><td>Mastercard LATAM</td><td>Network</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Dipal Doshi</td><td>Origin Merchant</td><td>M&amp;A advisory</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Horacio Facca</td><td>Origin Merchant</td><td>M&amp;A advisory</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Tedi Gjoleka</td><td>Origin Merchant</td><td>M&amp;A advisory</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Rob Marriott</td><td>Gobi Insights</td><td>Strategy advisory</td><td><span class="pill live">live</span></td></tr>
+      <tr><td>Transnetwork team</td><td>Transnetwork</td><td>Remesas</td><td><span class="pill watch">watch</span></td></tr>
+      <tr><td>Bamboo Payment</td><td>Bamboo</td><td>Issuing LATAM</td><td><span class="pill new">new</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- NEXT STEPS -->
+<section class="block" id="next">
+  <div class="kicker">Next 14 days</div>
+  <h2>Action items abiertos</h2>
+  <p class="sub">Prioridades críticas para cerrar antes del Gate 2 (30 Jun). Tracker: CGO Master.</p>
+
+  <div class="actions">
+    <div class="act">
+      <div class="n">#1 · CRITICAL</div>
+      <h4>Firmar MNDA Incode</h4>
+      <p>Coordinar con Martin Burbano para cerrar review y enviar vía DocuSign. Desbloquea POC de KYC.</p>
+      <span class="due">Due: 18 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#2 · STRATEGIC</div>
+      <h4>Cerrar Gate 1 formal (15 Abr)</h4>
+      <p>Documento de cierre con decisiones, candidatos descartados, stack preliminar y readiness para Gate 2.</p>
+      <span class="due">Due: 19 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#3 · COMMERCIAL</div>
+      <h4>Preparar call FinPay 22-23 Abr</h4>
+      <p>One-pager Payphone + compliance overview + volume projections. ES/EN. Confirmar Val + JJ + Pedro.</p>
+      <span class="due">Due: 21 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#4 · FIELD</div>
+      <h4>Stripe Sessions 29-30 Abr SF</h4>
+      <p>Definir lista de 1:1 targets (Issuing, Tempo, Treasury, International). Pre-agendar. Briefing por reunión.</p>
+      <span class="due">Due: 25 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#5 · OPS</div>
+      <h4>Transnetwork · 4 frentes pre go-live</h4>
+      <p>Prefondeo / KYC / Tech / Pricing. Alinear con Juan Diego (tech) y Finance (float operativo).</p>
+      <span class="due">Due: 30 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#6 · COMMERCIAL</div>
+      <h4>Follow-up Truist post intro Visa</h4>
+      <p>Enviar 3 fechas/horarios disponibles a Anthony Hounshell + pitch de acquiring para banco Top-10 US.</p>
+      <span class="due">Due: 22 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#7 · TECH</div>
+      <h4>Fiserv Cybersource deep-dive</h4>
+      <p>Sesión técnica PFAC: product overview + volume + compliance + pricing. Pedro lidera tech brief.</p>
+      <span class="due">Due: 28 Abr</span>
+    </div>
+    <div class="act">
+      <div class="n">#8 · DILIGENCE</div>
+      <h4>E6 + CBW follow-up</h4>
+      <p>Technical fit call, pricing discovery y comparación contra Highnote antes de Gate 2.</p>
+      <span class="due">Due: 15 May</span>
+    </div>
+    <div class="act">
+      <div class="n">#9 · COMMS</div>
+      <h4>Weekly Report #8</h4>
+      <p>Cubrir: Gate 1 close, FedNow cross-border, Stripe Sessions preview, ITIN policy, Seis Bank sunset (Apr 29).</p>
+      <span class="due">Due: 20 Abr</span>
+    </div>
+  </div>
+</section>
+
+<!-- FILES -->
+<section class="block">
+  <div class="kicker">Artifacts</div>
+  <h2>Archivos producidos</h2>
+  <p class="sub">Todos los deliverables generados en este ciclo, agrupados por workstream.</p>
+
+  <div class="ws-grid">
+    <div class="ws">
+      <span class="tag">ESTRATEGIA</span>
+      <h3>Strategy &amp; Roadmap</h3>
+      <ul>
+        <li>Payphone_Strategy_Deep_Dive_2026.md</li>
+        <li>Payphone_Roadmap_2026.pdf</li>
+        <li>us-execution-roadmap.html</li>
+        <li>latam-execution-roadmap.html</li>
+      </ul>
+    </div>
+    <div class="ws">
+      <span class="tag">ACQUIRING</span>
+      <h3>Sponsor / Acquirer</h3>
+      <ul>
+        <li>us-acquirer-sponsor-analysis.md</li>
+        <li>Payphone-US-Acquirer-Outreach-Emails.html</li>
+        <li>merchant-acquirer-roadmap.html</li>
+        <li>vendors.html</li>
+      </ul>
+    </div>
+    <div class="ws">
+      <span class="tag">ISSUING</span>
+      <h3>Programa de tarjetas</h3>
+      <ul>
+        <li>Payphone_US_Volume_Projections_Highnote.html/pdf</li>
+        <li>Payphone_US_Volume_Projections_EpisodeSix.html</li>
+        <li>Payphone_Programa_Tarjetas_PayCaddyFinance_US_LATAM.html</li>
+        <li>payphone-vs-episodesix.html</li>
+      </ul>
+    </div>
+    <div class="ws">
+      <span class="tag">TECH</span>
+      <h3>Infra &amp; Architecture</h3>
+      <ul>
+        <li>Payphone_CTO_Structure_Infrastructure.html</li>
+        <li>Payphone_CTO_Technical_Architecture.pdf</li>
+        <li>architecture.html / architecture-standalone.html</li>
+        <li>Payphone Stripe.pdf · Payphone-Stripe-B2B-B2C.pdf</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">payphone · US strategy</div>
+  <div>Retrospective ejecutivo preparado por Val Infante, CGO · 16 abril 2026</div>
+  <div style="margin-top:10px">Repositorio: <a href="https://github.com/Unicorellc/payphone-us-strategy">github.com/Unicorellc/payphone-us-strategy</a></div>
+</footer>
+
+</body>
+</html>
