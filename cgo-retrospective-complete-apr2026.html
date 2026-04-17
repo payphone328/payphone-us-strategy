@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payphone CGO Retrospective — 45 Days · All Verticals · Mar–Abr 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--o:#FF6400;--v:#5A00B4;--y:#FFA000;--dk:#222;--ink:#111;--mt:#6b7280;--ln:#e5e7eb;--bg:#fafafa;--cd:#fff;--ok:#10b981;--wn:#f59e0b;--ng:#ef4444}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--dk);line-height:1.6}
+h1,h2,h3,h4,.dsp{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;color:var(--ink)}
+nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--ln);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+nav .b{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:700;font-size:16px}
+nav .d{width:22px;height:22px;border-radius:7px;background:var(--o)}
+nav .lk{display:flex;flex-wrap:wrap;gap:4px}
+nav .lk a{text-decoration:none;color:var(--mt);font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px;transition:.15s}
+nav .lk a:hover{background:#fff5ef;color:var(--o)}
+.hero{position:relative;padding:100px 24px 80px;background:linear-gradient(135deg,#FFA000 0%,#FF6400 40%,#5A00B4 100%);color:#fff;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 15% 25%,rgba(255,255,255,.1) 0,transparent 40%),radial-gradient(circle at 85% 75%,rgba(255,255,255,.07) 0,transparent 35%)}
+.hi{position:relative;max-width:1200px;margin:0 auto}
+.ey{display:inline-block;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.18);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.hero h1{font-size:clamp(32px,5vw,60px);font-weight:700;line-height:1.08;margin-bottom:14px;color:#fff}
+.hero .ld{font-size:clamp(15px,1.8vw,18px);opacity:.95;max-width:740px;margin-bottom:32px}
+.hm{display:flex;flex-wrap:wrap;gap:20px;opacity:.95;font-size:13px}
+.hm div{display:flex;flex-direction:column}
+.hm .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.hm .v{font-family:'Space Grotesk';font-weight:600;font-size:15px;margin-top:2px}
+section.bk{max-width:1200px;margin:0 auto;padding:64px 24px}
+section.bk h2{font-size:32px;font-weight:700;margin-bottom:8px}
+.kk{color:var(--o);font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.sb{color:var(--mt);font-size:16px;margin-bottom:32px;max-width:780px}
+.sts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:28px}
+.st{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:20px}
+.st .bg{font-family:'Space Grotesk';font-size:30px;font-weight:700;color:var(--o);line-height:1}
+.st .lb{margin-top:6px;font-size:12px;color:var(--mt);font-weight:500}
+.wg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:28px}
+.ws{background:var(--cd);border:1px solid var(--ln);border-radius:16px;padding:22px;transition:.2s}
+.ws:hover{border-color:var(--o);transform:translateY(-2px);box-shadow:0 10px 30px -10px rgba(255,100,0,.2)}
+.tg{display:inline-block;padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-bottom:10px}
+.tg.mkt{background:#ede9fe;color:#5b21b6}
+.tg.bet{background:#fef3c7;color:#92400e}
+.tg.prd{background:#dbeafe;color:#1e40af}
+.tg.tch{background:#d1fae5;color:#065f46}
+.tg.fin{background:#fce7f3;color:#9d174d}
+.tg.usa{background:#fff5ef;color:#c2410c}
+.tg.lat{background:#f0fdf4;color:#166534}
+.ws h3{font-size:16px;margin-bottom:6px}
+.ws p{color:var(--mt);font-size:13px;margin-bottom:10px}
+.ws ul{list-style:none;font-size:12px;color:var(--dk)}
+.ws ul li{padding:5px 0;border-top:1px dashed var(--ln);display:flex;gap:6px}
+.ws ul li:first-child{border-top:none}
+.ws ul li::before{content:">";color:var(--o);font-weight:700}
+.bd{background:var(--ink);color:#fff;margin:40px 0}
+.bd h2{color:#fff}.bd .kk{color:var(--y)}.bd .sb{color:rgba(255,255,255,.7)}
+.bd .st{background:#2a2a2a;border-color:#333;color:#fff}
+.bd .st .bg{color:var(--y)}.bd .st .lb{color:rgba(255,255,255,.7)}
+table.ct{width:100%;border-collapse:collapse;background:var(--cd);border-radius:12px;overflow:hidden;margin-top:24px;border:1px solid var(--ln);font-size:13px}
+table.ct th{text-align:left;padding:12px 14px;background:var(--ink);color:#fff;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+table.ct td{padding:11px 14px;border-top:1px solid var(--ln);vertical-align:top}
+table.ct tr:hover td{background:#fafafa}
+.pl{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600}
+.pl.h{background:#fef3c7;color:#92400e}.pl.l{background:#dcfce7;color:#166534}.pl.n{background:#ede9fe;color:#5b21b6}.pl.w{background:#fee2e2;color:#991b1b}
+.ax{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:24px}
+.ac{background:#fff;border-left:4px solid var(--o);border-radius:8px;padding:16px 18px;box-shadow:0 2px 6px rgba(0,0,0,.03)}
+.ac .n{font-family:'Space Grotesk';font-weight:700;color:var(--o);font-size:11px;letter-spacing:.08em}
+.ac h4{margin:4px 0;font-size:15px}
+.ac p{font-size:12px;color:var(--mt)}
+.ac .du{display:inline-block;margin-top:8px;padding:2px 8px;border-radius:5px;background:#222;color:#fff;font-size:10px;font-weight:600}
+.tl{position:relative;margin-top:28px;padding-left:36px}
+.tl::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--y),var(--o),var(--v))}
+.ti{position:relative;padding:14px 0 14px 20px}
+.ti::before{content:"";position:absolute;left:-30px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--o);border:2px solid #fff;box-shadow:0 0 0 2px var(--o)}
+.td{font-family:'Space Grotesk';font-weight:600;color:var(--v);font-size:12px}
+.tt{font-weight:600;margin:3px 0;font-size:14px}
+.tb{color:var(--mt);font-size:13px}
+footer{background:var(--ink);color:rgba(255,255,255,.75);padding:40px 24px;text-align:center;font-size:12px}
+footer .fb{font-family:'Space Grotesk';color:#fff;font-weight:600;font-size:15px;margin-bottom:6px}
+footer a{color:var(--y);text-decoration:none}
+@media print{nav{display:none}section.bk{page-break-inside:avoid}}
+@media(max-width:640px){.hero{padding:60px 16px 50px}.hero h1{font-size:28px}section.bk{padding:40px 16px}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="b"><div class="d"></div>payphone CGO retrospective</div>
+<div class="lk">
+<a href="#summary">Summary</a>
+<a href="#marketing">Marketing</a>
+<a href="#betting">Betting</a>
+<a href="#product">Product</a>
+<a href="#tech">Tech</a>
+<a href="#finance">Finance</a>
+<a href="#us">US Market</a>
+<a href="#latam">LATAM</a>
+<a href="#next">Next</a>
+</div>
+</nav>
+
+<section class="hero">
+<div class="hi">
+<span class="ey">Chief Growth Officer &middot; 45 dias &middot; Mar&ndash;Abr 2026</span>
+<h1>Todo Payphone.<br>Todos los frentes.<br>Un solo retrospective.</h1>
+<p class="ld">Auditoria completa del trabajo de Val Infante como CGO de Payphone: Marketing, Betting, Product, Tech, Finance, US Market y LATAM. 73+ documentos. 12 repos GitHub. $4.9M en impacto identificado. 20+ contrapartes externas.</p>
+<div class="hm">
+<div><span class="l">Documentos</span><span class="v">73+</span></div>
+<div><span class="l">GitHub Repos</span><span class="v">12</span></div>
+<div><span class="l">Revenue Impact</span><span class="v">$4.9M+</span></div>
+<div><span class="l">Betting TPV 2025</span><span class="v">$101.9M</span></div>
+<div><span class="l">US Y5 Revenue</span><span class="v">$76.8M</span></div>
+<div><span class="l">Roadmap ROI</span><span class="v">4.98x</span></div>
+</div>
+</div>
+</section>
+
+<!-- EXECUTIVE SUMMARY -->
+<section class="bk" id="summary">
+<div class="kk">Executive summary</div>
+<h2>45 dias como CGO &mdash; the full picture</h2>
+<p class="sb">De cero a liderazgo operativo en 6 verticales: marketing, betting, producto, tech, finanzas/M&amp;A, y expansion US + LATAM.</p>
+<div class="sts">
+<div class="st"><div class="bg">$13.7M</div><div class="lb">Revenue 2025 baseline</div></div>
+<div class="st"><div class="bg">$2.44M</div><div class="lb">Impacto roadmap revenue-driven</div></div>
+<div class="st"><div class="bg">$101.9M</div><div class="lb">Betting TPV 2025</div></div>
+<div class="st"><div class="bg">30</div><div class="lb">Betting clients en pipeline</div></div>
+<div class="st"><div class="bg">5</div><div class="lb">TDDs escritos</div></div>
+<div class="st"><div class="bg">3</div><div class="lb">Code projects producidos</div></div>
+<div class="st"><div class="bg">4</div><div class="lb">Brand books creados</div></div>
+<div class="st"><div class="bg">13</div><div class="lb">Contratos betting multi-pais</div></div>
+<div class="st"><div class="bg">4.98x</div><div class="lb">ROI blended del roadmap</div></div>
+<div class="st"><div class="bg">20+</div><div class="lb">Contrapartes externas activas</div></div>
+</div>
+</section>
+
+<!-- MARKETING -->
+<section class="bk" id="marketing">
+<div class="kk">Marketing &amp; Brand</div>
+<h2>De brand books a lifecycle flows</h2>
+<p class="sb">4 brand books, 5 email templates production-ready, estrategia de 6 segmentos con anti-Yape positioning, CRM stack completo (Insider ONE + Pipedrive).</p>
+<div class="wg">
+<div class="ws"><span class="tg mkt">BRAND</span><h3>Brand Books &amp; Identity</h3><p>Sistema de diseno completo para LATAM y US.</p>
+<ul><li>Brand Book LATAM 2026 (definitivo)</li><li>Brand Book US 2026</li><li>Brand Book ES / EN versions</li><li>Product Marketing Context (fuente de verdad)</li><li>Design system: #FF6400 + Space Grotesk + Inter</li></ul></div>
+
+<div class="ws"><span class="tg mkt">LIFECYCLE</span><h3>Email Templates B2B</h3><p>5 templates production-ready con $1.8M revenue adicional proyectado.</p>
+<ul><li>Bienvenida &mdash; post-signup conversion</li><li>Activacion &mdash; 24h gamificacion</li><li>Reactivacion &mdash; 30d winback</li><li>Abandono link (NUEVO) &mdash; 2h recovery</li><li>Post-2do cobro (NUEVO) &mdash; features pro</li></ul></div>
+
+<div class="ws"><span class="tg mkt">CRM</span><h3>Insider ONE + Pipedrive</h3><p>CRM B2B (Pipedrive) + engagement B2C (Insider). Middleware Node.js custom.</p>
+<ul><li>Decision memo: Pipedrive over Freshworks</li><li>TDD Pipedrive Migration v2 (94KB)</li><li>Node.js middleware funcional</li><li>Insider SDK TDD + Integration Spec</li><li>WPFusion-Pipedrive integration (Apr 7)</li></ul></div>
+
+<div class="ws"><span class="tg mkt">SEGMENTACION</span><h3>6 Segmentos + Anti-Yape</h3><p>Estrategia v2 con quick wins, guerrilla marketing, benchmarks LATAM.</p>
+<ul><li>Comercio Fisico / Salud / Profesionales</li><li>Gastronomia / Eventos / Betting</li><li>Playbook operativo para Efrain Lopez</li><li>Lifecycle flows por segmento</li><li>Anti-Yape ventana 4-6 meses critica</li></ul></div>
+
+<div class="ws"><span class="tg mkt">PARTNERSHIPS</span><h3>Mastercard Promos</h3><p>Mi Comisariato, El Rosado, Pizza Hut, Digital Incentive activos.</p>
+<ul><li>10% descuento Mi Comisariato hasta Jul 2026</li><li>WhatsApp Bot entrenado para promos</li><li>Digital Incentive Letter firmada</li><li>Hero Account Pizza Hut exitoso</li></ul></div>
+
+<div class="ws"><span class="tg mkt">INTEGRACIONES</span><h3>Wix + WooCommerce</h3><p>Wix integration en vivo. GTM coordinado Apr 16.</p>
+<ul><li>Wix: landing page + email blast + lifecycle</li><li>WooCommerce: plugin existente</li><li>WPFusion para lead capture Pipedrive</li></ul></div>
+</div>
+</section>
+
+<!-- BETTING -->
+<section class="bd">
+<div class="bk" id="betting" style="padding-top:64px;padding-bottom:64px">
+<div class="kk">Betting &amp; iGaming</div>
+<h2>$101.9M TPV &middot; 30 clientes &middot; 10+ paises</h2>
+<p class="sb">De operacion fragmentada (26 status) a vertical profesionalizado con proceso estandarizado, contratos multi-pais, y expansion a Peru.</p>
+<div class="sts">
+<div class="st"><div class="bg">$101.9M</div><div class="lb">TPV 2025 (+39% YoY)</div></div>
+<div class="st"><div class="bg">$3.75M</div><div class="lb">Margen neto 2025</div></div>
+<div class="st"><div class="bg">$137.2M</div><div class="lb">Plan 2026 (+35%)</div></div>
+<div class="st"><div class="bg">30</div><div class="lb">Clientes en pipeline</div></div>
+<div class="st"><div class="bg">64</div><div class="lb">Contratos documentados</div></div>
+<div class="st"><div class="bg">13</div><div class="lb">Paises con template legal</div></div>
+</div>
+</div>
+</section>
+
+<section class="bk">
+<div class="wg">
+<div class="ws"><span class="tg bet">PIPELINE</span><h3>30 Clientes por Etapa</h3><p>5 activos, 6 integracion, 8 KYC, 7 propuesta, 4 prospecto.</p>
+<ul><li>Masterbets365 $250-500K (activo)</li><li>Betcris multi-pais (NDA+contrato)</li><li>Azar Latino GT/HN (activo)</li><li>DoradoBet 6 paises (firmado)</li><li>Betcris DOM integrandose (Feb 2026)</li></ul></div>
+
+<div class="ws"><span class="tg bet">REGULATORIO</span><h3>Uruguay: Primer NO fundamentado</h3><p>3 analisis exhaustivos. Severidad 96/125. Ratio riesgo/retorno 1:300.</p>
+<ul><li>BET-AN-001: Monopolio ANTEL, inviable</li><li>BET-RISK-001: Matriz multinivel, 7 loopholes rechazados</li><li>BET-AN-002: Coastal acquirer no cambia conclusion</li><li>5 mercados alternativos propuestos</li></ul></div>
+
+<div class="ws"><span class="tg bet">EXPANSION</span><h3>Peru: Izzipay + Niubiz</h3><p>Forecasts listos. Olimpobet $500K/mes listo para migrar.</p>
+<ul><li>Base forecast: $450K/mes al mes 12</li><li>13 corredores remesas = $144.2B volumen</li><li>2% processing fee negociado</li><li>Sin costo adquisicion para partner</li></ul></div>
+
+<div class="ws"><span class="tg bet">OPS</span><h3>Proceso Estandarizado</h3><p>COM-PRO-004 V3.0: 2,339 lineas, 6 mejoras operativas.</p>
+<ul><li>Pre-llenado MCC/fee/procesador</li><li>Rolling Reserve 6 meses automatizado</li><li>Validacion duplicados pre-crear</li><li>Dashboard tiempo real onboarding</li><li>Playbook escalacion multi-area</li></ul></div>
+
+<div class="ws"><span class="tg bet">LEGAL</span><h3>13 Paises Cubiertos</h3><p>Templates de contrato para toda LATAM + scripts Python de generacion.</p>
+<ul><li>CR, SV, Brasil (PIX), GT, Paraguay</li><li>HN, Peru v2, AR, PA, CO, MX</li><li>4 scripts Python automatizados</li><li>4 gaps documentales criticos ID'd</li></ul></div>
+
+<div class="ws"><span class="tg bet">FINANCIERO</span><h3>Nacional 3.5% vs Int 0.5%</h3><p>Nacional 7x mas rentable. Internacional diluye margen.</p>
+<ul><li>Nacional: $68.5M TPV, $2.40M margen (3.5%)</li><li>Internacional: $26.8M TPV, $0.94M (0.5%)</li><li>Paola Murillo: 101% target Q1-2026</li><li>Pricing Ganaplay/Starplay en renegociacion</li></ul></div>
+</div>
+</section>
+
+<!-- PRODUCT -->
+<section class="bk" id="product">
+<div class="kk">Product &amp; Roadmap</div>
+<h2>$2.44M impacto &middot; 4.98x ROI</h2>
+<p class="sb">Revenue-driven roadmap con 8 iniciativas que cierran el gap de $2.0-4.3M. TOP 5 BETS priorizadas de 14 necesidades comerciales.</p>
+<div class="wg">
+<div class="ws"><span class="tg prd">TOP 5 BETS</span><h3>$907K revenue, $270K inversion</h3><p>Priorizacion de 14 necesidades comerciales de David Munoz.</p>
+<ul><li>TAP Business $150K/yr &mdash; killer Datafast</li><li>Nuevos Diferidos $600K/yr &mdash; alto ticket</li><li>Diners/Discover/Amex $37K &mdash; table stakes</li><li>Segmentacion $15K &mdash; fundacional</li><li>Plugin Shopify $120K/yr &mdash; 1,500 tiendas</li></ul></div>
+
+<div class="ws"><span class="tg prd">ROADMAP</span><h3>Revenue Waterfall 2026</h3><p>Baseline $12.5M + $1.96M incremental + $484K ahorro = $14.46M target.</p>
+<ul><li>Inversion total: $490K</li><li>ROI blended: 4.98x</li><li>Payback: 3-9 meses</li><li>+$850K Mastercard retention</li></ul></div>
+
+<div class="ws"><span class="tg prd">CLICK TO PAY</span><h3>UX Review Completo</h3><p>19 archivos: flows, screenshots, dev handoff, QA tests, SDK alignment.</p>
+<ul><li>Happy path (4 screenshots)</li><li>Sad path (2 screenshots)</li><li>Figma SDK-aligned spec</li><li>QA test plan 77KB</li></ul></div>
+
+<div class="ws"><span class="tg prd">SUSCRIPCIONES</span><h3>Nuevo producto &mdash; target mid-May</h3><p>Val empujando aceleracion de Jun 19 a mid-May. Compliance en review.</p>
+<ul><li>PROD-66: Reporting suscripciones</li><li>PROD-67: F&amp;F planning</li><li>Belen Emag: compliance review</li></ul></div>
+
+<div class="ws"><span class="tg prd">CRM STACK</span><h3>5 TDDs + Codigo funcional</h3><p>De decision memo a middleware operativo en 3 semanas.</p>
+<ul><li>Pipedrive Migration TDD v2</li><li>Pipedrive-Insider Integration TDD</li><li>Node.js middleware funcional</li><li>WPFusion-Pipedrive TDD</li><li>Field mapping + Migration tracker</li></ul></div>
+
+<div class="ws"><span class="tg prd">MASTER TRACKER</span><h3>CGO Command Center</h3><p>86+ items tracked. Email extraction automatizada.</p>
+<ul><li>4 rounds de email extraction (100+/batch)</li><li>localStorage persistence</li><li>Action items categorizados por urgencia</li><li>TypeScript email processor (Azure Functions)</li></ul></div>
+</div>
+</section>
+
+<!-- TECH -->
+<section class="bk" id="tech">
+<div class="kk">Tech &amp; Architecture</div>
+<h2>De CTO docs a codigo funcional</h2>
+<p class="sb">Arquitectura CTO documentada, 3 proyectos de codigo producidos, Azure DevOps-Jira sync implementado.</p>
+<div class="wg">
+<div class="ws"><span class="tg tch">ARCHITECTURE</span><h3>CTO Org + Microservices</h3><p>14-17 ingenieros target. 4-layer microservices. NestJS/Swagger.</p>
+<ul><li>Client Apps &rarr; API Gateway &rarr; SDK Layer &rarr; Services</li><li>7 microservicios planificados</li><li>PG/Mongo/Redis data layer</li><li>Ronald Butler (Principal Architect) actual</li></ul></div>
+
+<div class="ws"><span class="tg tch">CODE SHIPPED</span><h3>3 Proyectos funcionales</h3><p>Middleware, email processor, test suite &mdash; todo en produccion o staging.</p>
+<ul><li>pipedrive-insider-middleware (Express.js)</li><li>payphone-email-processor (TS Azure Fns)</li><li>payphone-dashboard (Playwright E2E tests)</li></ul></div>
+
+<div class="ws"><span class="tg tch">DEVOPS</span><h3>Azure DevOps &harr; Jira Sync</h3><p>Getint.io seleccionado. Guia de instalacion producida.</p>
+<ul><li>Evaluacion de herramientas de sync</li><li>TDD + recomendaciones</li><li>Guia paso-a-paso implementacion</li></ul></div>
+
+<div class="ws"><span class="tg tch">ANDROID V5</span><h3>V4 &rarr; V5 Migration Analysis</h3><p>Feature-by-feature gap assessment de Kotlin/Compose migration.</p>
+<ul><li>CrossBorder: nueva en V5</li><li>Virtual Card: nueva en V5</li><li>Onboarding Express: nueva en V5</li></ul></div>
+</div>
+</section>
+
+<!-- FINANCE -->
+<section class="bd">
+<div class="bk" id="finance" style="padding-top:64px;padding-bottom:64px">
+<div class="kk">Finance, M&amp;A &amp; Competitive</div>
+<h2>Facephi audit &middot; Project Ring &middot; Modelo competitivo</h2>
+<p class="sb">$2.8-4.1M riesgo mitigado (Facephi), financial model v21 para M&amp;A, modelo competitivo Ecuador con scoring cuantitativo.</p>
+<div class="sts">
+<div class="st"><div class="bg">$2.8-4.1M</div><div class="lb">Impacto Facephi anual (mitigado)</div></div>
+<div class="st"><div class="bg">49/60</div><div class="lb">Score B2B Ecuador (#1)</div></div>
+<div class="st"><div class="bg">47/60</div><div class="lb">Score B2C Ecuador (#2)</div></div>
+<div class="st"><div class="bg">v21</div><div class="lb">Financial Model activo</div></div>
+</div>
+</div>
+</section>
+
+<section class="bk">
+<div class="wg">
+<div class="ws"><span class="tg fin">FACEPHI</span><h3>Auditoria KYC &mdash; $2.8-4.1M impacto</h3><p>Contrato 40-78% sobrepreciado vs mercado. Tasa rechazo 58%.</p>
+<ul><li>$0.706-$0.891/verificacion vs $0.40-$0.55 benchmark</li><li>Impacto EBITDA: 74.6% ($2.4M)</li><li>Saldo prepagado en riesgo: $98,869</li><li>Recomendacion: Dual Track + RFP competitivo</li><li>Ahorro 3 anos: $155-200K</li></ul></div>
+
+<div class="ws"><span class="tg fin">COMPETITIVO</span><h3>Ecuador B2C + B2B Scoring</h3><p>Modelo cuantitativo vs Deuna, Kushki, PlacetoPay.</p>
+<ul><li>4 amenazas: Yape (CRITICA), Apple/Google Pay, Deuna, AgoraPay</li><li>Plan 3 horizontes: H1 fortify, H2 defend, H3 position</li><li>CAC $42 (benchmark $35-55)</li><li>NPS 62 (Nubank 72)</li></ul></div>
+
+<div class="ws"><span class="tg fin">PROJECT RING</span><h3>M&amp;A Advisory</h3><p>Origin Merchant Partners. Weekly touchpoints. Family office deck.</p>
+<ul><li>Dipal Doshi, Horacio Facca, Tedi Gjoleka</li><li>Financial Model v21 activo</li><li>Outreach Summary tracking</li><li>Family Office overview deck</li></ul></div>
+
+<div class="ws"><span class="tg fin">COMPENSACION</span><h3>Variable + Tax Strategy</h3><p>Esquema Q2 2026 en creacion. Tax optimization $65-120K/ano.</p>
+<ul><li>7 componentes variable, 18-19 roles elegibles</li><li>S-Corp election: $20K+ ahorro inmediato</li><li>Effective rate target: 22-25%</li><li>Comisiones Q1 aprobadas, en tramite</li></ul></div>
+</div>
+</section>
+
+<!-- US MARKET -->
+<section class="bk" id="us">
+<div class="kk">US Market Entry</div>
+<h2>De cero a 4 sponsor banks &middot; Y5 $76.8M</h2>
+<p class="sb">9 workstreams activos. Stripe como Day-1. 4 rutas de issuing en paralelo. 7 weekly reports publicados.</p>
+<div class="wg">
+<div class="ws"><span class="tg usa">ACQUIRING</span><h3>4 Sponsor Banks en Pipeline</h3>
+<ul><li>Fiserv/Cybersource PFAC &mdash; meet &amp; greet cerrado</li><li>Truist &mdash; intro Visa, discovery pending</li><li>FinPay &mdash; call 22-23 Abr confirmada</li><li>Plutos Payments &mdash; call completada</li><li>Ranking: Elavon #1 (9.2/10), Worldpay #2</li></ul></div>
+
+<div class="ws"><span class="tg usa">ISSUING</span><h3>4 Rutas de Tarjetas</h3>
+<ul><li>Highnote: 50K Y1 defendida (TJ Grissom)</li><li>Episode Six + CBW Bank (Sydney Shay intro)</li><li>Stripe Issuing: Day-1 por velocidad</li><li>PayCaddy Finance: 86K M12 / 352K M24</li><li>Y5: 519K users, $1.43B TPV, 17.6% margin</li></ul></div>
+
+<div class="ws"><span class="tg usa">STRIPE</span><h3>Primary Infrastructure Partner</h3>
+<ul><li>Pricing tiered: 0.26-0.30% + $0.16-$0.20</li><li>Beta friends &amp; family: live</li><li>Stack: Payments + Issuing + Treasury + Capital</li><li>Decision deadline: 25 Abr</li><li>Stripe Sessions SF: 29-30 Abr</li></ul></div>
+
+<div class="ws"><span class="tg usa">REMESAS</span><h3>Transnetwork + FedNow</h3>
+<ul><li>TN puerta abierta 16 Abr</li><li>4 frentes: prefondeo, KYC, tech, pricing</li><li>Stripe Tempo mainnet live (18 Mar)</li><li>13 corredores = $144.2B volumen anual</li></ul></div>
+
+<div class="ws"><span class="tg usa">KYC</span><h3>Incode Re-engagement</h3>
+<ul><li>Jordan Patterson reconectado 31 Mar</li><li>MNDA en review (Martin Burbano)</li><li>POC agreement 15 Abr</li><li>Alternativa a Facephi (75-200% sobrepreciado)</li></ul></div>
+
+<div class="ws"><span class="tg usa">INTELLIGENCE</span><h3>7 Weekly Reports</h3>
+<ul><li>31 oportunidades scored y priorizadas</li><li>FedNow, ITIN crisis, DNERO tracking</li><li>Seis Bank sunset Apr 29 monitoreado</li><li>3 Provider Decision Gates definidos</li></ul></div>
+</div>
+</section>
+
+<!-- LATAM -->
+<section class="bk" id="latam">
+<div class="kk">LATAM Expansion</div>
+<h2>Ecuador home &middot; 10+ paises activos &middot; Peru next</h2>
+<p class="sb">Cobertura multi-pais con Ecuador como mercado core ($4.55M/mes betting) y expansion activa a Peru, Venezuela, Colombia, Mexico.</p>
+<div class="wg">
+<div class="ws"><span class="tg lat">ECUADOR</span><h3>Home Market &mdash; 84.7% TPV</h3>
+<ul><li>100K+ comercios, 700K+ usuarios</li><li>Mi Comisariato / El Rosado promos activas</li><li>Wix integration en vivo</li><li>Sector Publico: $10.4B mercado potencial</li></ul></div>
+
+<div class="ws"><span class="tg lat">PERU</span><h3>Izzipay / Niubiz Partnerships</h3>
+<ul><li>Forecast: $450K/mes base al mes 12</li><li>Olimpobet $500K/mes listo para migrar</li><li>MOVII Peru NDA en proceso</li><li>$2.8B GGR mercado betting</li></ul></div>
+
+<div class="ws"><span class="tg lat">CENTROAMERICA</span><h3>HN $1.3M + SV $500K + PA $460K + GT $230K</h3>
+<ul><li>Honduras: 2 clientes, $1.3M/mes</li><li>El Salvador: 3-4 clientes, $500K/mes</li><li>Panama: 3 clientes, $460K/mes</li><li>Guatemala: 3 clientes, $230K/mes</li></ul></div>
+
+<div class="ws"><span class="tg lat">NUEVOS</span><h3>Venezuela + Colombia + Mexico</h3>
+<ul><li>Venezuela: JJ presento propuesta a Val</li><li>Colombia revenue model en repo GitHub</li><li>Mexico revenue model en repo GitHub</li><li>Contratos template listos para todos</li></ul></div>
+</div>
+</section>
+
+<!-- NEXT STEPS -->
+<section class="bk" id="next">
+<div class="kk">Proximos 30 dias</div>
+<h2>Action items criticos</h2>
+<p class="sb">Las 10 prioridades que definen el cierre del Q2 y la preparacion para Gate 2 (30 Jun).</p>
+<div class="ax">
+<div class="ac"><div class="n">#1 CRITICAL</div><h4>Firmar MNDA Incode</h4><p>Martin Burbano review + DocuSign. Desbloquea KYC alternativo.</p><span class="du">18 Abr</span></div>
+<div class="ac"><div class="n">#2 STRATEGIC</div><h4>Cerrar Gate 1 formal</h4><p>Documento de cierre con stack preliminar y readiness Gate 2.</p><span class="du">19 Abr</span></div>
+<div class="ac"><div class="n">#3 COMMERCIAL</div><h4>Call FinPay 22-23 Abr</h4><p>One-pager + compliance overview + volume projections.</p><span class="du">21 Abr</span></div>
+<div class="ac"><div class="n">#4 FIELD</div><h4>Stripe Sessions SF 29-30 Abr</h4><p>Lista de 1:1 targets: Issuing, Tempo, Treasury, International.</p><span class="du">25 Abr</span></div>
+<div class="ac"><div class="n">#5 OPS</div><h4>Stripe Decision Deadline</h4><p>Confirmar Stripe como primary infra partner o evaluar alternativas.</p><span class="du">25 Abr</span></div>
+<div class="ac"><div class="n">#6 PRODUCT</div><h4>Suscripciones mid-May prod</h4><p>Compliance review + acceleration del timeline Jun 19 a mid-May.</p><span class="du">15 May</span></div>
+<div class="ac"><div class="n">#7 BETTING</div><h4>Plan estabilidad tx betting</h4><p>Fernando Jimenez commit. SLA + responsables. Retrasado 3 semanas.</p><span class="du">28 Abr</span></div>
+<div class="ac"><div class="n">#8 MARKETING</div><h4>Wix GTM + Mastercard campaign</h4><p>Landing page + email blast Wix. Colocacion Mastercard para finales Abr.</p><span class="du">30 Abr</span></div>
+<div class="ac"><div class="n">#9 LATAM</div><h4>Transnetwork 4 frentes</h4><p>Prefondeo, KYC, tech, pricing alineados con JJ + Juan Diego.</p><span class="du">30 Abr</span></div>
+<div class="ac"><div class="n">#10 M&amp;A</div><h4>Project Ring weekly cadence</h4><p>Origin Merchant touchpoints. Financial Model v21 actualizado.</p><span class="du">Ongoing</span></div>
+</div>
+</section>
+
+<!-- ARTIFACTS TABLE -->
+<section class="bk">
+<div class="kk">Artifacts</div>
+<h2>GitHub repos producidos</h2>
+<table class="ct">
+<thead><tr><th>Repo</th><th>Contenido</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>payphone-us-strategy</td><td>Arquitectura Stripe, execution roadmaps, vendors, LATAM revenue models, retrospectivas</td><td><span class="pl l">live</span></td></tr>
+<tr><td>payphone-brand-strategy</td><td>Brand books Ecuador/US + modelo competitivo + loyalty strategy</td><td><span class="pl l">live</span></td></tr>
+<tr><td>payphone-competitive-model</td><td>Modelo competitivo Ecuador con correcciones COO + action plan</td><td><span class="pl l">live</span></td></tr>
+<tr><td>email-templates-lifecycle</td><td>5 templates HTML lifecycle B2B merchants + creative feedback</td><td><span class="pl l">live</span></td></tr>
+<tr><td>betting-strategy-payphone</td><td>Dashboard betting: $9.74M TPV Mar 2026, +24% MoM, Betcris DOM activo</td><td><span class="pl l">live</span></td></tr>
+<tr><td>whatsapp-bot-prototype</td><td>Prototipo WhatsApp Bot para pagos</td><td><span class="pl n">new</span></td></tr>
+<tr><td>whatsapp-bot-business-plan</td><td>Business Plan WhatsApp Payments Bot 2026</td><td><span class="pl n">new</span></td></tr>
+<tr><td>payphone-deck / payphone-deck-fo</td><td>Investor pitch decks (Project Ring)</td><td><span class="pl l">live</span></td></tr>
+<tr><td>payphone-appflow</td><td>App Flow Ecuador V1 interactive viewer</td><td><span class="pl l">live</span></td></tr>
+<tr><td>payphone-api-card-service</td><td>API Card Domain Registry + URL Scanner</td><td><span class="pl l">live</span></td></tr>
+<tr><td>payphone-baas-presentation</td><td>Merchant acquiring analysis</td><td><span class="pl h">private</span></td></tr>
+<tr><td>payphone-compensation</td><td>Performance bonus section</td><td><span class="pl h">private</span></td></tr>
+</tbody>
+</table>
+</section>
+
+<footer>
+<div class="fb">payphone &middot; CGO retrospective</div>
+<div>Preparado por Val Infante, Chief Growth Officer &middot; 16 abril 2026</div>
+<div style="margin-top:8px">GitHub: <a href="https://payphone328.github.io/payphone-us-strategy/">payphone328.github.io/payphone-us-strategy</a></div>
+</footer>
+
+</body>
+</html>
